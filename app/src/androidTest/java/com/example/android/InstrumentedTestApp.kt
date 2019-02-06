@@ -1,15 +1,16 @@
-package com.example.android.writeitsayithearit
+package com.example.android
 
 import android.app.Activity
 import android.app.Application
 import com.example.android.writeitsayithearit.di.AppInjector
 import com.example.android.writeitsayithearit.di.DaggerAppComponent
+import com.example.android.writeitsayithearit.test.BuildConfig
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import timber.log.Timber
 import javax.inject.Inject
 
-class WriteItSayItHearItApp : Application(), HasActivityInjector {
+class InstrumentedTestApp : Application(), HasActivityInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
@@ -24,9 +25,8 @@ class WriteItSayItHearItApp : Application(), HasActivityInjector {
                 .build()
                 .inject(this)
         AppInjector.init(this)
-        Timber.d("Production injection used.")
+        Timber.d("Test Injection used.")
     }
 
     override fun activityInjector() = dispatchingAndroidInjector
-
 }

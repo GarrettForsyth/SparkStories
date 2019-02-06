@@ -17,7 +17,8 @@ import timber.log.Timber
  * Injects the application.
  */
 object AppInjector {
-    fun init(app: WriteItSayItHearItApp) {
+    fun init(app: Application) {
+        println(app.toString())
         app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
 
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

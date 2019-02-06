@@ -17,6 +17,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -28,6 +29,9 @@ android {
         unitTests {
             includeAndroidResources = true // roboelectric
         }
+    }
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -55,25 +59,40 @@ dependencies {
     implementation deps.navigation.fragment_ktx
     implementation deps.navigation.ui_ktx
 
+    // lifecycle
+    implementation deps.lifecycle.runtime
+    implementation deps.lifecycle.extensions
+
+    // room
+    implementation deps.room.runtime
+
     // annotation processors
     kapt deps.dagger.android_support_compiler
     kapt deps.dagger.compiler
+    kapt deps.room.compiler
 
     /* Unit test dependencies: */
 
     testImplementation deps.test_ext.junit
-    testImplementation deps.test_ext.truth
     testImplementation deps.robolectric
+    testImplementation deps.mockk
 
     /* Instrumented test dependencies: */
     androidTestImplementation deps.support.test
-    androidTestImplementation deps.espresso.core
     androidTestImplementation deps.test_ext.junit
     androidTestImplementation deps.test_ext.truth
+    androidTestImplementation deps.mockk_android
 
     // dagger
     androidTestImplementation deps.dagger.runtime
     androidTestImplementation deps.dagger.android
     androidTestImplementation deps.dagger.android_support
+
+    /* Debug dependencies */
+    debugImplementation deps.fragment_test
+    debugImplementation deps.test_ext.truth
+    debugImplementation deps.espresso.core
+    debugImplementation deps.espresso.contrib
+    debugImplementation deps.arch_core.testing
 
 }

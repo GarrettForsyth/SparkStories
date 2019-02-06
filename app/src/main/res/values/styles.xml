@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.CueCardText" >
+        <item name="android:fontFamily">@font/cormorant_medium</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
 </resources>

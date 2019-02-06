@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/queues_dest"
-        android:name="com.example.android.writeitsayithearit.ui.QueuesFragment"
-        tools:layout="@layout/fragment_queues"
+        android:name="com.example.android.writeitsayithearit.ui.CuesFragment"
+        tools:layout="@layout/fragment_cues"
         android:label="Queues" />
 
 </navigation>
