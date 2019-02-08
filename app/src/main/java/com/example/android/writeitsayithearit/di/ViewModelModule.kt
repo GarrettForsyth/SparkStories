@@ -3,6 +3,7 @@ package com.example.android.writeitsayithearit.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.writeitsayithearit.ui.CuesViewModel
+import com.example.android.writeitsayithearit.ui.NewCueViewModel
 import com.example.android.writeitsayithearit.viewmodel.WriteItSayItHearItViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -15,6 +16,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CuesViewModel::class)
     abstract fun bindCuesViewModel(cuesViewModel: CuesViewModel) : ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NewCueViewModel::class)
+    abstract fun bindNewCueViewModel(newCueViewModel: NewCueViewModel) : ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: WriteItSayItHearItViewModelFactory) : ViewModelProvider.Factory

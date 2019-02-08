@@ -1,16 +1,20 @@
-package com.example.android
+package com.example.android.writeitsayithearit
 
 import android.app.Activity
 import android.app.Application
 import com.example.android.writeitsayithearit.di.AppInjector
+import com.example.android.writeitsayithearit.di.DaggerAndroidTestAppComponent
 import com.example.android.writeitsayithearit.di.DaggerAppComponent
-import com.example.android.writeitsayithearit.test.BuildConfig
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import timber.log.Timber
 import javax.inject.Inject
 
-class InstrumentedTestApp : Application(), HasActivityInjector {
+/**
+ * AndroidTest app replaces some dependencies to be more test friendly.
+ * Unit test are expected to mock out dependencies.
+ */
+class AndroidTestApp : Application(), HasActivityInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
@@ -20,12 +24,12 @@ class InstrumentedTestApp : Application(), HasActivityInjector {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        DaggerAppComponent.builder()
+        DaggerAndroidTestAppComponent.builder()
                 .application(this)
                 .build()
                 .inject(this)
         AppInjector.init(this)
-        Timber.d("Test Injection used.")
+        Timber.d("AndroidTest injection used.")
     }
 
     override fun activityInjector() = dispatchingAndroidInjector

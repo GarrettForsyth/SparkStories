@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.android.writeitsayithearit">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application tools:ignore="GoogleAppIndexingWarning">
+        <!-- Override the theme for EmptyFragmentActivity (activity used in FragmentScenario) with
+            the app theme. This provides necessary resources to inflate certain views.
+            In particular, roboletric won't work without this work around. -->
+        <activity
+            android:name="androidx.fragment.app.testing.FragmentScenario$EmptyFragmentActivity"
+            tools:replace="android:theme"
+            android:theme="@style/Theme.WriteItSayItHearIt"/>
+    </application>
+
+</manifest>

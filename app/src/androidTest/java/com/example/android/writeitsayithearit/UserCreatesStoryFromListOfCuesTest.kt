@@ -23,7 +23,6 @@ class UserCreatesStoryFromListOfCuesTest {
 
     private lateinit var scenario : ActivityScenario<MainActivity>
 
-    @Inject
     private lateinit var listOfQueues: List<Cue>
 
     @Before

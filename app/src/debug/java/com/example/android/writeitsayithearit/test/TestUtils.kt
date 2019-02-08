@@ -25,4 +25,6 @@ object TestUtils {
     fun postCueResults() {
         _cues.value = listOfStartingCues
     }
+
+    fun createTestCue(): Cue = Cue(0, "this is a test cue")
 }

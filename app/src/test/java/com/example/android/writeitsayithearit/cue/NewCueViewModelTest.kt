@@ -2,7 +2,10 @@ package com.example.android.writeitsayithearit.cue
 
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.CueRepository
+import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.ui.CuesViewModel
+import com.example.android.writeitsayithearit.ui.NewCueViewModel
+import com.example.android.writeitsayithearit.vo.Cue
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
@@ -11,18 +14,17 @@ import org.junit.runners.JUnit4
 
 @SmallTest
 @RunWith(JUnit4::class)
-class CuesViewModelTest {
+class NewCueViewModelTest {
 
     private val cueRepository: CueRepository = mockk(relaxed = true)
-    private lateinit var cuesViewModel: CuesViewModel
+    private val newCueViewModel = NewCueViewModel(cueRepository)
 
-    init {
-        // init after the instant executor rule is established
-        cuesViewModel = CuesViewModel(cueRepository)
-    }
+
 
     @Test
-    fun cuesCallsRepository() {
-        verify(exactly = 1) { cueRepository.cues() }
+    fun submitCueCallsRepository() {
+        val cue = TestUtils.createTestCue()
+        newCueViewModel.submitCue(cue)
+        verify(exactly = 1) { cueRepository.submitCue(cue) }
     }
 }

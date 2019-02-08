@@ -9,6 +9,19 @@
         android:id="@+id/queues_dest"
         android:name="com.example.android.writeitsayithearit.ui.CuesFragment"
         tools:layout="@layout/fragment_cues"
-        android:label="Queues" />
+        android:label="Queues" >
+        <action
+            android:id="@+id/action_queues_dest_to_newCueFragment"
+            app:destination="@id/newCueFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newCueFragment"
+        android:name="com.example.android.writeitsayithearit.ui.NewCueFragment"
+        android:label="fragment_new_cue"
+        tools:layout="@layout/fragment_new_cue" >
+        <action
+            android:id="@+id/action_newCueFragment_to_queues_dest"
+            app:destination="@id/queues_dest" />
+    </fragment>
 
 </navigation>

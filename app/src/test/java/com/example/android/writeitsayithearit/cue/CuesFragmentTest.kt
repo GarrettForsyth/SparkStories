@@ -1,63 +1,44 @@
 package com.example.android.writeitsayithearit.cue
 
 import android.os.Bundle
-import androidx.arch.core.executor.TaskExecutor
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.FragmentScenario.launchInContainer
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.lifecycle.MutableLiveData
-import androidx.test.core.app.ActivityScenario
+import androidx.navigation.NavController
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.writeitsayithearit.AppExecutors
-import com.example.android.writeitsayithearit.R
+import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.ui.CuesFragment
-import com.example.android.writeitsayithearit.ui.CuesViewModel
+import com.example.android.writeitsayithearit.ui.CuesFragmentDirections
 import com.example.android.writeitsayithearit.ui.adapters.vh.CueViewHolder
 import com.example.android.writeitsayithearit.util.ViewModelUtil
-import com.example.android.writeitsayithearit.vo.Cue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
+
+@LargeTest
 @RunWith(AndroidJUnit4::class)
-@Config(application = TestApp::class)
+@Config(
+        application = TestApp::class
+        )
 class CuesFragmentTest {
 
-    /**
-     * A factory that returns a CuesFragment with mocked dependencies.
-     */
-    class CuesFragmentFactory : FragmentFactory() {
-
-        override fun instantiate(classLoader: ClassLoader, className: String, args: Bundle?): Fragment {
-            return (super.instantiate(classLoader, className, args) as CuesFragment).apply {
-                this.cuesViewModel = mockk(relaxed = true)
-                this.viewModelFactory = ViewModelUtil.createFor(this.cuesViewModel)
-
-                TestUtils.postCueResults()
-                every { cuesViewModel.cues } returns TestUtils.cues
-            }
-        }
-    }
 
     private val scenario = launchInContainer(
-            CuesFragment::class.java,
+            TestCuesFragment::class.java,
             null,
-            CuesFragmentTest.CuesFragmentFactory()
+            TestCuesFragmentFactory()
     )
 
     @Test
@@ -75,23 +56,68 @@ class CuesFragmentTest {
      * on the screen. So the recyclerview must be scrolled to check for
      * views that wouldn't normally be on the screen.
      *
-     * TODO: This test is really slow and probably unecessary
+     * To keep the test quick, only the first and last cues are checked
      */
     @Test
     fun resultsAreInsideRecyclerView() {
-        TestUtils.listOfStartingCues.forEachIndexed { position, cue ->
-            // Scroll to position
-            onView(ViewMatchers.withId(R.id.cues_list))
-                    .perform(
-                            RecyclerViewActions.scrollToPosition<CueViewHolder>(position)
-                    )
+        val cues = TestUtils.listOfStartingCues
 
-            //Check view exists
-            onView(withId(R.id.cues_list))
-                    .check(matches(hasDescendant(
-                            withText(cue.text))
-                    ))
+        // check first cue is in hierarchy
+        onView(withId(com.example.android.writeitsayithearit.R.id.cues_list))
+                .check(matches(hasDescendant(
+                        withText(cues.first().text))
+                ))
 
+        // Scroll to position last position
+        onView(ViewMatchers.withId(com.example.android.writeitsayithearit.R.id.cues_list))
+                .perform(
+                        RecyclerViewActions.scrollToPosition<CueViewHolder>(cues.size - 1)
+                )
+
+        // check the last cue in the list is in the hierarchy
+        onView(withId(com.example.android.writeitsayithearit.R.id.cues_list))
+                .check(matches(hasDescendant(
+                        withText(cues.last().text))
+                ))
+    }
+
+    @Test
+    fun clickingAddCueButtonNavigatesToNewCueFragment() {
+        onView(withId(com.example.android.writeitsayithearit.R.id.add_cue_fab))
+                .perform(click())
+        scenario.onFragment {
+            verify { it.navController.navigate(
+                    CuesFragmentDirections.actionQueuesDestToNewCueFragment())
+            }
         }
     }
+
+    /**
+     * A factory that returns a CuesFragment with mocked dependencies.
+     *
+     * This allows the dependencies to be mocked BEFORE the fragment
+     * is attached using FragmentScenario.launch.
+     */
+    class TestCuesFragmentFactory : FragmentFactory() {
+
+        override fun instantiate(classLoader: ClassLoader, className: String, args: Bundle?): Fragment {
+            return (super.instantiate(classLoader, className, args) as TestCuesFragment).apply {
+                this.cuesViewModel = mockk(relaxed = true)
+                this.viewModelFactory = ViewModelUtil.createFor(this.cuesViewModel)
+
+                TestUtils.postCueResults()
+                every { cuesViewModel.cues } returns TestUtils.cues
+            }
+        }
+    }
+
+    /**
+     * Simply overrides the nav controller to verify correct actions are
+     * being called when expected.
+     */
+    class TestCuesFragment : CuesFragment() {
+        val navController: NavController = mockk(relaxed = true)
+        override fun navController() = navController
+    }
+
 }

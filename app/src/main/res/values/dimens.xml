@@ -5,4 +5,7 @@
     <dimen name="padding_regular">16dp</dimen>
     <dimen name="text_size_large">16sp</dimen>
     <dimen name="margin_regular">16dp</dimen>
+    <dimen name="margin_xlarge">32dp</dimen>
+    <dimen name="new_cue_card_width">300dp</dimen>
+    <dimen name="new_cue_card_height">120dp</dimen>
 </resources>

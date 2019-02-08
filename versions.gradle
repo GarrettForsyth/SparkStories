@@ -41,6 +41,7 @@ versions.cucumber= "3.0.2"
 versions.picocontainer="2.0.1"
 versions.robolectric="4.1"
 versions.mockk="1.9.kotlin12"
+versions.material_support="1.0.0-alpha3"
 def deps = [:]
 
 
@@ -53,7 +54,6 @@ support.app_compat = "androidx.appcompat:appcompat:$versions.support"
 support.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 support.recyclerview = "androidx.recyclerview:recyclerview:$versions.support"
 support.cardview = "androidx.cardview:cardview:$versions.support"
-support.design = "com.google.android.material:material:$versions.support"
 support.v4 = "androidx.legacy:legacy-support-v4:$versions.support"
 support.core_utils = "androidx.legacy:legacy-support-core-utils:$versions.support"
 deps.support = support
@@ -150,6 +150,7 @@ deps.picocontainer = "io.cucumber:cucumber-picocontainer:$versions.picocontainer
 deps.robolectric = "org.robolectric:robolectric:$versions.robolectric"
 deps.mockk = "io.mockk:mockk:$versions.mockk"
 deps.mockk_android = "io.mockk:mockk-android:$versions.mockk"
+deps.material_support = "com.google.android.material:material:$versions.material_support"
 ext.deps = deps
 
 def build_versions = [:]

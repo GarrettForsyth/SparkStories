@@ -8,6 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.data.CueDao
 import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
 import com.example.android.writeitsayithearit.test.TestUtils
@@ -22,6 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 
+@LargeTest
 @RunWith(AndroidJUnit4::class)
 class CueDaoTest {
 

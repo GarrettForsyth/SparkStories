@@ -10,11 +10,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.android.writeitsayithearit.AppExecutors
 
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentCuesBinding
 import com.example.android.writeitsayithearit.di.Injectable
+import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.ui.adapters.CueAdapter
 import javax.inject.Inject
 
@@ -22,7 +24,9 @@ import javax.inject.Inject
  * A simple [Fragment] subclass.
  *
  * Note: can use field injections after onStart
+ *
  */
+@OpenForTesting
 class CuesFragment : Fragment(), Injectable {
 
     @Inject
@@ -36,6 +40,7 @@ class CuesFragment : Fragment(), Injectable {
 
     private lateinit var binding: FragmentCuesBinding
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(
@@ -44,6 +49,12 @@ class CuesFragment : Fragment(), Injectable {
                 container,
                 false
         )
+
+        binding.addCueFab.setOnClickListener {
+            navController().navigate(
+                    CuesFragmentDirections.actionQueuesDestToNewCueFragment()
+            )
+        }
 
         return binding.root
     }
@@ -65,5 +76,12 @@ class CuesFragment : Fragment(), Injectable {
             }
         })
     }
+
+    /**
+     * Created to override during tests.
+     */
+    fun navController() = findNavController()
+
+
 
 }
