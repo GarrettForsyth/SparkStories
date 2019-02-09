@@ -1,11 +1,9 @@
-package com.example.android.writeitsayithearit.cue
+package com.example.android.writeitsayithearit.cues
 
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.test.TestUtils
-import com.example.android.writeitsayithearit.ui.CuesViewModel
-import com.example.android.writeitsayithearit.ui.NewCueViewModel
-import com.example.android.writeitsayithearit.vo.Cue
+import com.example.android.writeitsayithearit.ui.cues.NewCueViewModel
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
@@ -18,8 +16,6 @@ class NewCueViewModelTest {
 
     private val cueRepository: CueRepository = mockk(relaxed = true)
     private val newCueViewModel = NewCueViewModel(cueRepository)
-
-
 
     @Test
     fun submitCueCallsRepository() {

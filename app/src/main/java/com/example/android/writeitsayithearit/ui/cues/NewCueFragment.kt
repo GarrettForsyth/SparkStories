@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.ui
+package com.example.android.writeitsayithearit.ui.cues
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -34,9 +34,6 @@ class NewCueFragment : Fragment(), Injectable {
 
     lateinit var newCueViewModel: NewCueViewModel
 
-    private var minCueTextLength = 5
-    private var maxCueTextLength = 200
-
     private lateinit var binding: FragmentNewCueBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,29 +45,46 @@ class NewCueFragment : Fragment(), Injectable {
                 false
         )
 
-        minCueTextLength = context?.resources?.getInteger(R.integer.min_cue_text_length)!!
-        maxCueTextLength = context?.resources?.getInteger(R.integer.max_cue_text_length)!!
+        val minCueTextLength = context?.resources?.getInteger(R.integer.min_cue_text_length)!!
+        val maxCueTextLength = context?.resources?.getInteger(R.integer.max_cue_text_length)!!
 
         binding.submitCueBtn.setOnClickListener {
-            if (isInvalidCue(binding)) {
-                Snackbar.make(
-                        binding.newCueConstraintLayout,
-                        getString(R.string.new_cue_invalid_message,
-                                minCueTextLength,
-                                maxCueTextLength),
-                        Snackbar.LENGTH_SHORT
-                ).show()
+            // TODO: validation checks probably shouldn't be done in the fragment
+            // consider moving validation logic into the model and propagating errors.
+
+            if (isValidCue(binding, minCueTextLength, maxCueTextLength)) {
+                submitCueAndNavigate()
             } else {
-                val newCue = Cue(0, binding.newCueEditText.text.toString().trim())
-                newCueViewModel.submitCue(newCue)
-                navController().navigate(
-                        NewCueFragmentDirections.actionNewCueFragmentToQueuesDest()
-                )
+                showInvalidCueSnackBar(minCueTextLength, maxCueTextLength)
             }
         }
 
         return binding.root
     }
+
+    private fun isValidCue(binding: FragmentNewCueBinding, min: Int, max: Int): Boolean {
+        binding.invalidateAll()
+        val cueText = binding.newCueEditText.text.toString().trim()
+        val cueTextLength = cueText.length
+        return cueTextLength in min..max && !cueText.isBlank()
+    }
+
+    private fun submitCueAndNavigate() {
+        val newCue = Cue(0, binding.newCueEditText.text.toString().trim())
+        newCueViewModel.submitCue(newCue)
+        navController().navigate(
+                NewCueFragmentDirections.actionNewCueFragmentToCuesFragment()
+        )
+    }
+
+    private fun showInvalidCueSnackBar(min: Int, max: Int) {
+        Snackbar.make(
+                binding.newCueConstraintLayout,
+                getString(R.string.new_cue_invalid_message, min, max),
+                Snackbar.LENGTH_SHORT
+        ).show()
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -79,15 +93,6 @@ class NewCueFragment : Fragment(), Injectable {
 
     }
 
-    private fun isInvalidCue(binding: FragmentNewCueBinding): Boolean {
-        binding.invalidateAll()
-        val cueText = binding.newCueEditText.text.toString().trim()
-        val cueTextLength = cueText.length
-        val min = minCueTextLength
-        val max = maxCueTextLength
-
-        return cueTextLength !in min..max || cueText.isBlank()
-    }
 
     /**
      * Created to override during tests.

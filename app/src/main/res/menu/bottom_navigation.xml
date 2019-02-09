@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/cuesFragment"
+        android:icon="@drawable/ic_action_cue"
+        android:title="@string/cues" />
+
+    <item
+        android:id="@+id/storiesFragment"
+        android:icon="@drawable/ic_action_stories"
+        android:title="@string/stories" />
+
+    <item
+        android:id="@+id/narrationsFragment"
+        android:icon="@drawable/ic_action_narrations"
+        android:title="@string/narrations" />
+
+
+</menu>

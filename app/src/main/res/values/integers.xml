@@ -2,4 +2,7 @@
 <resources>
     <integer name="min_cue_text_length">5</integer>
     <integer name="max_cue_text_length">200</integer>
+
+    <integer name="min_story_text_length">10</integer>
+    <integer name="max_story_text_length">5000</integer>
 </resources>

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/table_top_port"
-        tools:context=".ui.CuesFragment">
+        tools:context=".ui.cues.CuesFragment">
 
 
         <androidx.recyclerview.widget.RecyclerView

@@ -30,6 +30,7 @@ class DatabaseModule {
                         super.onCreate(db)
                         appExecutors.diskIO().execute {
                             database.cueDao().insert(TestUtils.listOfStartingCues)
+                            database.storyDao().insert(TestUtils.listOfStartingStories)
                         }
                     }
                 })

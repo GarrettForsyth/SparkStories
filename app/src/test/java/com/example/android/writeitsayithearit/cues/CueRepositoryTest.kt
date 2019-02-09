@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.cue
+package com.example.android.writeitsayithearit.cues
 
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.api.WriteItSayItHearItService

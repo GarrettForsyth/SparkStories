@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.ui
+package com.example.android.writeitsayithearit.ui.cues
 
 
 import android.os.Bundle
@@ -17,7 +17,10 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentCuesBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
+import com.example.android.writeitsayithearit.ui.adapters.ClickListener
 import com.example.android.writeitsayithearit.ui.adapters.CueAdapter
+import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentArgs
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -40,6 +43,8 @@ class CuesFragment : Fragment(), Injectable {
 
     private lateinit var binding: FragmentCuesBinding
 
+    private lateinit var adapter: CueAdapter
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -49,39 +54,57 @@ class CuesFragment : Fragment(), Injectable {
                 container,
                 false
         )
-
-        binding.addCueFab.setOnClickListener {
-            navController().navigate(
-                    CuesFragmentDirections.actionQueuesDestToNewCueFragment()
-            )
-        }
+        initializeFab()
+        initializeAdapter()
 
         return binding.root
     }
 
+    private fun initializeFab() {
+        binding.addCueFab.setOnClickListener {
+            navController().navigate(
+                    CuesFragmentDirections.actionCuesFragmentToNewCueFragment()
+            )
+        }
+
+    }
+
+    private fun initializeAdapter() {
+        adapter = CueAdapter()
+        adapter.setOnItemClickListener(object : ClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                val cue = adapter.getCueAtPosition(position)
+                navController().navigate(
+                        CuesFragmentDirections.actionCuesFragmentToNewStoryFragment(
+                                cue.id
+                        )
+                )
+
+            }
+        })
+        binding.cuesList.adapter = adapter
+    }
+
+    /**
+     * TODO: Figure out why ViewModel can't be set before onStart()
+     */
     override fun onStart() {
         super.onStart()
         cuesViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(CuesViewModel::class.java)
-        initializeAdapter()
-    }
 
-    private fun initializeAdapter() {
-        val adapter = CueAdapter()
-        binding.cuesList.adapter = adapter
         cuesViewModel.cues.observe(this, Observer { cues ->
             if (cues != null) {
                 adapter.setList(cues)
                 adapter.notifyDataSetChanged()
             }
         })
+
     }
 
     /**
      * Created to override during tests.
      */
     fun navController() = findNavController()
-
-
 
 }

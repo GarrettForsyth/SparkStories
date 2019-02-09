@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.cue
+package com.example.android.writeitsayithearit.cues
 
 import android.content.Context
 import android.os.Bundle
@@ -16,11 +16,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
-import com.example.android.writeitsayithearit.ui.NewCueFragment
-import com.example.android.writeitsayithearit.ui.NewCueFragmentDirections
+import com.example.android.writeitsayithearit.ui.cues.NewCueFragment
+import com.example.android.writeitsayithearit.ui.cues.NewCueFragmentDirections
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.vo.Cue
+import io.mockk.Called
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Test
@@ -33,7 +35,7 @@ import org.robolectric.annotation.Config
 @Config(
         application = TestApp::class
 )
-class NewCueTest {
+class NewCueFragmentTest {
 
     companion object {
         private val context = ApplicationProvider.getApplicationContext<Context>()
@@ -73,7 +75,7 @@ class NewCueTest {
 
         scenario.onFragment {
             verify(exactly = 1) { it.navController().navigate(
-                    NewCueFragmentDirections.actionNewCueFragmentToQueuesDest()
+                    NewCueFragmentDirections.actionNewCueFragmentToCuesFragment()
             ) }
         }
     }
@@ -139,11 +141,18 @@ class NewCueTest {
         verifyNoNavigation()
     }
 
+
+    @Test
+    fun cueInfoIsShown() {
+        onView(withId(R.id.new_cue_constraint_layout))
+                .check(matches(hasDescendant(
+                        withText(R.string.new_cue_info_text)
+                )))
+    }
+
     private fun verifyNoNavigation(){
         scenario.onFragment {
-            verify(exactly = 0) { it.navController().navigate(
-                    NewCueFragmentDirections.actionNewCueFragmentToQueuesDest()
-            ) }
+            verify(exactly = 0) { it.navController() wasNot Called }
         }
     }
 

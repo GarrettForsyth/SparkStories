@@ -1,9 +1,10 @@
-package com.example.android.writeitsayithearit.cue
+package com.example.android.writeitsayithearit.cues
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario.launchInContainer
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -13,12 +14,14 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.test.TestUtils
-import com.example.android.writeitsayithearit.ui.CuesFragment
-import com.example.android.writeitsayithearit.ui.CuesFragmentDirections
+import com.example.android.writeitsayithearit.ui.cues.CuesFragment
 import com.example.android.writeitsayithearit.ui.adapters.vh.CueViewHolder
+import com.example.android.writeitsayithearit.ui.cues.CuesFragmentDirections
 import com.example.android.writeitsayithearit.util.ViewModelUtil
+import com.example.android.writeitsayithearit.vo.Cue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -87,7 +90,26 @@ class CuesFragmentTest {
                 .perform(click())
         scenario.onFragment {
             verify { it.navController.navigate(
-                    CuesFragmentDirections.actionQueuesDestToNewCueFragment())
+                    CuesFragmentDirections.actionCuesFragmentToNewCueFragment())
+            }
+        }
+    }
+
+    @Test
+    fun clickingCueNavigatesToNewStoryFragment() {
+        val cue = TestUtils.listOfStartingCues.first()
+
+        onView(withId(R.id.cues_list))
+                .perform(RecyclerViewActions.actionOnItemAtPosition<CueViewHolder>(
+                        0, click()
+                ))
+
+        scenario.onFragment {
+            verify { it.navController.navigate(
+                    CuesFragmentDirections.actionCuesFragmentToNewStoryFragment(
+                            cue.id
+                    )
+            )
             }
         }
     }
@@ -105,8 +127,9 @@ class CuesFragmentTest {
                 this.cuesViewModel = mockk(relaxed = true)
                 this.viewModelFactory = ViewModelUtil.createFor(this.cuesViewModel)
 
-                TestUtils.postCueResults()
-                every { cuesViewModel.cues } returns TestUtils.cues
+                val liveCues = MutableLiveData<List<Cue>>()
+                liveCues.postValue(TestUtils.listOfStartingCues)
+                every { cuesViewModel.cues } returns liveCues
             }
         }
     }

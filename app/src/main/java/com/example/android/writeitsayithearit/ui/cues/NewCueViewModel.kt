@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.ui
+package com.example.android.writeitsayithearit.ui.cues
 
 import androidx.lifecycle.ViewModel
 import com.example.android.writeitsayithearit.repos.CueRepository

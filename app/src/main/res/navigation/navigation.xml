@@ -3,25 +3,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/queues_dest">
+    app:startDestination="@id/cuesFragment">
 
     <fragment
-        android:id="@+id/queues_dest"
-        android:name="com.example.android.writeitsayithearit.ui.CuesFragment"
-        tools:layout="@layout/fragment_cues"
-        android:label="Queues" >
+        android:id="@+id/cuesFragment"
+        android:name="com.example.android.writeitsayithearit.ui.cues.CuesFragment"
+        android:label="fragment_cues"
+        tools:layout="@layout/fragment_cues" >
         <action
-            android:id="@+id/action_queues_dest_to_newCueFragment"
+            android:id="@+id/action_cuesFragment_to_newCueFragment"
             app:destination="@id/newCueFragment" />
+        <action
+            android:id="@+id/action_cuesFragment_to_newStoryFragment"
+            app:destination="@id/newStoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/newCueFragment"
-        android:name="com.example.android.writeitsayithearit.ui.NewCueFragment"
+        android:name="com.example.android.writeitsayithearit.ui.cues.NewCueFragment"
         android:label="fragment_new_cue"
         tools:layout="@layout/fragment_new_cue" >
         <action
-            android:id="@+id/action_newCueFragment_to_queues_dest"
-            app:destination="@id/queues_dest" />
+            android:id="@+id/action_newCueFragment_to_cuesFragment"
+            app:destination="@id/cuesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/newStoryFragment"
+        android:name="com.example.android.writeitsayithearit.ui.stories.NewStoryFragment"
+        android:label="fragment_new_story"
+        tools:layout="@layout/fragment_new_story" >
+        <argument
+            android:name="cue_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_newStoryFragment_to_storiesFragment"
+            app:destination="@id/storiesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/storiesFragment"
+        android:name="com.example.android.writeitsayithearit.ui.stories.StoriesFragment"
+        android:label="fragment_stories"
+        tools:layout="@layout/fragment_stories" />
+    <fragment
+        android:id="@+id/narrationsFragment"
+        android:name="com.example.android.writeitsayithearit.ui.narrations.NarrationsFragment"
+        android:label="fragment_narrations"
+        tools:layout="@layout/fragment_narrations" />
 
 </navigation>

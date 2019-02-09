@@ -19,4 +19,6 @@ class CueRepository @Inject constructor(
         appExecutors.diskIO().execute { cueDao.insert(cue) }
     }
 
+    fun cue(id: Int) = cueDao.cue(id)
+
 }

@@ -3,15 +3,63 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" >
 
+    <data>
+        <variable
+            name="cue"
+            type="com.example.android.writeitsayithearit.vo.Cue" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/table_top_port"
         tools:context=".ui.cues.NewCueFragment"
-        android:id="@+id/new_cue_constraint_layout">
+        android:id="@+id/new_story_constraint_layout">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/new_cue_info_card"
+            android:id="@+id/story_cue_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:layout_marginLeft="@dimen/margin_regular"
+            android:layout_marginEnd="@dimen/margin_regular"
+            android:layout_marginRight="@dimen/margin_regular"
+            android:layout_marginBottom="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_small"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/new_story_info_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/padding_regular"
+                android:paddingLeft="@dimen/padding_regular"
+                android:paddingEnd="@dimen/padding_regular"
+                android:paddingRight="@dimen/padding_regular"
+                android:paddingTop="@dimen/padding_regular"
+                android:paddingBottom="@dimen/padding_regular">
+
+                <TextView
+                    style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                    android:id="@+id/cue_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{cue.text}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/new_story_info_card"
             android:layout_width="@dimen/new_cue_card_width"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -19,7 +67,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/story_cue_card"
             app:layout_constraintVertical_bias="0.25">
 
             <TextView
@@ -27,13 +75,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_size_large"
-                android:text="@string/new_cue_info_text"
+                android:text="@string/new_story_info_text"
                 android:textAlignment="center" />
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/new_cue_card"
+            android:id="@+id/new_story_card"
             android:layout_width="@dimen/new_cue_card_width"
             android:layout_height="@dimen/new_cue_card_height"
             android:layout_marginTop="@dimen/margin_xlarge"
@@ -41,7 +89,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/new_cue_info_card">
+            app:layout_constraintTop_toBottomOf="@id/new_story_info_card">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -49,10 +97,10 @@
                 android:layout_margin="@dimen/margin_large" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/new_cue_edit_text"
+                    android:id="@+id/new_story_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/cue_text"
+                    android:hint="@string/story_text"
                     android:textColor="@color/colorPrimaryDark"
                     android:inputType="textMultiLine"
                     android:lines="5"
@@ -64,17 +112,17 @@
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/submit_cue_btn"
+            android:id="@+id/submit_story_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/submit_btn_text"
-            app:layout_constraintEnd_toEndOf="@+id/new_cue_card"
+            app:layout_constraintEnd_toEndOf="@+id/new_story_card"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/new_cue_card"
+            app:layout_constraintTop_toBottomOf="@id/new_story_card"
             style="@style/Theme.WriteItSayItHearIt.MaterialButton" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </layout>
+</layout>
