@@ -29,4 +29,10 @@ class StoryRepositoryTest {
         storyRepository.submitStory(story)
         verify(exactly = 1) { dao.insert(story) }
     }
+
+    @Test
+    fun loadStoriesLocally() {
+        storyRepository.stories()
+        verify(exactly = 1) { dao.stories() }
+    }
 }

@@ -66,19 +66,19 @@ class CuesFragmentTest {
         val cues = TestUtils.listOfStartingCues
 
         // check first cue is in hierarchy
-        onView(withId(com.example.android.writeitsayithearit.R.id.cues_list))
+        onView(withId(R.id.cues_list))
                 .check(matches(hasDescendant(
                         withText(cues.first().text))
                 ))
 
         // Scroll to position last position
-        onView(ViewMatchers.withId(com.example.android.writeitsayithearit.R.id.cues_list))
+        onView(ViewMatchers.withId(R.id.cues_list))
                 .perform(
                         RecyclerViewActions.scrollToPosition<CueViewHolder>(cues.size - 1)
                 )
 
         // check the last cue in the list is in the hierarchy
-        onView(withId(com.example.android.writeitsayithearit.R.id.cues_list))
+        onView(withId(R.id.cues_list))
                 .check(matches(hasDescendant(
                         withText(cues.last().text))
                 ))
@@ -86,7 +86,7 @@ class CuesFragmentTest {
 
     @Test
     fun clickingAddCueButtonNavigatesToNewCueFragment() {
-        onView(withId(com.example.android.writeitsayithearit.R.id.add_cue_fab))
+        onView(withId(R.id.add_cue_fab))
                 .perform(click())
         scenario.onFragment {
             verify { it.navController.navigate(

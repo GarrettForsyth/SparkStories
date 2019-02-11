@@ -42,11 +42,24 @@
         android:id="@+id/storiesFragment"
         android:name="com.example.android.writeitsayithearit.ui.stories.StoriesFragment"
         android:label="fragment_stories"
-        tools:layout="@layout/fragment_stories" />
+        tools:layout="@layout/fragment_stories" >
+        <action
+            android:id="@+id/action_storiesFragment_to_storyFragment"
+            app:destination="@id/storyFragment" />
+    </fragment>
     <fragment
         android:id="@+id/narrationsFragment"
         android:name="com.example.android.writeitsayithearit.ui.narrations.NarrationsFragment"
         android:label="fragment_narrations"
         tools:layout="@layout/fragment_narrations" />
+    <fragment
+        android:id="@+id/storyFragment"
+        android:name="com.example.android.writeitsayithearit.ui.stories.StoryFragment"
+        android:label="fragment_story"
+        tools:layout="@layout/fragment_story" >
+        <argument
+            android:name="story_id"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

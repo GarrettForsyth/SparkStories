@@ -14,12 +14,7 @@ import org.junit.runners.JUnit4
 class CuesViewModelTest {
 
     private val cueRepository: CueRepository = mockk(relaxed = true)
-    private lateinit var cuesViewModel: CuesViewModel
-
-    init {
-        // init after the instant executor rule is established
-        cuesViewModel = CuesViewModel(cueRepository)
-    }
+    private val cuesViewModel = CuesViewModel(cueRepository)
 
     @Test
     fun cuesCallsRepository() {

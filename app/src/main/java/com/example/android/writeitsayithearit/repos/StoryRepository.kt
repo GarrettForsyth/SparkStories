@@ -11,8 +11,12 @@ class StoryRepository @Inject constructor(
         val storyDao: StoryDao,
         val service: WriteItSayItHearItService
 ) {
+
+    fun stories() = storyDao.stories()
+
     fun submitStory(story: Story) {
         appExecutors.diskIO().execute { storyDao.insert(story) }
     }
+
 
 }

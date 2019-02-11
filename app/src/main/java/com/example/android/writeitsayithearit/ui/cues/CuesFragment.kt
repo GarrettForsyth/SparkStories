@@ -33,9 +33,6 @@ import javax.inject.Inject
 class CuesFragment : Fragment(), Injectable {
 
     @Inject
-    lateinit var appExecutors: AppExecutors
-
-    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var cuesViewModel: CuesViewModel

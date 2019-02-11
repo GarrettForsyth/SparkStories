@@ -21,6 +21,7 @@ import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.ui.cues.NewCueFragmentDirections
 import com.example.android.writeitsayithearit.ui.stories.NewStoryFragment
+import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentArgs
 import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentDirections
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.vo.Cue
@@ -78,13 +79,14 @@ class NewStoryFragmentTest {
                 .perform(typeText(NEW_STORY_TEXT_VALID))
 
 
-        val validStory = Story(0, NEW_STORY_TEXT_VALID, 0)
 
         onView(withId(R.id.submit_story_btn))
                 .perform(click())
 
+        val expectedStory = Story(0, NEW_STORY_TEXT_VALID, CUE.id)
+
         scenario.onFragment {
-            verify(exactly =1) { it.newStoryViewModel.submitStory(validStory) }
+            verify(exactly =1) { it.newStoryViewModel.submitStory(expectedStory) }
         }
 
         scenario.onFragment {

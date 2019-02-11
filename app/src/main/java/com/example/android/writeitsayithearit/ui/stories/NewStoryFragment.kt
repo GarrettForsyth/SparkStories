@@ -74,7 +74,10 @@ class NewStoryFragment : Fragment(), Injectable {
     }
 
     private fun submitStoryAndNavigate() {
-        val newStory = Story(0, binding.newStoryEditText.text.toString().trim(), 0)
+        val newStory = Story(
+                0,
+                binding.newStoryEditText.text.toString().trim(),
+                binding.cue?.id)
         newStoryViewModel.submitStory(newStory)
         navController().navigate(NewStoryFragmentDirections
                 .actionNewStoryFragmentToStoriesFragment())
