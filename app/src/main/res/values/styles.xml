@@ -30,4 +30,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Theme.WriteItSayItHearIt.FilterTextInputLayout">
+        <item name="colorControlActivated">@color/secondaryColor</item>
+        <item name="android:textColorHint">@color/secondaryDarkColor</item>
+    </style>
+
+    <style name="Theme.WriteItSayItHearIt.FilterEditText">
+        <item name="colorControlNormal">@color/secondaryDarkColor</item>
+        <item name="colorControlActivated">@color/secondaryColor</item>
+        <item name="android:inputType">textShortMessage</item>
+    </style>
+
 </resources>

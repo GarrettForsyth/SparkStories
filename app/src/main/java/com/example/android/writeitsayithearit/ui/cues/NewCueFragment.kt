@@ -17,17 +17,11 @@ import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.vo.Cue
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
 import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass.
- *
- */
 @OpenForTesting
 class NewCueFragment : Fragment(), Injectable {
-
-    @Inject
-    lateinit var appExecutors: AppExecutors
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -45,8 +39,8 @@ class NewCueFragment : Fragment(), Injectable {
                 false
         )
 
-        val minCueTextLength = context?.resources?.getInteger(R.integer.min_cue_text_length)!!
-        val maxCueTextLength = context?.resources?.getInteger(R.integer.max_cue_text_length)!!
+        val minCueTextLength = context!!.resources!!.getInteger(R.integer.min_cue_text_length)!!
+        val maxCueTextLength = context!!.resources!!.getInteger(R.integer.max_cue_text_length)!!
 
         binding.submitCueBtn.setOnClickListener {
             // TODO: validation checks probably shouldn't be done in the fragment
@@ -66,11 +60,12 @@ class NewCueFragment : Fragment(), Injectable {
         binding.invalidateAll()
         val cueText = binding.newCueEditText.text.toString().trim()
         val cueTextLength = cueText.length
-        return cueTextLength in min..max && !cueText.isBlank()
+        return cueTextLength in min..max
     }
 
     private fun submitCueAndNavigate() {
-        val newCue = Cue(0, binding.newCueEditText.text.toString().trim())
+        val now = Calendar.getInstance().timeInMillis
+        val newCue = Cue( binding.newCueEditText.text.toString().trim(), now, 0)
         newCueViewModel.submitCue(newCue)
         navController().navigate(
                 NewCueFragmentDirections.actionNewCueFragmentToCuesFragment()
@@ -85,14 +80,12 @@ class NewCueFragment : Fragment(), Injectable {
         ).show()
     }
 
-
     override fun onStart() {
         super.onStart()
         newCueViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(NewCueViewModel::class.java)
 
     }
-
 
     /**
      * Created to override during tests.

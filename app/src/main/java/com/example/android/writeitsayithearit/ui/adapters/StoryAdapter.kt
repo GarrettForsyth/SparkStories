@@ -26,18 +26,11 @@ class StoryAdapter() : RecyclerView.Adapter<StoryViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
-        val story = stories?.get(position)!!
+        val story = stories!!.get(position)
         holder.bind(story)
     }
 
-    override fun getItemCount(): Int {
-        if (stories == null) {
-            return 0
-        }
-        else {
-            return stories?.size!!
-        }
-    }
+    override fun getItemCount() = stories?.size ?: 0
 
     fun setList(stories: List<Story>) {
         this.stories = stories

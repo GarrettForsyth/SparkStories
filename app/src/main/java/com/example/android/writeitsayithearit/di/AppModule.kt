@@ -5,6 +5,7 @@ import com.example.android.writeitsayithearit.api.WriteItSayItHearItService
 import com.example.android.writeitsayithearit.data.CueDao
 import com.example.android.writeitsayithearit.data.StoryDao
 import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
+import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import dagger.Module
 import dagger.Provides
@@ -35,6 +36,12 @@ class AppModule {
     @Provides
     fun provideStoryDao(db: WriteItSayItHearItDatabase): StoryDao {
         return db.storyDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideWSHQueryHelper(): WSHQueryHelper {
+        return WSHQueryHelper
     }
 
 }

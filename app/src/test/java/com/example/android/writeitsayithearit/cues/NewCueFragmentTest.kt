@@ -32,9 +32,7 @@ import org.robolectric.annotation.Config
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-@Config(
-        application = TestApp::class
-)
+@Config(application = TestApp::class)
 class NewCueFragmentTest {
 
     companion object {
@@ -65,7 +63,7 @@ class NewCueFragmentTest {
                 .perform(typeText(NEW_CUE_TEXT_VALID))
 
 
-        val validCue = Cue(0, NEW_CUE_TEXT_VALID)
+        val validCue = Cue(id = 0, text = NEW_CUE_TEXT_VALID, creationDate = 0, rating = 0)
 
         onView(withId(R.id.submit_cue_btn))
                 .perform(click())

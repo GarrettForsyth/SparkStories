@@ -8,28 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.Observable
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentNewStoryBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
-import com.example.android.writeitsayithearit.ui.cues.NewCueFragment
 import com.example.android.writeitsayithearit.vo.Story
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_new_story.*
-import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass.
- *
- */
 @OpenForTesting
 class NewStoryFragment : Fragment(), Injectable {
 
@@ -49,8 +41,8 @@ class NewStoryFragment : Fragment(), Injectable {
                 false
         )
 
-        val minStoryTextLength = context?.resources?.getInteger(R.integer.min_story_text_length)!!
-        val maxStoryTextLength = context?.resources?.getInteger(R.integer.max_story_text_length)!!
+        val minStoryTextLength = context!!.resources!!.getInteger(R.integer.min_story_text_length)!!
+        val maxStoryTextLength = context!!.resources!!.getInteger(R.integer.max_story_text_length)!!
 
         binding.submitStoryBtn.setOnClickListener {
             // TODO: validation checks probably shouldn't be done in the fragment
@@ -70,14 +62,16 @@ class NewStoryFragment : Fragment(), Injectable {
         binding.invalidateAll()
         val storyText = binding.newStoryEditText.text.toString().trim()
         val storyTextLength = storyText.length
-        return storyTextLength in min..max && !storyText.isBlank()
+        return storyTextLength in min..max
     }
 
     private fun submitStoryAndNavigate() {
+        val creationTime = Calendar.getInstance().timeInMillis
         val newStory = Story(
-                0,
                 binding.newStoryEditText.text.toString().trim(),
-                binding.cue?.id)
+                binding.cue!!.id,
+                creationTime,
+                0)
         newStoryViewModel.submitStory(newStory)
         navController().navigate(NewStoryFragmentDirections
                 .actionNewStoryFragmentToStoriesFragment())
@@ -107,6 +101,5 @@ class NewStoryFragment : Fragment(), Injectable {
      * Created to override during tests.
      */
     fun navController() = findNavController()
-
 
 }

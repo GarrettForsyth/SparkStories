@@ -20,6 +20,11 @@ import kotlinx.android.synthetic.main.fragment_cues.*
 import timber.log.Timber
 
 
+/**
+ * As a user
+ * I want to create cues for the community
+ * To help writers create original stories
+ */
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class UserCreatesANewCue {
@@ -36,36 +41,39 @@ class UserCreatesANewCue {
     }
 
 
+    // Given the user is starting at the main activity
+    // And the database is seeded with 10 starting cues
     @Test
     fun userCreatesAValidCue() {
+        // When the user clicks the + floating fab
         onView(withId(R.id.add_cue_fab))
                 .perform(click())
 
+        // And enters their cue into the edit text
         onView(withId(R.id.new_cue_edit_text))
                 .perform(typeText(NEW_CUE_TEXT))
 
+        // And presses the submit button
         Espresso.closeSoftKeyboard()
-
         onView(withId(R.id.submit_cue_btn))
                 .perform(click())
 
-        var endOfListItemPosition : Int? = 0
+        // Then they should see their new cue on the bottom list of cues
+        var endOfListItemPosition : Int = 0
         scenario.onActivity {
-            endOfListItemPosition = it.cues_list.adapter?.itemCount
+            endOfListItemPosition = it.cues_list.adapter?.itemCount!!
+            Timber.d("TEST" + endOfListItemPosition.toString())
 
         }
-
-        Timber.d("There are ${endOfListItemPosition} items!")
-
-        // new cue should be on the bottom
         onView(withId(R.id.cues_list))
                 .perform(RecyclerViewActions.scrollToPosition<CueViewHolder>(
-                        13
+                        endOfListItemPosition
                 ))
 
         onView(withText(NEW_CUE_TEXT))
                 .check(matches(isDisplayed()))
-
     }
+
+
 
 }

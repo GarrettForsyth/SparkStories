@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
@@ -17,14 +18,18 @@ import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.test.TestUtils
+import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.cues.CuesFragment
 import com.example.android.writeitsayithearit.ui.adapters.vh.CueViewHolder
 import com.example.android.writeitsayithearit.ui.cues.CuesFragmentDirections
 import com.example.android.writeitsayithearit.util.ViewModelUtil
+import com.example.android.writeitsayithearit.vo.CueContract
 import com.example.android.writeitsayithearit.vo.Cue
+import com.example.android.writeitsayithearit.vo.SortOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.android.synthetic.main.fragment_cues.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -111,6 +116,45 @@ class CuesFragmentTest {
                     )
             )
             }
+        }
+    }
+
+    @Test
+    fun typingInFilterEditTextQueriesViewModel() {
+        val filterString = "dogs"
+        onView(withId(R.id.filter_cues_edit_text))
+                .perform(typeText(filterString))
+        scenario.onFragment {
+            verify {
+                it.cuesViewModel.filterQuery("d")
+                it.cuesViewModel.filterQuery("do")
+                it.cuesViewModel.filterQuery("dog")
+                it.cuesViewModel.filterQuery("dogs")
+            }
+        }
+    }
+
+    @Test
+    fun selectingNewSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(0)
+            verify { it.cuesViewModel.sortOrder(SortOrder.NEW) }
+        }
+    }
+
+    @Test
+    fun selectingTopSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(1)
+            verify { it.cuesViewModel.sortOrder(SortOrder.TOP) }
+        }
+    }
+
+    @Test
+    fun selectingHotSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(2)
+            verify { it.cuesViewModel.sortOrder(SortOrder.HOT) }
         }
     }
 

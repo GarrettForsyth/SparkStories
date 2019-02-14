@@ -27,18 +27,11 @@ class CueAdapter() : RecyclerView.Adapter<CueViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CueViewHolder, position: Int) {
-        val cue = cues?.get(position)!!
+        val cue = cues!!.get(position)
         holder.bind(cue)
     }
 
-    override fun getItemCount(): Int {
-        if (cues == null) {
-            return 0
-        }
-        else {
-            return cues?.size!!
-        }
-    }
+    override fun getItemCount() = cues?.size ?: 0
 
     fun setList(cues: List<Cue>) {
         this.cues = cues

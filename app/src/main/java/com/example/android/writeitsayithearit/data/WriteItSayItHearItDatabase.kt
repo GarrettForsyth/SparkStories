@@ -10,7 +10,7 @@ import com.example.android.writeitsayithearit.vo.Story
             Cue::class,
             Story::class
         ],
-        version = 2,
+        version = 5,
         exportSchema = false
 )
 abstract class WriteItSayItHearItDatabase : RoomDatabase() {

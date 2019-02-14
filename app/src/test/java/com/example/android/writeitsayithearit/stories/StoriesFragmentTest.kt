@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
@@ -18,14 +19,15 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.ui.adapters.vh.StoryViewHolder
-import com.example.android.writeitsayithearit.ui.cues.CuesFragmentDirections
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragment
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragmentDirections
 import com.example.android.writeitsayithearit.util.ViewModelUtil
+import com.example.android.writeitsayithearit.vo.SortOrder
 import com.example.android.writeitsayithearit.vo.Story
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.android.synthetic.main.fragment_cues.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -33,11 +35,8 @@ import org.robolectric.annotation.Config
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-@Config(
-        application = TestApp::class
-)
+@Config(application = TestApp::class)
 class StoriesFragmentTest {
-
 
     private val scenario = launchInContainer(
             TestStoriesFragment::class.java,
@@ -84,6 +83,45 @@ class StoriesFragmentTest {
                     )
             )
             }
+        }
+    }
+
+    @Test
+    fun typingInFilterEditTextQueriesViewModel() {
+        val filterString = "dogs"
+        onView(withId(R.id.filter_stories_edit_text))
+                .perform(typeText(filterString))
+        scenario.onFragment {
+            verify {
+                it.storiesViewModel.filterQuery("d")
+                it.storiesViewModel.filterQuery("do")
+                it.storiesViewModel.filterQuery("dog")
+                it.storiesViewModel.filterQuery("dogs")
+            }
+        }
+    }
+
+    @Test
+    fun selectingNewSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(0)
+            verify { it.storiesViewModel.sortOrder(SortOrder.NEW) }
+        }
+    }
+
+    @Test
+    fun selectingTopSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(1)
+            verify { it.storiesViewModel.sortOrder(SortOrder.TOP) }
+        }
+    }
+
+    @Test
+    fun selectingHotSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(2)
+            verify { it.storiesViewModel.sortOrder(SortOrder.HOT) }
         }
     }
 

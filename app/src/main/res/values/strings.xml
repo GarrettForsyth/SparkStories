@@ -15,4 +15,12 @@
     <string name="stories">Stories</string>
     <string name="narrations">Narrations</string>
     <string name="story_text">Story Text</string>
+    <string name="filter_cues">Filter Cues</string>
+    <string name="filter_stories">Filter Stories</string>
+
+    <string-array name="sort_order">
+        <item>New</item>
+        <item>Top</item>
+        <item>Hot</item>
+    </string-array>
 </resources>

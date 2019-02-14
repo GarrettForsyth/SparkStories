@@ -1,12 +1,18 @@
 package com.example.android.writeitsayithearit.cues
 
+import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.api.WriteItSayItHearItService
 import com.example.android.writeitsayithearit.data.CueDao
 import com.example.android.writeitsayithearit.repos.CueRepository
+import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
+import com.example.android.writeitsayithearit.vo.CueContract
+import com.example.android.writeitsayithearit.vo.SortOrder
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,13 +24,54 @@ class CueRepositoryTest {
 
     private val dao: CueDao = mockk(relaxed = true)
     private val service: WriteItSayItHearItService = mockk(relaxed = true)
-    private val cueRepository = CueRepository(InstantAppExecutors(), dao, service)
+    private val wshQueryHelper: WSHQueryHelper = mockk(relaxed = true)
 
+    private val cueRepository = CueRepository(InstantAppExecutors(), dao, service, wshQueryHelper)
 
     @Test
     fun loadCuesLocally() {
-        cueRepository.cues()
-        verify(exactly = 1) { dao.cues() }
+        val mockedQuery: SupportSQLiteQuery = mockk()
+        every { wshQueryHelper.cues("", SortOrder.NEW) } returns mockedQuery
+
+        cueRepository.cues("", SortOrder.NEW)
+        verify(exactly = 1) { dao.cues(mockedQuery) }
+    }
+
+    @Test
+    fun loadCuesLocallyFilterByText() {
+        val mockedQuery: SupportSQLiteQuery = mockk()
+        every { wshQueryHelper.cues("Dogs", SortOrder.NEW) } returns mockedQuery
+
+        cueRepository.cues("Dogs",SortOrder.NEW)
+        verify(exactly = 1) { dao.cues(mockedQuery) }
+    }
+
+    @Test
+    fun loadCuesLocallyOrderByNew() {
+        val mockedQuery: SupportSQLiteQuery = mockk()
+        every { wshQueryHelper.cues("", SortOrder.NEW) } returns mockedQuery
+
+        cueRepository.cues("", SortOrder.NEW)
+        verify(exactly = 1) { dao.cues(mockedQuery) }
+
+    }
+
+    @Test
+    fun loadCuesLocallyOrderByTop() {
+        val mockedQuery: SupportSQLiteQuery = mockk()
+        every { wshQueryHelper.cues("", SortOrder.TOP) } returns mockedQuery
+
+        cueRepository.cues("", SortOrder.TOP)
+        verify(exactly = 1) { dao.cues(mockedQuery) }
+    }
+
+    @Test
+    fun loadCuesLocallyOrderByHot() {
+        val mockedQuery: SupportSQLiteQuery = mockk()
+        every { wshQueryHelper.cues("", SortOrder.HOT) } returns mockedQuery
+
+        cueRepository.cues("", SortOrder.HOT)
+        verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 
     @Test

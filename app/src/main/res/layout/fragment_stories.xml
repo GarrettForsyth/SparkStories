@@ -11,11 +11,45 @@
         android:background="@mipmap/table_top_port"
         tools:context=".ui.stories.StoriesFragment">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:theme="@style/Theme.WriteItSayItHearIt.FilterTextInputLayout"
+            android:id="@+id/filter_stories_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/stories_list"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/sort_order_spinner"
+            app:layout_constraintRight_toLeftOf="@id/sort_order_spinner">
+            <com.google.android.material.textfield.TextInputEditText
+                android:theme="@style/Theme.WriteItSayItHearIt.FilterEditText"
+                android:id="@+id/filter_stories_edit_text"
+                android:hint="@string/filter_stories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/sort_order_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/stories_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@id/filter_stories_layout"
+            app:layout_constraintLeft_toRightOf="@id/filter_stories_layout">
+        </androidx.appcompat.widget.AppCompatSpinner>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stories_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/filter_stories_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listItem="@layout/story_list_item" />
 

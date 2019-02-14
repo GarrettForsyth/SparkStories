@@ -37,9 +37,7 @@ import org.robolectric.annotation.Config
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-@Config(
-        application = TestApp::class
-)
+@Config(application = TestApp::class)
 class NewStoryFragmentTest {
 
     companion object {
@@ -78,12 +76,11 @@ class NewStoryFragmentTest {
         onView(withId(R.id.new_story_edit_text))
                 .perform(typeText(NEW_STORY_TEXT_VALID))
 
-
-
         onView(withId(R.id.submit_story_btn))
                 .perform(click())
 
-        val expectedStory = Story(0, NEW_STORY_TEXT_VALID, CUE.id)
+        val expectedStory = Story(id = 0, text = NEW_STORY_TEXT_VALID, cueId = CUE.id,
+                creationDate = 0, rating = 0)
 
         scenario.onFragment {
             verify(exactly =1) { it.newStoryViewModel.submitStory(expectedStory) }

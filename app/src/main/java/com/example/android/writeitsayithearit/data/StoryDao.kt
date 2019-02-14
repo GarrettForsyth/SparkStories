@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.RawQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.android.writeitsayithearit.vo.Cue
 import com.example.android.writeitsayithearit.vo.Story
 
@@ -16,10 +18,10 @@ abstract class StoryDao {
     @Insert
     abstract fun insert(stories: List<Story>)
 
-    @Query("SELECT * from story WHERE id = :id")
+    @Query("SELECT * from stories WHERE id = :id")
     abstract fun story(id: Int): LiveData<Story>
 
-    @Query("SELECT * from story")
-    abstract fun stories(): LiveData<List<Story>>
+    @RawQuery(observedEntities = [ Story::class ])
+    abstract fun stories(query: SupportSQLiteQuery): LiveData<List<Story>>
 
 }
