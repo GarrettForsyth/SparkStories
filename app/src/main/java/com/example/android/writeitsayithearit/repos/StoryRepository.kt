@@ -11,10 +11,10 @@ import com.example.android.writeitsayithearit.vo.Story
 import javax.inject.Inject
 
 class StoryRepository @Inject constructor(
-        val appExecutors: AppExecutors,
-        val storyDao: StoryDao,
-        val service: WriteItSayItHearItService,
-        val wshQueryHelper: WSHQueryHelper
+        private val appExecutors: AppExecutors,
+        private val storyDao: StoryDao,
+        private val service: WriteItSayItHearItService,
+        private val wshQueryHelper: WSHQueryHelper
 ) {
 
     fun stories(filterText: String, sortOrder: SortOrder): LiveData<List<Story>> {

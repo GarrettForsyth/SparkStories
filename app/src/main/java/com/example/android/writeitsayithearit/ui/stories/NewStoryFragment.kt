@@ -1,7 +1,6 @@
 package com.example.android.writeitsayithearit.ui.stories
 
 
-import android.os.Build.VERSION_CODES.N
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -45,10 +44,7 @@ class NewStoryFragment : Fragment(), Injectable {
         val maxStoryTextLength = context!!.resources!!.getInteger(R.integer.max_story_text_length)!!
 
         binding.submitStoryBtn.setOnClickListener {
-            // TODO: validation checks probably shouldn't be done in the fragment
-            // consider moving validation logic into the model and propagating errors.
-
-            if (isValidStory(binding, minStoryTextLength, maxStoryTextLength)) {
+            if (isValidForStoryCreation(binding, minStoryTextLength, maxStoryTextLength)) {
                 submitStoryAndNavigate()
             } else {
                 showInvalidStorySnackBar(minStoryTextLength, maxStoryTextLength)
@@ -58,7 +54,7 @@ class NewStoryFragment : Fragment(), Injectable {
         return binding.root
     }
 
-    private fun isValidStory(binding: FragmentNewStoryBinding, min: Int, max: Int): Boolean {
+    private fun isValidForStoryCreation(binding: FragmentNewStoryBinding, min: Int, max: Int): Boolean {
         binding.invalidateAll()
         val storyText = binding.newStoryEditText.text.toString().trim()
         val storyTextLength = storyText.length

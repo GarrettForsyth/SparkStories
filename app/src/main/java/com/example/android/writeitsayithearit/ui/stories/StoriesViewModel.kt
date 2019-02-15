@@ -2,13 +2,15 @@ package com.example.android.writeitsayithearit.ui.stories
 
 import androidx.lifecycle.*
 import com.example.android.writeitsayithearit.repos.StoryRepository
+import com.example.android.writeitsayithearit.viewmodel.HasFilterQuery
+import com.example.android.writeitsayithearit.viewmodel.HasSortOrderSpinner
 import com.example.android.writeitsayithearit.vo.SortOrder
 import com.example.android.writeitsayithearit.vo.Story
 import javax.inject.Inject
 
 class StoriesViewModel @Inject constructor(
-        private val storyRepository: StoryRepository
-): ViewModel() {
+    private val storyRepository: StoryRepository
+) : ViewModel(), HasFilterQuery, HasSortOrderSpinner {
 
     private val _stories = MediatorLiveData<List<Story>>()
     val stories: LiveData<List<Story>> = _stories
@@ -17,18 +19,14 @@ class StoriesViewModel @Inject constructor(
     private val _filteredStories = Transformations.switchMap(_filterQuery) { query ->
         if (_sortOrder.value != null) {
             stories(query, _sortOrder.value!!)
-        }else {
+        } else {
             stories(filterText = query, sortOrder = SortOrder.NEW)
         }
     }
 
     private val _sortOrder = MutableLiveData<SortOrder>()
     private val _sortedStories = Transformations.switchMap(_sortOrder) { sortOrder ->
-        if (_filterQuery.value != null) {
-            stories(_filterQuery.value!!, _sortOrder.value!!)
-        }else {
-            stories(filterText = "", sortOrder = sortOrder)
-        }
+        stories(_filterQuery.value!!, _sortOrder.value!!)
     }
 
     init {
@@ -37,9 +35,9 @@ class StoriesViewModel @Inject constructor(
         _stories.addSource(_sortedStories, { _stories.value = _sortedStories.value!! })
     }
 
-    fun filterQuery(filterText: String) = _filterQuery.postValue(filterText)
+    override fun filterQuery(filterText: String) = _filterQuery.postValue(filterText)
 
-    fun sortOrder(sortOrder: SortOrder) = _sortOrder.postValue(sortOrder)
+    override fun sortOrder(sortOrder: SortOrder) = _sortOrder.postValue(sortOrder)
 
     private fun stories(filterText: String, sortOrder: SortOrder): LiveData<List<Story>> {
         return storyRepository.stories(filterText, sortOrder)

@@ -23,12 +23,10 @@ data class Cue(
         @ColumnInfo(name = CueContract.COLUMN_ID)
         val id: Int = 0
 ) {
-    // TODO: Think about what makes sense for this
     override fun equals(other: Any?): Boolean {
         return (other is Cue)
                 && this.text.equals(other.text)
     }
-
 }
 
 

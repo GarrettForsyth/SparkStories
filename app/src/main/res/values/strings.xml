@@ -17,6 +17,7 @@
     <string name="story_text">Story Text</string>
     <string name="filter_cues">Filter Cues</string>
     <string name="filter_stories">Filter Stories</string>
+    <string name="no_results">No results.</string>
 
     <string-array name="sort_order">
         <item>New</item>

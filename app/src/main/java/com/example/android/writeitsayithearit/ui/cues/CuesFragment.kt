@@ -1,15 +1,12 @@
 package com.example.android.writeitsayithearit.ui.cues
 
 
+import android.opengl.Visibility
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,9 +19,7 @@ import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.ui.adapters.ClickListener
 import com.example.android.writeitsayithearit.ui.adapters.CueAdapter
-import com.example.android.writeitsayithearit.vo.CueContract
-import com.example.android.writeitsayithearit.vo.SortOrder
-import timber.log.Timber
+import com.example.android.writeitsayithearit.ui.util.ViewUtils
 import javax.inject.Inject
 
 /**
@@ -55,8 +50,6 @@ class CuesFragment : Fragment(), Injectable {
                 false
         )
         initializeFab()
-        initializeFilter()
-        initializeSortOrderSpinner()
         initializeAdapter()
 
         return binding.root
@@ -67,38 +60,6 @@ class CuesFragment : Fragment(), Injectable {
             navController().navigate(
                     CuesFragmentDirections.actionCuesFragmentToNewCueFragment()
             )
-        }
-    }
-
-    private fun initializeFilter() {
-        binding.filterCuesEditText.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(text: CharSequence?, start: Int, end: Int, count: Int) {
-                cuesViewModel.filterQuery(text.toString())
-            }
-            override fun afterTextChanged(p0: Editable?) {}
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        })
-    }
-
-    private fun initializeSortOrderSpinner() {
-        val spinnerAdapter = ArrayAdapter.createFromResource(
-                context!!,
-                R.array.sort_order,
-                android.R.layout.simple_spinner_item
-        )
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.sortOrderSpinner.adapter = spinnerAdapter
-
-        binding.sortOrderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when (position) {
-                    0 -> cuesViewModel.sortOrder(SortOrder.NEW)
-                    1 -> cuesViewModel.sortOrder(SortOrder.TOP)
-                    else -> cuesViewModel.sortOrder(SortOrder.HOT)
-                }
-            }
         }
     }
 
@@ -115,8 +76,17 @@ class CuesFragment : Fragment(), Injectable {
         binding.cuesList.adapter = adapter
     }
 
+
     /**
      * TODO: Figure out why ViewModel can't be set before onStart()
+     *
+     * Firstly, it's not ideal to call setup here since it will be called
+     * every time onStart is called and it really only needs to be called once.
+     * (Although, it's probably not that big of a deal in this case.)
+     *
+     * For some reason viewModelFactory is not initialized until onStart(),
+     * and some views need a reference to the viewmodel to set up.
+     *
      */
     override fun onStart() {
         super.onStart()
@@ -127,9 +97,18 @@ class CuesFragment : Fragment(), Injectable {
             if (cues != null) {
                 adapter.setList(cues)
                 adapter.notifyDataSetChanged()
+                binding.noResults.visibility = if (!cues.isEmpty()) View.GONE else View.VISIBLE
+            }else {
+                binding.noResults.visibility = View.VISIBLE
             }
         })
 
+        ViewUtils.initializeFilter(binding.filterCuesEditText, cuesViewModel)
+        ViewUtils.initializeSortOrderSpinner(
+            binding.sortOrderSpinner,
+            cuesViewModel,
+            context!!
+        )
     }
 
     /**

@@ -27,7 +27,6 @@ data class Story (
         @ColumnInfo(name = StoryContract.COLUMN_ID)
         val id: Int = 0
 ) {
-    // TODO: Figure out if this is ok
     override fun equals(other: Any?): Boolean {
         return (other is Story)
                 && this.text.equals(other.text)

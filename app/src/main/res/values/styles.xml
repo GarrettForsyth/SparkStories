@@ -41,4 +41,11 @@
         <item name="android:inputType">textShortMessage</item>
     </style>
 
+    <style name="Theme.WriteItSayItHearIt.NoResultsFoundStyle">
+        <item name="android:fontFamily">@font/cormorant_medium</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">@dimen/text_size_headline</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

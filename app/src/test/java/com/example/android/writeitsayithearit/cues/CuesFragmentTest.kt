@@ -1,9 +1,11 @@
 package com.example.android.writeitsayithearit.cues
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario.launchInContainer
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.test.espresso.Espresso.onView
@@ -30,6 +32,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.android.synthetic.main.fragment_cues.*
+import org.hamcrest.CoreMatchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -48,6 +51,7 @@ class CuesFragmentTest {
             null,
             TestCuesFragmentFactory()
     )
+
 
     @Test
     fun fragmentQueriesViewModelForCues() {
@@ -87,6 +91,26 @@ class CuesFragmentTest {
                 .check(matches(hasDescendant(
                         withText(cues.last().text))
                 ))
+
+        scenario.onFragment {
+            assert(!it.view!!.findViewById<TextView>(R.id.no_results).isShown)
+        }
+    }
+
+    @Test
+    fun noResultsTextViewIsDisplayedWhenNoResults(){
+        scenario.onFragment {
+            it.liveResponseCues.postValue(emptyList())
+            assert(it.view!!.findViewById<TextView>(R.id.no_results).isShown)
+        }
+    }
+
+    @Test
+    fun noResultsTextViewIsDisplayedWhenNullResults(){
+        scenario.onFragment {
+            it.liveResponseCues.postValue(null)
+            assert(it.view!!.findViewById<TextView>(R.id.no_results).isShown)
+        }
     }
 
     @Test
@@ -158,6 +182,7 @@ class CuesFragmentTest {
         }
     }
 
+
     /**
      * A factory that returns a CuesFragment with mocked dependencies.
      *
@@ -171,19 +196,22 @@ class CuesFragmentTest {
                 this.cuesViewModel = mockk(relaxed = true)
                 this.viewModelFactory = ViewModelUtil.createFor(this.cuesViewModel)
 
-                val liveCues = MutableLiveData<List<Cue>>()
-                liveCues.postValue(TestUtils.listOfStartingCues)
-                every { cuesViewModel.cues } returns liveCues
+                liveResponseCues.postValue(TestUtils.listOfStartingCues)
+                every { cuesViewModel.cues } returns liveResponseCues
             }
         }
     }
 
     /**
-     * Simply overrides the nav controller to verify correct actions are
+     * Overrides the nav controller to verify correct actions are
      * being called when expected.
+     *
+     * Also exposes the live data returned by the viewmodel as a
+     * testing courtesy.
      */
     class TestCuesFragment : CuesFragment() {
         val navController: NavController = mockk(relaxed = true)
+        val liveResponseCues = MutableLiveData<List<Cue>>()
         override fun navController() = navController
     }
 

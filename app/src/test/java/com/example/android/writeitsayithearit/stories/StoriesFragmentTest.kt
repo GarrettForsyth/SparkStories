@@ -1,6 +1,7 @@
 package com.example.android.writeitsayithearit.stories
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario.launchInContainer
@@ -22,6 +23,7 @@ import com.example.android.writeitsayithearit.ui.adapters.vh.StoryViewHolder
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragment
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragmentDirections
 import com.example.android.writeitsayithearit.util.ViewModelUtil
+import com.example.android.writeitsayithearit.vo.Cue
 import com.example.android.writeitsayithearit.vo.SortOrder
 import com.example.android.writeitsayithearit.vo.Story
 import io.mockk.every
@@ -65,6 +67,26 @@ class StoriesFragmentTest {
                 .check(matches(hasDescendant(
                         withText(stories.last().text))
                 ))
+
+        scenario.onFragment {
+            assert(!it.view!!.findViewById<TextView>(R.id.no_results).isShown)
+        }
+    }
+
+    @Test
+    fun noResultsTextViewIsDisplayedWhenNoResults(){
+        scenario.onFragment {
+            it.liveResponseStories.postValue(emptyList())
+            assert(it.view!!.findViewById<TextView>(R.id.no_results).isShown)
+        }
+    }
+
+    @Test
+    fun noResultsTextViewIsDisplayedWhenNullResults(){
+        scenario.onFragment {
+            it.liveResponseStories.postValue(null)
+            assert(it.view!!.findViewById<TextView>(R.id.no_results).isShown)
+        }
     }
 
     @Test
@@ -139,19 +161,22 @@ class StoriesFragmentTest {
                 this.storiesViewModel = mockk(relaxed = true)
                 this.viewModelFactory = ViewModelUtil.createFor(this.storiesViewModel)
 
-                val liveStories = MutableLiveData<List<Story>>()
-                liveStories.postValue(TestUtils.listOfStartingStories)
-                every { storiesViewModel.stories } returns liveStories
+                liveResponseStories.postValue(TestUtils.listOfStartingStories)
+                every { storiesViewModel.stories } returns liveResponseStories
             }
         }
     }
 
     /**
-     * Simply overrides the nav controller to verify correct actions are
+     * Overrides the nav controller to verify correct actions are
      * being called when expected.
+     *
+     * Also exposes the live data returned by the viewmodel as a
+     * testing courtesy.
      */
     class TestStoriesFragment : StoriesFragment() {
         val navController: NavController = mockk(relaxed = true)
+        val liveResponseStories = MutableLiveData<List<Story>>()
         override fun navController() = navController
     }
 }

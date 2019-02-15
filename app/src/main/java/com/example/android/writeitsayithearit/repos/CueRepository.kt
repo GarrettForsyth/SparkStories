@@ -10,10 +10,10 @@ import com.example.android.writeitsayithearit.vo.SortOrder
 import javax.inject.Inject
 
 class CueRepository @Inject constructor(
-        val appExecutors: AppExecutors,
-        val cueDao: CueDao,
-        val service: WriteItSayItHearItService,
-        val wshQueryHelper: WSHQueryHelper
+        private val appExecutors: AppExecutors,
+        private val cueDao: CueDao,
+        private val service: WriteItSayItHearItService,
+        private val wshQueryHelper: WSHQueryHelper
 ) {
 
     fun cues(filterText: String, sortOrder: SortOrder): LiveData<List<Cue>> {

@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.example.android.writeitsayithearit.AppExecutors
 
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentNewCueBinding
@@ -43,10 +42,7 @@ class NewCueFragment : Fragment(), Injectable {
         val maxCueTextLength = context!!.resources!!.getInteger(R.integer.max_cue_text_length)!!
 
         binding.submitCueBtn.setOnClickListener {
-            // TODO: validation checks probably shouldn't be done in the fragment
-            // consider moving validation logic into the model and propagating errors.
-
-            if (isValidCue(binding, minCueTextLength, maxCueTextLength)) {
+            if (isValidForCueCreation(binding, minCueTextLength, maxCueTextLength)) {
                 submitCueAndNavigate()
             } else {
                 showInvalidCueSnackBar(minCueTextLength, maxCueTextLength)
@@ -56,7 +52,7 @@ class NewCueFragment : Fragment(), Injectable {
         return binding.root
     }
 
-    private fun isValidCue(binding: FragmentNewCueBinding, min: Int, max: Int): Boolean {
+    private fun isValidForCueCreation(binding: FragmentNewCueBinding, min: Int, max: Int): Boolean {
         binding.invalidateAll()
         val cueText = binding.newCueEditText.text.toString().trim()
         val cueTextLength = cueText.length

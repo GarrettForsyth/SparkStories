@@ -5,7 +5,9 @@ import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.vo.Cue
 import javax.inject.Inject
 
-class NewCueViewModel @Inject constructor(val cueRepository: CueRepository): ViewModel() {
+class NewCueViewModel @Inject constructor(
+    private val cueRepository: CueRepository
+): ViewModel() {
 
     fun submitCue(cue: Cue) { cueRepository.submitCue(cue) }
 }
