@@ -29,8 +29,8 @@ class DatabaseModule {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         appExecutors.diskIO().execute {
-                            database.cueDao().insert(TestUtils.listOfStartingCues)
-                            database.storyDao().insert(TestUtils.listOfStartingStories)
+                            database.cueDao().insert(TestUtils.STARTING_CUES)
+                            database.storyDao().insert(TestUtils.STARTING_STORIES)
                         }
                     }
                 })

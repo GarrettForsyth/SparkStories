@@ -4,6 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="com.example.android.writeitsayithearit.binding.Converter" />
+
+        <variable
+            name="hasResults"
+            type="boolean" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.android.writeitsayithearit.ui.stories.StoriesViewModel" />
+
+        <variable
+            name="listAdapter"
+            type="com.example.android.writeitsayithearit.ui.adapters.StoryAdapter" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/stories_fragment"
         android:layout_width="match_parent"
@@ -22,8 +38,10 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintEnd_toStartOf="@id/sort_order_spinner"
             app:layout_constraintRight_toLeftOf="@id/sort_order_spinner">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:theme="@style/Theme.WriteItSayItHearIt.FilterEditText"
+                android:text="@={viewmodel.filterQuery}"
                 android:id="@+id/filter_stories_edit_text"
                 android:hint="@string/filter_stories"
                 android:layout_width="match_parent"
@@ -33,6 +51,8 @@
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/sort_order_spinner"
+            app:entries="@{@stringArray/sort_order}"
+            app:onItemSelected="@{(selection) -> viewmodel.sortOrder(Converter.toSortOrder(selection))}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
@@ -46,6 +66,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stories_list"
+            android:adapter="@{listAdapter}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/filter_stories_layout"
@@ -66,6 +87,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
+            visibleGone="@{!hasResults}"
         />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

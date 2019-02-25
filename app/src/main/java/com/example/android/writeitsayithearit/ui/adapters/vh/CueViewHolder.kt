@@ -7,15 +7,8 @@ import com.example.android.writeitsayithearit.vo.Cue
 import timber.log.Timber
 
 class CueViewHolder(
-        private val binding : CueListItemBinding,
-        private val clickListener: ClickListener
+        private val binding : CueListItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-
-    init {
-        binding.root.setOnClickListener { view ->
-            clickListener.onItemClick(view, adapterPosition)
-        }
-    }
 
     fun bind(cue: Cue) {
         binding.cue = cue

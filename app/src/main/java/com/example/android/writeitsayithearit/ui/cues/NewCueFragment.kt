@@ -14,6 +14,8 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentNewCueBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
+import com.example.android.writeitsayithearit.ui.cues.models.CueTextField
+import com.example.android.writeitsayithearit.ui.util.events.EventObserver
 import com.example.android.writeitsayithearit.vo.Cue
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
@@ -29,58 +31,47 @@ class NewCueFragment : Fragment(), Injectable {
 
     private lateinit var binding: FragmentNewCueBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_new_cue,
-                container,
-                false
+            inflater,
+            R.layout.fragment_new_cue,
+            container,
+            false
         )
 
-        val minCueTextLength = context!!.resources!!.getInteger(R.integer.min_cue_text_length)!!
-        val maxCueTextLength = context!!.resources!!.getInteger(R.integer.max_cue_text_length)!!
+        newCueViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(NewCueViewModel::class.java)
+        binding.viewmodel = newCueViewModel
 
-        binding.submitCueBtn.setOnClickListener {
-            if (isValidForCueCreation(binding, minCueTextLength, maxCueTextLength)) {
-                submitCueAndNavigate()
-            } else {
-                showInvalidCueSnackBar(minCueTextLength, maxCueTextLength)
-            }
-        }
+        observeInvalidSnackBar()
+        observeShouldNavigateToCues()
 
         return binding.root
     }
 
-    private fun isValidForCueCreation(binding: FragmentNewCueBinding, min: Int, max: Int): Boolean {
-        binding.invalidateAll()
-        val cueText = binding.newCueEditText.text.toString().trim()
-        val cueTextLength = cueText.length
-        return cueTextLength in min..max
-    }
-
-    private fun submitCueAndNavigate() {
-        val now = Calendar.getInstance().timeInMillis
-        val newCue = Cue( binding.newCueEditText.text.toString().trim(), now, 0)
-        newCueViewModel.submitCue(newCue)
-        navController().navigate(
+    private fun observeShouldNavigateToCues() {
+        newCueViewModel.shouldNavigateToCues.observe(this, EventObserver {
+            navController().navigate(
                 NewCueFragmentDirections.actionNewCueFragmentToCuesFragment()
-        )
+            )
+        })
     }
 
-    private fun showInvalidCueSnackBar(min: Int, max: Int) {
-        Snackbar.make(
+    private fun observeInvalidSnackBar() {
+        newCueViewModel.invalidCueSnackBar.observe(this, EventObserver {
+            Snackbar.make(
                 binding.newCueConstraintLayout,
-                getString(R.string.new_cue_invalid_message, min, max),
+                getString(
+                    R.string.invalid_new_cue_snackbar,
+                    CueTextField.minCharacters,
+                    CueTextField.maxCharacters
+                ),
                 Snackbar.LENGTH_SHORT
-        ).show()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        newCueViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(NewCueViewModel::class.java)
-
+            ).show()
+        })
     }
 
     /**

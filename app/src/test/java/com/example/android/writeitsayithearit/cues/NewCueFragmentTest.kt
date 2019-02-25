@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario.launchInContainer
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -18,12 +19,15 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.ui.cues.NewCueFragment
 import com.example.android.writeitsayithearit.ui.cues.NewCueFragmentDirections
+import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentDirections
+import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.vo.Cue
 import io.mockk.Called
+import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
+import kotlinx.android.synthetic.main.fragment_new_cue.*
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,13 +44,7 @@ class NewCueFragmentTest {
         private val MINIMUM_CUE_LENGTH = context.resources.getInteger(R.integer.min_cue_text_length)
         private val MAXIMUM_CUE_LENGTH = context.resources.getInteger(R.integer.max_cue_text_length)
 
-        private val NEW_CUE_TEXT_VALID = "a".repeat(MINIMUM_CUE_LENGTH)
-        private val NEW_CUE_TEXT_TOO_SHORT = "a".repeat(MINIMUM_CUE_LENGTH - 1)
-        private val NEW_CUE_TEXT_BLANK = " ".repeat(MINIMUM_CUE_LENGTH)
-        private val NEW_CUE_TEXT_TOO_LONG = "a".repeat(MAXIMUM_CUE_LENGTH + 1)
-
-
-        private val invalidCueMessage = context.getString(R.string.new_cue_invalid_message,
+        private val invalidCueMessage = context.getString(R.string.invalid_new_cue_snackbar,
                 MINIMUM_CUE_LENGTH, MAXIMUM_CUE_LENGTH)
     }
 
@@ -58,102 +56,36 @@ class NewCueFragmentTest {
     )
 
     @Test
-    fun validCueCallsViewModel() {
-        onView(withId(R.id.new_cue_edit_text))
-                .perform(typeText(NEW_CUE_TEXT_VALID))
-
-
-        val validCue = Cue(id = 0, text = NEW_CUE_TEXT_VALID, creationDate = 0, rating = 0)
-
-        onView(withId(R.id.submit_cue_btn))
-                .perform(click())
+    fun submitCueButton() {
         scenario.onFragment {
-            verify(exactly =1) { it.newCueViewModel.submitCue(validCue) }
-        }
-
-        scenario.onFragment {
-            verify(exactly = 1) { it.navController().navigate(
-                    NewCueFragmentDirections.actionNewCueFragmentToCuesFragment()
-            ) }
+            it.submit_cue_btn.callOnClick()
+            verify(exactly = 1) { it.newCueViewModel.onClickSubmitCue() }
         }
     }
 
     @Test
-    fun showInvalidWhenCueIsTooShort() {
-        onView(withId(R.id.new_cue_edit_text))
-                .perform(typeText(NEW_CUE_TEXT_TOO_SHORT))
-
-        onView(withId(R.id.submit_cue_btn))
-                .perform(click())
-
-        onView(allOf(
-                withId(com.google.android.material.R.id.snackbar_text),
-                withText(invalidCueMessage)
-        )).check(matches(isDisplayed()))
-
-        verifyNoNavigation()
-    }
-
-    @Test
-    fun showInvalidWhenCueIsEmpty() {
-        onView(withId(R.id.submit_cue_btn))
-                .perform(click())
-
-        onView(allOf(
-                withId(com.google.android.material.R.id.snackbar_text),
-                withText(invalidCueMessage)
-        )).check(matches(isDisplayed()))
-
-        verifyNoNavigation()
-    }
-
-    @Test
-    fun showInvalidWhenCueIsBlank() {
-        onView(withId(R.id.new_cue_edit_text))
-                .perform(typeText(NEW_CUE_TEXT_BLANK))
-
-        onView(withId(R.id.submit_cue_btn))
-                .perform(click())
-
-        onView(allOf(
-                withId(com.google.android.material.R.id.snackbar_text),
-                withText(invalidCueMessage)
-        )).check(matches(isDisplayed()))
-
-        verifyNoNavigation()
-    }
-
-    @Test
-    fun showInvalidWhenCueIsTooLong() {
-        onView(withId(R.id.new_cue_edit_text))
-                .perform(typeText(NEW_CUE_TEXT_TOO_LONG))
-
-        onView(withId(R.id.submit_cue_btn))
-                .perform(click())
-
-        onView(allOf(
-                withId(com.google.android.material.R.id.snackbar_text),
-                withText(invalidCueMessage)
-        )).check(matches(isDisplayed()))
-
-        verifyNoNavigation()
-    }
-
-
-    @Test
-    fun cueInfoIsShown() {
-        onView(withId(R.id.new_cue_constraint_layout))
-                .check(matches(hasDescendant(
-                        withText(R.string.new_cue_info_text)
-                )))
-    }
-
-    private fun verifyNoNavigation(){
+    fun showInvalidStorySnackbar() {
         scenario.onFragment {
-            verify(exactly = 0) { it.navController() wasNot Called }
+            it.invalidCueSnackBar.value = Event(true)
+        }
+        onView(
+            allOf(
+                withId(com.google.android.material.R.id.snackbar_text),
+                withText(invalidCueMessage)
+            )
+        ).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun shouldNavigateToCues() {
+        scenario.onFragment {
+            it.shouldNavigateToCues.value = Event(true)
+            verify {
+                it.navController.navigate(
+                    NewCueFragmentDirections.actionNewCueFragmentToCuesFragment())
+            }
         }
     }
-
 
     /**
      * A factory that returns a NewCuesFragment with mocked dependencies.
@@ -167,6 +99,9 @@ class NewCueFragmentTest {
                     as TestNewCueFragment).apply {
                 this.newCueViewModel = mockk(relaxed = true)
                 this.viewModelFactory = ViewModelUtil.createFor(this.newCueViewModel)
+
+                every { newCueViewModel.shouldNavigateToCues } returns shouldNavigateToCues
+                every { newCueViewModel.invalidCueSnackBar } returns invalidCueSnackBar
             }
         }
     }
@@ -178,6 +113,9 @@ class NewCueFragmentTest {
     class TestNewCueFragment : NewCueFragment() {
         val navController: NavController = mockk(relaxed = true)
         override fun navController() = navController
+
+        val invalidCueSnackBar = MutableLiveData<Event<Boolean>>()
+        val shouldNavigateToCues = MutableLiveData<Event<Boolean>>()
     }
 
 }

@@ -12,7 +12,7 @@ object TestUtils {
     private val now = Calendar.getInstance().timeInMillis
     private val twoDays = 172800000
 
-    val listOfStartingCues = listOf(
+    val STARTING_CUES = listOf(
             Cue( "You find a rock, and realize anyone holding it must tell the truth.",
                    now - 9 - twoDays,
                     90),
@@ -46,7 +46,7 @@ object TestUtils {
     )
 
 
-    val listOfStartingStories = listOf(
+    val STARTING_STORIES = listOf(
             Story( "This is the tale about: You find a rock, and realize anyone holding it must tell the truth.",
                     1,
                     now - 9 - twoDays,
@@ -89,10 +89,13 @@ object TestUtils {
                     200)
     )
 
-    val sortByNewIndices = listOf(9,8,7,6,4,2,0,5,3,1)
-    val sortByTopIndices = listOf(9,2,0,5,6,7,8,3,4,1)
-    val sortByHotIndices = listOf(9,2,6,7,8,4)
-    val sortByHotAndFilter = listOf(9,6,7,8) // filter on 'to'
+    val SORT_NEW_INDICES = listOf(9,8,7,6,4,2,0,5,3,1)
+    val SORT_TOP_INDICES = listOf(9,2,0,5,6,7,8,3,4,1)
+    val SORT_HOT_INDICES = listOf(9,2,6,7,8,4)
+    val FILTER_SORT_HOT_INDICES = listOf(9,6,7,8) // filter on 'to'
+    val FILTER_SORT_NEW_INDICES = listOf(9,8,7,6) // filter on 'to'
+    val FILTER_SORT_TOP_INDICES = listOf(9,6,7,8) // filter on 'to'
+    val FILTER_STRING_TO = "to"
 
     fun createTestCue(): Cue = Cue( "this is a test cue", now, 0)
 

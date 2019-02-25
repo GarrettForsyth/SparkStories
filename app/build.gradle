@@ -174,12 +174,13 @@ dependencies {
     androidTestImplementation deps.dagger.android_support
 
     /* Debug dependencies */
-    debugImplementation deps.fragment_test
     debugImplementation deps.test_ext.truth
     debugImplementation deps.espresso.core
     debugImplementation deps.espresso.contrib
     debugImplementation deps.arch_core.testing
+    debugImplementation deps.fragment_test
 
     androidTestUtil deps.orchestrator
+
 }
 

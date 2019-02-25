@@ -2,6 +2,7 @@ package com.example.android.writeitsayithearit.stories
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario
@@ -10,8 +11,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,21 +18,21 @@ import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.test.TestUtils
-import com.example.android.writeitsayithearit.ui.cues.NewCueFragmentDirections
 import com.example.android.writeitsayithearit.ui.stories.NewStoryFragment
-import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentArgs
 import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentDirections
+import com.example.android.writeitsayithearit.ui.stories.models.StoryTextField
+import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.vo.Cue
-import com.example.android.writeitsayithearit.vo.Story
-import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.android.synthetic.main.fragment_new_story.*
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowAlertDialog
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -42,139 +41,158 @@ class NewStoryFragmentTest {
 
     companion object {
         private val context = ApplicationProvider.getApplicationContext<Context>()
-        private val MINIMUM_STORY_LENGTH = context.resources.getInteger(R.integer.min_story_text_length)
-        private val MAXIMUM_STORY_LENGTH = context.resources.getInteger(R.integer.max_story_text_length)
+        private val MINIMUM_STORY_LENGTH = StoryTextField.minCharacters
+        private val MAXIMUM_STORY_LENGTH = StoryTextField.maxCharacters
 
-        private val NEW_STORY_TEXT_VALID = "a".repeat(MINIMUM_STORY_LENGTH)
-        private val NEW_STORY_TEXT_TOO_SHORT = "a".repeat(MINIMUM_STORY_LENGTH - 1)
-        private val NEW_STORY_TEXT_BLANK = " ".repeat(MINIMUM_STORY_LENGTH)
-        private val NEW_STORY_TEXT_TOO_LONG = "a".repeat(MAXIMUM_STORY_LENGTH + 1)
-
-
-        private val invalidStoryMessage = context.getString(R.string.new_story_invalid_message,
-                MINIMUM_STORY_LENGTH, MAXIMUM_STORY_LENGTH)
-
+        private val invalidStoryMessage = context.getString(
+            R.string.invalid_new_story_snackbar,
+            MINIMUM_STORY_LENGTH, MAXIMUM_STORY_LENGTH
+        )
         private val CUE_ID_EXTRA = "cue_id"
-        private val CUE = TestUtils.listOfStartingCues.last()
+        private val CUE = TestUtils.STARTING_CUES.last()
     }
 
     private var scenario: FragmentScenario<TestNewStoryFragment>
 
+    // initialize the fragment with a cue id passed as an argument
     init {
         val args = Bundle()
         args.putInt(CUE_ID_EXTRA, CUE.id)
         scenario = launchInContainer(
-                NewStoryFragmentTest.TestNewStoryFragment::class.java,
-                args,
-                NewStoryFragmentTest.TestNewStoryFragmentFactory()
+            NewStoryFragmentTest.TestNewStoryFragment::class.java,
+            args,
+            NewStoryFragmentTest.TestNewStoryFragmentFactory()
         )
-
     }
 
     @Test
-    fun validStoryCallsViewModel() {
-        onView(withId(R.id.new_story_edit_text))
-                .perform(typeText(NEW_STORY_TEXT_VALID))
-
-        onView(withId(R.id.submit_story_btn))
-                .perform(click())
-
-        val expectedStory = Story(id = 0, text = NEW_STORY_TEXT_VALID, cueId = CUE.id,
-                creationDate = 0, rating = 0)
-
+    fun submitStoryButton() {
         scenario.onFragment {
-            verify(exactly =1) { it.newStoryViewModel.submitStory(expectedStory) }
-        }
-
-        scenario.onFragment {
-            verify(exactly = 1) { it.navController().navigate(
-                    NewStoryFragmentDirections.actionNewStoryFragmentToStoriesFragment()
-            ) }
+            it.submit_story_button.callOnClick()
+            verify(exactly = 1) { it.newStoryViewModel.onClickSubmit() }
         }
     }
 
     @Test
-    fun showInvalidWhenStoryIsTooShort() {
-        onView(withId(R.id.new_story_edit_text))
-                .perform(typeText(NEW_STORY_TEXT_TOO_SHORT))
-
-        onView(withId(R.id.submit_story_btn))
-                .perform(click())
-
-        onView(allOf(
-                withId(com.google.android.material.R.id.snackbar_text),
-                withText(invalidStoryMessage)
-        )).check(matches(isDisplayed()))
-
-        verifyNoNavigation()
-    }
-
-    @Test
-    fun showInvalidWhenStoryIsEmpty() {
-        onView(withId(R.id.submit_story_btn))
-                .perform(click())
-
-        onView(allOf(
-                withId(com.google.android.material.R.id.snackbar_text),
-                withText(invalidStoryMessage)
-        )).check(matches(isDisplayed()))
-
-        verifyNoNavigation()
-    }
-
-    @Test
-    fun showInvalidWhenStoryIsBlank() {
-        onView(withId(R.id.new_story_edit_text))
-                .perform(typeText(NEW_STORY_TEXT_BLANK))
-
-        onView(withId(R.id.submit_story_btn))
-                .perform(click())
-
-        onView(allOf(
-                withId(com.google.android.material.R.id.snackbar_text),
-                withText(invalidStoryMessage)
-        )).check(matches(isDisplayed()))
-
-        verifyNoNavigation()
-    }
-
-    @Test
-    fun showInvalidWhenStoryIsTooLong() {
-        onView(withId(R.id.new_story_edit_text))
-                .perform(typeText(NEW_STORY_TEXT_TOO_LONG))
-
-        onView(withId(R.id.submit_story_btn))
-                .perform(click())
-
-        onView(allOf(
-                withId(com.google.android.material.R.id.snackbar_text),
-                withText(invalidStoryMessage)
-        )).check(matches(isDisplayed()))
-
-        verifyNoNavigation()
-    }
-
-    @Test
-    fun cueIsShown() {
-        onView(withId(R.id.new_story_constraint_layout))
-                .check(matches(hasDescendant(
-                        withText(CUE.text)
-                )))
-    }
-
-    @Test
-    fun storyInfoIsShown() {
-        onView(withId(R.id.new_story_constraint_layout))
-                .check(matches(hasDescendant(
-                        withText(R.string.new_story_info_text)
-                )))
-    }
-
-    private fun verifyNoNavigation(){
+    fun showConfirmStoryDialog() {
         scenario.onFragment {
-            verify(exactly = 0) { it.navController() wasNot Called }
+            assert(ShadowAlertDialog.getShownDialogs().isEmpty())
+            it.confirmSubmissionDialog.value = Event(true)
+            assert(ShadowAlertDialog.getShownDialogs()[0].isShowing)
         }
     }
+
+    @Test
+    fun confirmSubmissionButton() {
+        scenario.onFragment {
+            it.confirmSubmissionDialog.value = Event(true)
+
+            // Check confirm dialog is shown and click confirm
+            ShadowAlertDialog.getShownDialogs().first()
+                .findViewById<Button>(android.R.id.button1).callOnClick()
+
+            verify(exactly = 1) { it.newStoryViewModel.onConfirmSubmission() }
+        }
+    }
+
+    @Test
+    fun confirmStoryButton() {
+        assert(ShadowAlertDialog.getShownDialogs().isEmpty())
+        scenario.onFragment {
+            it.confirmSubmissionDialog.value = Event(true)
+        }
+
+        // Check confirm dialog is shown and click confirm
+        ShadowAlertDialog.getShownDialogs().first()
+            .findViewById<Button>(android.R.id.button1).callOnClick()
+
+        scenario.onFragment {
+            verify(exactly = 1) { it.newStoryViewModel.onConfirmSubmission() }
+        }
+    }
+
+    @Test
+    fun showInvalidStorySnackbar() {
+        scenario.onFragment {
+            it.invalidStorySnackBar.value = Event(true)
+        }
+        onView(
+            allOf(
+                withId(com.google.android.material.R.id.snackbar_text),
+                withText(invalidStoryMessage)
+            )
+        ).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun infoDialogButton() {
+        scenario.onFragment {
+            it.new_story_info_button.callOnClick()
+            verify(exactly = 1) { it.newStoryViewModel.onClickInfo() }
+        }
+    }
+
+    @Test
+    fun showInfoDialog() {
+        scenario.onFragment {
+            assert(ShadowAlertDialog.getShownDialogs().isEmpty())
+            it.newStoryInfoDialog.value = Event(true)
+            assert(ShadowAlertDialog.getShownDialogs()[0].isShowing)
+        }
+    }
+
+    @Test
+    fun toggleMenuButton() {
+        scenario.onFragment {
+            it.toggle_menu_button.callOnClick()
+            verify(exactly = 1) { it.newStoryViewModel.onToggleMenu() }
+        }
+    }
+
+    @Test
+    fun showMenu() {
+        scenario.onFragment {
+            it.topMenuShown.value = Event(true)
+            assert(it.new_story_top_menu.isShown)
+        }
+    }
+
+    @Test
+    fun hideMenu() {
+        scenario.onFragment {
+            it.topMenuShown.value = Event(false)
+            assert(!it.new_story_top_menu.isShown)
+        }
+    }
+
+    @Test
+    fun getCue() {
+        scenario.onFragment {
+            verify { it.newStoryViewModel.getCue(CUE.id) }
+        }
+    }
+
+    @Test
+    fun displayCue() {
+        scenario.onFragment {
+            it.cue.postValue(CUE)
+            onView(withId(R.id.new_story_constraint_layout))
+                .check(matches(hasDescendant(withText(CUE.text))))
+        }
+    }
+
+    @Test
+    fun shouldNavigateToStories() {
+         scenario.onFragment {
+             it.shouldNavigateToStories.value = Event(true)
+             verify {
+                 it.navController.navigate(
+                     NewStoryFragmentDirections.actionNewStoryFragmentToStoriesFragment())
+             }
+        }
+    }
+
+
 
     class TestNewStoryFragmentFactory : FragmentFactory() {
         override fun instantiate(classLoader: ClassLoader, className: String, args: Bundle?): Fragment {
@@ -183,16 +201,35 @@ class NewStoryFragmentTest {
                 this.newStoryViewModel = mockk(relaxed = true)
                 this.viewModelFactory = ViewModelUtil.createFor(this.newStoryViewModel)
 
-                val liveCue = MutableLiveData<Cue>()
-                liveCue.value = CUE
-                every { newStoryViewModel.cue(CUE.id) } returns liveCue
+                this.topMenuShown.value = Event(true)
+
+                every { newStoryViewModel.cue } returns this.cue
+                every { newStoryViewModel.invalidStorySnackBar } returns this.invalidStorySnackBar
+                every { newStoryViewModel.newStoryInfoDialog } returns this.newStoryInfoDialog
+                every { newStoryViewModel.confirmSubmissionDialog } returns this.confirmSubmissionDialog
+                every { newStoryViewModel.shouldNavigateToStories } returns this.shouldNavigateToStories
+                every { newStoryViewModel.topMenuStatus } returns this.topMenuShown
             }
         }
     }
 
+    /**
+     * Expose observed objects in test fragment. This allows the
+     * tests to be driven by setting the value of these objects.
+     *
+     * i.e. setting the value to of these objects represents the
+     * viewmodel forwarding an event or data change.
+     */
     class TestNewStoryFragment : NewStoryFragment() {
         val navController: NavController = mockk(relaxed = true)
         override fun navController() = navController
+
+        val invalidStorySnackBar = MutableLiveData<Event<Boolean>>()
+        val newStoryInfoDialog = MutableLiveData<Event<Boolean>>()
+        val confirmSubmissionDialog = MutableLiveData<Event<Boolean>>()
+        val shouldNavigateToStories = MutableLiveData<Event<Boolean>>()
+        val topMenuShown = MutableLiveData<Event<Boolean>>()
+        val cue = MutableLiveData<Cue>()
     }
 
 }

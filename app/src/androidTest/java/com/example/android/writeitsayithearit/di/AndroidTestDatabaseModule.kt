@@ -26,8 +26,8 @@ class AndroidTestDatabaseModule {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         appExecutors.diskIO().execute {
-                            database.storyDao().insert(TestUtils.listOfStartingStories)
-                            database.cueDao().insert(TestUtils.listOfStartingCues)
+                            database.storyDao().insert(TestUtils.STARTING_STORIES)
+                            database.cueDao().insert(TestUtils.STARTING_CUES)
                         }
                     }
                 })

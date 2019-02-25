@@ -7,9 +7,14 @@
         <variable
             name="story"
             type="com.example.android.writeitsayithearit.vo.Story" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.android.writeitsayithearit.ui.stories.StoriesViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
+        android:onClick="@{() -> viewmodel.onClickStory(story.id)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_regular"

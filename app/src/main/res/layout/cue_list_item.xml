@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -7,9 +8,14 @@
         <variable
             name="cue"
             type="com.example.android.writeitsayithearit.vo.Cue" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.android.writeitsayithearit.ui.cues.CuesViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
+        android:onClick="@{() -> viewmodel.onClickCue(cue.id)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_regular"

@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.StoryListItemBinding
 import com.example.android.writeitsayithearit.ui.adapters.vh.StoryViewHolder
+import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
 import com.example.android.writeitsayithearit.vo.Story
 
-class StoryAdapter() : RecyclerView.Adapter<StoryViewHolder>() {
+class StoryAdapter(private val viewModel: StoriesViewModel) : RecyclerView.Adapter<StoryViewHolder>() {
 
     private var stories: List<Story>?  = null
-    private lateinit var clickListener: ClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoryViewHolder {
 
@@ -22,7 +22,8 @@ class StoryAdapter() : RecyclerView.Adapter<StoryViewHolder>() {
                 parent,
                 false
         )
-        return StoryViewHolder(binding, clickListener)
+        binding.viewmodel = viewModel
+        return StoryViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
@@ -34,14 +35,6 @@ class StoryAdapter() : RecyclerView.Adapter<StoryViewHolder>() {
 
     fun setList(stories: List<Story>) {
         this.stories = stories
-    }
-
-    fun getStoryAtPosition(position: Int): Story {
-        return stories?.get(position)!!
-    }
-
-    fun setOnItemClickListener(clickListener: ClickListener) {
-        this.clickListener = clickListener
     }
 
 }

@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.example.android.writeitsayithearit.binding.Converter" />
+
+        <variable
+            name="hasResults"
+            type="boolean" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.android.writeitsayithearit.ui.cues.CuesViewModel" />
+
+        <variable
+            name="listAdapter"
+            type="com.example.android.writeitsayithearit.ui.adapters.CueAdapter" />
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/queues_fragment"
@@ -12,75 +28,78 @@
         tools:context=".ui.cues.CuesFragment">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:theme="@style/Theme.WriteItSayItHearIt.FilterTextInputLayout"
             android:id="@+id/filter_cues_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/Theme.WriteItSayItHearIt.FilterTextInputLayout"
             app:layout_constraintBottom_toTopOf="@id/cues_list"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintEnd_toStartOf="@id/sort_order_spinner"
-            app:layout_constraintRight_toLeftOf="@id/sort_order_spinner">
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/sort_order_spinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <com.google.android.material.textfield.TextInputEditText
-                android:theme="@style/Theme.WriteItSayItHearIt.FilterEditText"
                 android:id="@+id/filter_cues_edit_text"
-                android:hint="@string/filter_cues"
+                android:text="@={viewmodel.filterQuery}"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:hint="@string/filter_cues"
+                android:theme="@style/Theme.WriteItSayItHearIt.FilterEditText" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/sort_order_spinner"
+            app:entries="@{@stringArray/sort_order}"
+            app:onItemSelected="@{(selection) -> viewmodel.sortOrder(Converter.toSortOrder(selection))}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/cues_list"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/filter_cues_layout"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@id/filter_cues_layout"
-            app:layout_constraintLeft_toRightOf="@id/filter_cues_layout">
-        </androidx.appcompat.widget.AppCompatSpinner>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cues_list"
+            android:adapter="@{listAdapter}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/filter_cues_layout"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filter_cues_layout"
             tools:listItem="@layout/cue_list_item" />
 
         <TextView
-                style="@style/Theme.WriteItSayItHearIt.NoResultsFoundStyle"
-                android:id="@+id/no_results"
-                android:text="@string/no_results"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-        />
+            android:id="@+id/no_results"
+            style="@style/Theme.WriteItSayItHearIt.NoResultsFoundStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_results"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleGone="@{!hasResults}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_cue_fab"
+            android:onClick="@{() -> viewmodel.onClickNewCue()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="@dimen/margin_large"
             android:layout_marginRight="@dimen/margin_large"
             android:layout_marginBottom="@dimen/margin_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_add_black_24dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </layout>

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = CueContract.TABLE_NAME)
 data class Cue(
@@ -23,6 +24,13 @@ data class Cue(
         @ColumnInfo(name = CueContract.COLUMN_ID)
         val id: Int = 0
 ) {
+
+    constructor(text: String): this(text,
+        Calendar.getInstance().timeInMillis,
+         0,
+        0
+    )
+
     override fun equals(other: Any?): Boolean {
         return (other is Cue)
                 && this.text.equals(other.text)

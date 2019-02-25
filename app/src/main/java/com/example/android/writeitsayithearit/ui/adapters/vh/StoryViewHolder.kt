@@ -6,15 +6,8 @@ import com.example.android.writeitsayithearit.ui.adapters.ClickListener
 import com.example.android.writeitsayithearit.vo.Story
 
 class StoryViewHolder (
-        private val binding : StoryListItemBinding,
-        private val clickListener: ClickListener
+        private val binding : StoryListItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-
-    init {
-        binding.root.setOnClickListener { view ->
-            clickListener.onItemClick(view, adapterPosition)
-        }
-    }
 
     fun bind(story: Story) {
         binding.story = story

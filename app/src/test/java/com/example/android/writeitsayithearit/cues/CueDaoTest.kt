@@ -31,7 +31,7 @@ class CueDaoTest {
 
     private lateinit var cueDao: CueDao
     private lateinit var db: WriteItSayItHearItDatabase
-    private val cues = TestUtils.listOfStartingCues
+    private val cues = TestUtils.STARTING_CUES
 
     @Before
     fun createAndSeedDb() {
@@ -87,7 +87,7 @@ class CueDaoTest {
         val query = WSHQueryHelper.cues("", SortOrder.NEW)
         val readCues = cueDao.cues(query).getValueBlocking()
 
-        val expectedCueOrder = TestUtils.sortByNewIndices
+        val expectedCueOrder = TestUtils.SORT_NEW_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
     }
 
@@ -97,7 +97,7 @@ class CueDaoTest {
         val query = WSHQueryHelper.cues("", SortOrder.TOP)
         val readCues = cueDao.cues(query).getValueBlocking()
 
-        val expectedCueOrder = TestUtils.sortByTopIndices
+        val expectedCueOrder = TestUtils.SORT_TOP_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
     }
 
@@ -107,7 +107,7 @@ class CueDaoTest {
         val query = WSHQueryHelper.cues("", SortOrder.HOT)
         val readCues = cueDao.cues(query).getValueBlocking()
 
-        val expectedCueOrder = TestUtils.sortByHotIndices
+        val expectedCueOrder = TestUtils.SORT_HOT_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
     }
 
@@ -117,7 +117,27 @@ class CueDaoTest {
         val query = WSHQueryHelper.cues("to", SortOrder.HOT)
         val readCues = cueDao.cues(query).getValueBlocking()
 
-        val expectedCueOrder = TestUtils.sortByHotAndFilter
+        val expectedCueOrder = TestUtils.FILTER_SORT_HOT_INDICES
+        assertCorrectOrder(expectedCueOrder, readCues)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun writeAndReadCueListWithTopWithFilter() {
+        val query = WSHQueryHelper.cues("to", SortOrder.TOP)
+        val readCues = cueDao.cues(query).getValueBlocking()
+
+        val expectedCueOrder = TestUtils.FILTER_SORT_TOP_INDICES
+        assertCorrectOrder(expectedCueOrder, readCues)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun writeAndReadCueListWithNewWithFilter() {
+        val query = WSHQueryHelper.cues("to", SortOrder.NEW)
+        val readCues = cueDao.cues(query).getValueBlocking()
+
+        val expectedCueOrder = TestUtils.FILTER_SORT_NEW_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
     }
 

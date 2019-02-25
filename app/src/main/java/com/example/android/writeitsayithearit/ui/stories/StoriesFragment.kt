@@ -16,9 +16,8 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentStoriesBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
-import com.example.android.writeitsayithearit.ui.adapters.ClickListener
 import com.example.android.writeitsayithearit.ui.adapters.StoryAdapter
-import com.example.android.writeitsayithearit.ui.util.ViewUtils
+import com.example.android.writeitsayithearit.ui.util.events.EventObserver
 import javax.inject.Inject
 
 @OpenForTesting
@@ -31,8 +30,6 @@ class StoriesFragment : Fragment(), Injectable {
 
     lateinit var binding: FragmentStoriesBinding
 
-    lateinit var adapter: StoryAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,50 +41,45 @@ class StoriesFragment : Fragment(), Injectable {
             false
         )
 
+        storiesViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(StoriesViewModel::class.java)
 
-        initializeAdapter()
+        binding.viewmodel = storiesViewModel
+        binding.listAdapter = StoryAdapter(storiesViewModel)
+        binding.hasResults = false
+
+        observeStories()
+        observeResultStatus()
+        observeStoryClick()
 
         return binding.root
     }
 
-
-    private fun initializeAdapter() {
-        adapter = StoryAdapter()
-        adapter.setOnItemClickListener(object : ClickListener {
-            override fun onItemClick(view: View, position: Int) {
-                val story = adapter.getStoryAtPosition(position)
-                navController().navigate(
-                    StoriesFragmentDirections.actionStoriesFragmentToStoryFragment(
-                        story.id
-                    )
-                )
-
-            }
+    private fun observeStoryClick() {
+        storiesViewModel.storyClicked.observe(this, EventObserver { storyId ->
+            navController().navigate(
+                StoriesFragmentDirections
+                    .actionStoriesFragmentToStoryFragment(storyId)
+            )
         })
-        binding.storiesList.adapter = adapter
     }
 
-    override fun onStart() {
-        super.onStart()
-        storiesViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(StoriesViewModel::class.java)
+    private fun observeResultStatus() {
+        storiesViewModel.hasResultsStatus.observe(this, EventObserver { hasResults ->
+            binding.hasResults = hasResults
+        })
+    }
 
+    private fun observeStories() {
         storiesViewModel.stories.observe(this, Observer { stories ->
             if (stories != null) {
-                adapter.setList(stories)
-                adapter.notifyDataSetChanged()
-                binding.noResults.visibility = if (!stories.isEmpty()) View.GONE else View.VISIBLE
+                binding.listAdapter?.setList(stories)
+                binding.listAdapter?.notifyDataSetChanged()
+                storiesViewModel.setHasResults(!stories.isEmpty())
             } else {
-                binding.noResults.visibility = View.VISIBLE
+                storiesViewModel.setHasResults(false)
             }
         })
-
-        ViewUtils.initializeFilter(binding.filterStoriesEditText, storiesViewModel)
-        ViewUtils.initializeSortOrderSpinner(
-            binding.sortOrderSpinner,
-            storiesViewModel,
-            context!!
-        )
     }
 
     /**

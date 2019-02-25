@@ -31,7 +31,7 @@ class StoryDaoTest {
 
     private lateinit var storiesDao: StoryDao
     private lateinit var db: WriteItSayItHearItDatabase
-    private val stories = TestUtils.listOfStartingStories
+    private val stories = TestUtils.STARTING_STORIES
 
     @Before
     fun createAndSeedDb() {
@@ -87,7 +87,7 @@ class StoryDaoTest {
         val query = WSHQueryHelper.stories("", SortOrder.NEW)
         val readStories = storiesDao.stories(query).getValueBlocking()
 
-        val expectedStoryOrder = TestUtils.sortByNewIndices
+        val expectedStoryOrder = TestUtils.SORT_NEW_INDICES
         assertCorrectOrder(expectedStoryOrder, readStories)
     }
 
@@ -97,7 +97,7 @@ class StoryDaoTest {
         val query = WSHQueryHelper.stories("", SortOrder.TOP)
         val readStories = storiesDao.stories(query).getValueBlocking()
 
-        val expectedStoryOrder = TestUtils.sortByTopIndices
+        val expectedStoryOrder = TestUtils.SORT_TOP_INDICES
         assertCorrectOrder(expectedStoryOrder, readStories)
     }
 
@@ -107,7 +107,7 @@ class StoryDaoTest {
         val query = WSHQueryHelper.stories("", SortOrder.HOT)
         val readStories = storiesDao.stories(query).getValueBlocking()
 
-        val expectedStoryOrder = TestUtils.sortByHotIndices
+        val expectedStoryOrder = TestUtils.SORT_HOT_INDICES
         assertCorrectOrder(expectedStoryOrder, readStories)
     }
 
@@ -117,7 +117,7 @@ class StoryDaoTest {
         val query = WSHQueryHelper.stories("to", SortOrder.HOT)
         val readStories = storiesDao.stories(query).getValueBlocking()
 
-        val expectedStoryOrder = TestUtils.sortByHotAndFilter
+        val expectedStoryOrder = TestUtils.FILTER_SORT_HOT_INDICES
         assertCorrectOrder(expectedStoryOrder, readStories)
     }
 

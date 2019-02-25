@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.CueListItemBinding
 import com.example.android.writeitsayithearit.ui.adapters.vh.CueViewHolder
+import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
 import com.example.android.writeitsayithearit.vo.Cue
 
-class CueAdapter() : RecyclerView.Adapter<CueViewHolder>() {
+class CueAdapter(private val viewModel: CuesViewModel) : RecyclerView.Adapter<CueViewHolder>() {
 
     private var cues: List<Cue>?  = null
-    private lateinit var clickListener: ClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CueViewHolder {
 
@@ -23,7 +23,9 @@ class CueAdapter() : RecyclerView.Adapter<CueViewHolder>() {
                 parent,
                 false
         )
-        return CueViewHolder(binding, clickListener)
+
+        binding.viewmodel = viewModel
+        return CueViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CueViewHolder, position: Int) {
@@ -36,13 +38,4 @@ class CueAdapter() : RecyclerView.Adapter<CueViewHolder>() {
     fun setList(cues: List<Cue>) {
         this.cues = cues
     }
-
-    fun getCueAtPosition(position: Int): Cue {
-        return cues?.get(position)!!
-    }
-
-    fun setOnItemClickListener(clickListener: ClickListener) {
-        this.clickListener = clickListener
-    }
-
 }

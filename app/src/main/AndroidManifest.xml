@@ -10,7 +10,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WriteItSayItHearIt">
-        <activity android:name=".MainActivity">
+
+        <!-- Hide bottom nav when keyboard is out -->
+        <activity android:name=".MainActivity"
+                  android:windowSoftInputMode="stateAlwaysHidden|adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
