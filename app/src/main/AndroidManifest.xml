@@ -11,9 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WriteItSayItHearIt">
 
-        <!-- Hide bottom nav when keyboard is out -->
+        <!-- Hide bottom nav when keyboard is out and pan to not hide input elements-->
         <activity android:name=".MainActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustNothing">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

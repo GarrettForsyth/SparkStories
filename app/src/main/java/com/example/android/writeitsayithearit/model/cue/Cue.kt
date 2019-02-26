@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.vo
+package com.example.android.writeitsayithearit.model.cue
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo

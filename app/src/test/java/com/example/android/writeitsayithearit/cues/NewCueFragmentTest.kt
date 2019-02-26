@@ -9,8 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,11 +17,8 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.ui.cues.NewCueFragment
 import com.example.android.writeitsayithearit.ui.cues.NewCueFragmentDirections
-import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentDirections
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
-import com.example.android.writeitsayithearit.vo.Cue
-import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

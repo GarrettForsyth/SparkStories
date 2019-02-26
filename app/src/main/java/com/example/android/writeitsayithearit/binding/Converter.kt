@@ -1,6 +1,6 @@
 package com.example.android.writeitsayithearit.binding
 
-import com.example.android.writeitsayithearit.vo.SortOrder
+import com.example.android.writeitsayithearit.model.SortOrder
 
 object Converter {
 

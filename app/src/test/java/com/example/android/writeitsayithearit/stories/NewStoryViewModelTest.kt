@@ -10,7 +10,7 @@ import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.vo.Cue
+import com.example.android.writeitsayithearit.model.cue.Cue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -74,6 +74,21 @@ class NewStoryViewModelTest {
 
         newStoryViewModel.onToggleMenu()
         assertTrue(newStoryViewModel.topMenuStatus.getValueBlocking().peekContent())
+    }
+
+    @Test
+    fun togglePreviewMode() {
+        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
+        newStoryViewModel.inPreviewMode.observeForever(mockObserver)
+
+        // initial state should be false
+        assertFalse(newStoryViewModel.inPreviewMode.getValueBlocking().peekContent())
+
+        newStoryViewModel.onTogglePreviewMode()
+        assertTrue(newStoryViewModel.inPreviewMode.getValueBlocking().peekContent())
+
+        newStoryViewModel.onTogglePreviewMode()
+        assertFalse(newStoryViewModel.inPreviewMode.getValueBlocking().peekContent())
     }
 
     @Test(expected = KotlinNullPointerException::class )

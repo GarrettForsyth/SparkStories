@@ -6,7 +6,7 @@
 
         <variable
             name="story"
-            type="com.example.android.writeitsayithearit.vo.Story" />
+            type="com.example.android.writeitsayithearit.model.story.Story" />
 
         <variable
             name="viewmodel"

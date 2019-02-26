@@ -2,9 +2,9 @@ package com.example.android.writeitsayithearit.repos.utils
 
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
-import com.example.android.writeitsayithearit.vo.CueContract
-import com.example.android.writeitsayithearit.vo.SortOrder
-import com.example.android.writeitsayithearit.vo.StoryContract
+import com.example.android.writeitsayithearit.model.cue.CueContract
+import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.model.story.StoryContract
 import java.util.*
 
 /**

@@ -3,14 +3,13 @@ package com.example.android.writeitsayithearit.ui.stories
 import androidx.lifecycle.*
 import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.viewmodel.HasSortOrderSpinner
-import com.example.android.writeitsayithearit.vo.SortOrder
-import com.example.android.writeitsayithearit.vo.Story
+import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.model.story.Story
 import javax.inject.Inject
 
 class StoriesViewModel @Inject constructor(
     private val storyRepository: StoryRepository
-) : ViewModel() , HasSortOrderSpinner {
+) : ViewModel() {
 
     var filterQuery
         get() = _filterQuery.value ?: ""
@@ -57,7 +56,7 @@ class StoriesViewModel @Inject constructor(
         _storyClicked.value = Event(cueId)
     }
 
-    override fun sortOrder(sortOrder: SortOrder) = _sortOrder.postValue(sortOrder)
+    fun sortOrder(sortOrder: SortOrder) = _sortOrder.postValue(sortOrder)
 
     private fun stories(filterText: String, sortOrder: SortOrder): LiveData<List<Story>> {
         return storyRepository.stories(filterText, sortOrder)

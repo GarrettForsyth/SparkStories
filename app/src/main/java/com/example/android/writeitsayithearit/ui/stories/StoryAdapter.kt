@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.ui.adapters
+package com.example.android.writeitsayithearit.ui.stories
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,9 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.StoryListItemBinding
-import com.example.android.writeitsayithearit.ui.adapters.vh.StoryViewHolder
-import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
-import com.example.android.writeitsayithearit.vo.Story
+import com.example.android.writeitsayithearit.model.story.Story
 
 class StoryAdapter(private val viewModel: StoriesViewModel) : RecyclerView.Adapter<StoryViewHolder>() {
 

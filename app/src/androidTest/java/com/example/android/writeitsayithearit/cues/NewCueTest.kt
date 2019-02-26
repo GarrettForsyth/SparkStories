@@ -14,7 +14,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
-import com.example.android.writeitsayithearit.ui.cues.models.CueTextField
+import com.example.android.writeitsayithearit.model.cue.CueTextField
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
 import org.junit.Rule
 

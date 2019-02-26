@@ -20,7 +20,7 @@ import com.example.android.writeitsayithearit.test.TestUtils.SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
-import com.example.android.writeitsayithearit.ui.adapters.vh.CueViewHolder
+import com.example.android.writeitsayithearit.ui.cues.CueViewHolder
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
 import kotlinx.android.synthetic.main.fragment_cues.*
 import org.hamcrest.CoreMatchers.*
@@ -28,7 +28,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import timber.log.Timber
 
 /**
  * As a writer

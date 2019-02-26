@@ -1,9 +1,8 @@
-package com.example.android.writeitsayithearit.ui.adapters.vh
+package com.example.android.writeitsayithearit.ui.stories
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.writeitsayithearit.databinding.StoryListItemBinding
-import com.example.android.writeitsayithearit.ui.adapters.ClickListener
-import com.example.android.writeitsayithearit.vo.Story
+import com.example.android.writeitsayithearit.model.story.Story
 
 class StoryViewHolder (
         private val binding : StoryListItemBinding

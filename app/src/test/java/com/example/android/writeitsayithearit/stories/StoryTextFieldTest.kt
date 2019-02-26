@@ -1,7 +1,7 @@
 package com.example.android.writeitsayithearit.stories
 
 import androidx.test.filters.SmallTest
-import com.example.android.writeitsayithearit.ui.stories.models.StoryTextField
+import com.example.android.writeitsayithearit.model.story.StoryTextField
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

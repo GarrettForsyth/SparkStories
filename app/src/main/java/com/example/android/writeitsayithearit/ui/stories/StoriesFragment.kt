@@ -16,7 +16,6 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentStoriesBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
-import com.example.android.writeitsayithearit.ui.adapters.StoryAdapter
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
 import javax.inject.Inject
 

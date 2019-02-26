@@ -2,8 +2,8 @@ package com.example.android.writeitsayithearit.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.android.writeitsayithearit.vo.Cue
-import com.example.android.writeitsayithearit.vo.Story
+import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.model.story.Story
 
 @Database(
         entities = [

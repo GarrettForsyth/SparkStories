@@ -15,15 +15,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 
-import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentNewStoryBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
-import com.example.android.writeitsayithearit.ui.stories.models.StoryTextField
+import com.example.android.writeitsayithearit.model.story.StoryTextField
 import com.example.android.writeitsayithearit.ui.util.AnimationAdapter
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
+import android.widget.EditText
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.inputmethod.InputMethodManager
+
 
 @OpenForTesting
 class NewStoryFragment : Fragment(), Injectable {
@@ -41,7 +44,7 @@ class NewStoryFragment : Fragment(), Injectable {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_new_story,
+            com.example.android.writeitsayithearit.R.layout.fragment_new_story,
             container,
             false
         )
@@ -59,12 +62,52 @@ class NewStoryFragment : Fragment(), Injectable {
         observeNavigateToStoriesFragment()
         observeMenuStatus()
 
+        newStoryViewModel.inPreviewMode.observe(this, EventObserver { inPreviewMode ->
+            if (inPreviewMode) {
+                disableEditText(binding.newStoryEditText)
+            }else {
+                enableEditText(binding.newStoryEditText)
+            }
+        })
+
         return binding.root
+    }
+
+    private fun enableEditText(editText: EditText) {
+        editText.apply {
+            isCursorVisible = true
+            isFocusableInTouchMode = true
+        }
+    }
+
+    /**
+     * TODO:
+     * There is a bug here where the user can still input using a keyboard even
+     * when the edit text is disabled. Hiding the keyboard should stop users on
+     * a phone from having trouble, but users using a keyboard input will be able to
+     * continue typing into the edit text even though it is disabled.
+     *
+     * Detaching and reattaching the key listener fixes this problem, but for some reason
+     * it prevents the edit text from ever gaining focus again
+     */
+    private fun disableEditText(editText: EditText) {
+        editText.apply {
+            isFocusableInTouchMode = false
+            isCursorVisible = false
+            hideKeyboard()
+            clearFocus()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm!!.hideSoftInputFromWindow(binding.newStoryEditText.windowToken, 0)
     }
 
     private fun observeMenuStatus() {
         val menu = binding.newStoryTopMenu
         val button = binding.toggleMenuButton
+        val editText = binding.newStoryEditText
         val slideUp = setUpSlideUpAnimation(menu)
         val slideDown = setUpSlideDownAnimation(menu)
 
@@ -72,15 +115,17 @@ class NewStoryFragment : Fragment(), Injectable {
             if (isShown) { //slide the menu and toggle button up
                 menu.startAnimation(slideUp)
                 button.startAnimation(slideUp)
+                editText.startAnimation(slideUp)
             } else { //slide the menu and toggle button down
                 menu.startAnimation(slideDown)
                 button.startAnimation(slideDown)
+                editText.startAnimation(slideDown)
             }
         })
     }
 
     private fun setUpSlideUpAnimation(menu: View): Animation {
-        val slideUp: Animation = AnimationUtils.loadAnimation(context, R.anim.top_menu_slide_down)
+        val slideUp: Animation = AnimationUtils.loadAnimation(context, com.example.android.writeitsayithearit.R.anim.top_menu_slide_down)
         slideUp.setAnimationListener(object : AnimationAdapter(){
             // set the view state to match the end state of the animation
             override fun onAnimationEnd(p0: Animation?) { menu.visibility = View.VISIBLE }
@@ -92,7 +137,7 @@ class NewStoryFragment : Fragment(), Injectable {
     }
 
     private fun setUpSlideDownAnimation(menu: View): Animation {
-        val slideDown: Animation = AnimationUtils.loadAnimation(context, R.anim.top_menu_slide_up)
+        val slideDown: Animation = AnimationUtils.loadAnimation(context, com.example.android.writeitsayithearit.R.anim.top_menu_slide_up)
         slideDown.setAnimationListener(object : AnimationAdapter(){
             // set the view state to match the end state of the animation
             override fun onAnimationEnd(p0: Animation?) { menu.visibility = View.GONE }
@@ -128,7 +173,7 @@ class NewStoryFragment : Fragment(), Injectable {
             Snackbar.make(
                 binding.newStoryConstraintLayout,
                 getString(
-                    R.string.invalid_new_story_snackbar,
+                    com.example.android.writeitsayithearit.R.string.invalid_new_story_snackbar,
                     StoryTextField.minCharacters,
                     StoryTextField.maxCharacters
                 ),
@@ -148,10 +193,10 @@ class NewStoryFragment : Fragment(), Injectable {
 
     private fun createInfoDialog(): AlertDialog? {
         return activity?.let {
-            val builder = AlertDialog.Builder(it, R.style.Theme_WriteItSayItHearIt_AlertDialogStyle)
+            val builder = AlertDialog.Builder(it, com.example.android.writeitsayithearit.R.style.Theme_WriteItSayItHearIt_AlertDialogStyle)
             builder.apply {
-                this.setTitle(R.string.create_a_new_story)
-                this.setMessage(R.string.new_story_info_text)
+                this.setTitle(com.example.android.writeitsayithearit.R.string.create_a_new_story)
+                this.setMessage(com.example.android.writeitsayithearit.R.string.new_story_info_text)
             }
             builder.create()
         }
@@ -159,15 +204,15 @@ class NewStoryFragment : Fragment(), Injectable {
 
     private fun createConfirmSubmitDialog(): AlertDialog? {
         return activity?.let {
-            val builder = AlertDialog.Builder(it, R.style.Theme_WriteItSayItHearIt_AlertDialogStyle)
+            val builder = AlertDialog.Builder(it, com.example.android.writeitsayithearit.R.style.Theme_WriteItSayItHearIt_AlertDialogStyle)
             builder.apply {
-                this.setTitle(getString(R.string.confirm_submission_dialog_title))
+                this.setTitle(getString(com.example.android.writeitsayithearit.R.string.confirm_submission_dialog_title))
 
-                this.setPositiveButton(getString(R.string.submit)) { _, _ ->
+                this.setPositiveButton(getString(com.example.android.writeitsayithearit.R.string.submit)) { _, _ ->
                     newStoryViewModel.onConfirmSubmission()
                 }
 
-                this.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                this.setNegativeButton(getString(com.example.android.writeitsayithearit.R.string.cancel)) { _, _ -> }
             }
             builder.create()
         }

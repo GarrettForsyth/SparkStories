@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.vo
+package com.example.android.writeitsayithearit.model.cue
 
 /**
  * Class that defines the column and table names for the Cue model.

@@ -1,13 +1,12 @@
 package com.example.android.writeitsayithearit.repos
 
 import androidx.lifecycle.LiveData
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.android.writeitsayithearit.AppExecutors
 import com.example.android.writeitsayithearit.api.WriteItSayItHearItService
 import com.example.android.writeitsayithearit.data.StoryDao
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
-import com.example.android.writeitsayithearit.vo.SortOrder
-import com.example.android.writeitsayithearit.vo.Story
+import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.model.story.Story
 import javax.inject.Inject
 
 class StoryRepository @Inject constructor(

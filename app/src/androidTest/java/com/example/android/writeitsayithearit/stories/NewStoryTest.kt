@@ -12,7 +12,7 @@ import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.R.id.*
 import com.example.android.writeitsayithearit.test.TestUtils
-import com.example.android.writeitsayithearit.ui.stories.models.StoryTextField
+import com.example.android.writeitsayithearit.model.story.StoryTextField
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
@@ -65,6 +65,33 @@ class NewStoryTest {
         // I should see a dialog with explanation text
         onView(withText(R.string.new_story_info_text))
             .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun togglePreviewMode() {
+        // When I click the new story editText
+        onView(withId(R.id.new_story_edit_text)).perform(click())
+
+        // Then it should have focus
+        onView(withId(R.id.new_story_edit_text)).check(matches(hasFocus()))
+
+        // When I click preview button
+        onView(withId(R.id.toggle_preview_button)).perform(click())
+        // And I click the new story editText
+        onView(withId(R.id.new_story_edit_text)).perform(click())
+
+        // Then it should not have focus
+        onView(withId(R.id.new_story_edit_text)).check(matches(not(hasFocus())))
+        // And the keyboard should not be shown
+        // TODO: learn how to check if keyboard is shown
+
+        // When I click preview button again
+        onView(withId(R.id.toggle_preview_button)).perform(click())
+        // And I click the new story editText
+        onView(withId(R.id.new_story_edit_text)).perform(click())
+
+        // Then it should  have focus
+        onView(withId(R.id.new_story_edit_text)).check(matches(hasFocus()))
     }
 
     @Test

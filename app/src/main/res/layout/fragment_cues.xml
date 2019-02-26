@@ -16,7 +16,7 @@
 
         <variable
             name="listAdapter"
-            type="com.example.android.writeitsayithearit.ui.adapters.CueAdapter" />
+            type="com.example.android.writeitsayithearit.ui.cues.CueAdapter" />
 
     </data>
 

@@ -20,7 +20,7 @@ import com.example.android.writeitsayithearit.test.TestUtils.SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
-import com.example.android.writeitsayithearit.ui.adapters.vh.StoryViewHolder
+import com.example.android.writeitsayithearit.ui.stories.StoryViewHolder
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
 import kotlinx.android.synthetic.main.fragment_stories.*
 import org.hamcrest.CoreMatchers.*
@@ -195,6 +195,8 @@ class StoriesTest {
     }
 
     /**
+     * TODO: possibly this is flaky. Look into it
+     *
      * Loops through a list of indices and checks that the starting
      * story associated with each index is in the correct order and
      * displayed in the list of stories.

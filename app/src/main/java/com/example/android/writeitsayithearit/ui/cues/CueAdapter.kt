@@ -1,15 +1,12 @@
-package com.example.android.writeitsayithearit.ui.adapters
+package com.example.android.writeitsayithearit.ui.cues
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.CueListItemBinding
-import com.example.android.writeitsayithearit.ui.adapters.vh.CueViewHolder
-import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
-import com.example.android.writeitsayithearit.vo.Cue
+import com.example.android.writeitsayithearit.model.cue.Cue
 
 class CueAdapter(private val viewModel: CuesViewModel) : RecyclerView.Adapter<CueViewHolder>() {
 

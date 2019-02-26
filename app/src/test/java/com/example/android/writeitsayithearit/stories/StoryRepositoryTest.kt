@@ -8,7 +8,7 @@ import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
-import com.example.android.writeitsayithearit.vo.SortOrder
+import com.example.android.writeitsayithearit.model.SortOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

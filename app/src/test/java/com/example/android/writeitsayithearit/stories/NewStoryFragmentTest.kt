@@ -20,10 +20,10 @@ import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.ui.stories.NewStoryFragment
 import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentDirections
-import com.example.android.writeitsayithearit.ui.stories.models.StoryTextField
+import com.example.android.writeitsayithearit.model.story.StoryTextField
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
-import com.example.android.writeitsayithearit.vo.Cue
+import com.example.android.writeitsayithearit.model.cue.Cue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -165,6 +165,25 @@ class NewStoryFragmentTest {
         }
     }
 
+
+    @Test
+    fun inPreviewMode() {
+        scenario.onFragment {
+            it.inPreviewMode.value = Event(true)
+            it.new_story_edit_text.callOnClick()
+            assert(!it.new_story_edit_text.isFocused)
+        }
+    }
+
+    @Test
+    fun notInPreviewMode() {
+        scenario.onFragment {
+            it.inPreviewMode.value = Event(false)
+            it.new_story_edit_text.callOnClick()
+            assert(it.new_story_edit_text.isFocusable)
+        }
+    }
+
     @Test
     fun getCue() {
         scenario.onFragment {
@@ -209,6 +228,7 @@ class NewStoryFragmentTest {
                 every { newStoryViewModel.confirmSubmissionDialog } returns this.confirmSubmissionDialog
                 every { newStoryViewModel.shouldNavigateToStories } returns this.shouldNavigateToStories
                 every { newStoryViewModel.topMenuStatus } returns this.topMenuShown
+                every { newStoryViewModel.inPreviewMode } returns this.inPreviewMode
             }
         }
     }
@@ -229,6 +249,7 @@ class NewStoryFragmentTest {
         val confirmSubmissionDialog = MutableLiveData<Event<Boolean>>()
         val shouldNavigateToStories = MutableLiveData<Event<Boolean>>()
         val topMenuShown = MutableLiveData<Event<Boolean>>()
+        val inPreviewMode = MutableLiveData<Event<Boolean>>()
         val cue = MutableLiveData<Cue>()
     }
 

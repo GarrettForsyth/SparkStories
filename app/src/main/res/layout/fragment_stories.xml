@@ -17,7 +17,7 @@
 
         <variable
             name="listAdapter"
-            type="com.example.android.writeitsayithearit.ui.adapters.StoryAdapter" />
+            type="com.example.android.writeitsayithearit.ui.stories.StoryAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -9,9 +9,8 @@ import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.vo.CueContract
-import com.example.android.writeitsayithearit.vo.Cue
-import com.example.android.writeitsayithearit.vo.SortOrder
+import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.model.SortOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

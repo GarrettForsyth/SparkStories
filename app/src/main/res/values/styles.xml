@@ -50,6 +50,21 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Theme.WriteItSayItHearIt.TopMenuItem" >
+        <item name="android:layout_marginTop">@dimen/margin_regular</item>
+        <item name="android:layout_marginBottom">@dimen/margin_regular</item>
+        <item name="android:layout_marginStart">@dimen/margin_small</item>
+        <item name="android:layout_marginLeft">@dimen/margin_small</item>
+        <item name="android:layout_marginEnd">@dimen/margin_small</item>
+        <item name="android:layout_marginRight">@dimen/margin_small</item>
+
+
+        <item name="android:paddingBottom">@dimen/margin_regular</item>
+    </style>
+
+    <style name="Theme.WriteItSayItHearIt.TopMenuCueCardText" parent="Theme.WriteItSayItHearIt.CueCardText">
+        <item name="android:gravity">center_horizontal</item>
+    </style>
 
     <style name="Theme.WriteItSayItHearIt.AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:textColor">@color/secondaryTextColor</item>

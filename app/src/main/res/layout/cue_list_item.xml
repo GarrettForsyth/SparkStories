@@ -7,7 +7,7 @@
 
         <variable
             name="cue"
-            type="com.example.android.writeitsayithearit.vo.Cue" />
+            type="com.example.android.writeitsayithearit.model.cue.Cue" />
 
         <variable
             name="viewmodel"

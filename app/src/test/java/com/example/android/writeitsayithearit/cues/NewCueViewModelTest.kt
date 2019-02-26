@@ -7,9 +7,7 @@ import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.cues.NewCueViewModel
-import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.vo.Cue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

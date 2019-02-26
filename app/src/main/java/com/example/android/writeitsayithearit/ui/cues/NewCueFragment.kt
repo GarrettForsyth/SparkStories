@@ -14,11 +14,9 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentNewCueBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
-import com.example.android.writeitsayithearit.ui.cues.models.CueTextField
+import com.example.android.writeitsayithearit.model.cue.CueTextField
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
-import com.example.android.writeitsayithearit.vo.Cue
 import com.google.android.material.snackbar.Snackbar
-import java.util.*
 import javax.inject.Inject
 
 @OpenForTesting

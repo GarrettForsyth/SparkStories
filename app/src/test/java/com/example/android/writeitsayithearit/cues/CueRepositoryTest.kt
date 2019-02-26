@@ -8,11 +8,9 @@ import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
-import com.example.android.writeitsayithearit.vo.CueContract
-import com.example.android.writeitsayithearit.vo.SortOrder
+import com.example.android.writeitsayithearit.model.SortOrder
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Test
 import org.junit.runner.RunWith

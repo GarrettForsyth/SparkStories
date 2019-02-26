@@ -1,18 +1,13 @@
 package com.example.android.writeitsayithearit.ui.cues
 
 import androidx.lifecycle.*
-import com.example.android.writeitsayithearit.di.AppInjector.init
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.viewmodel.HasFilterQuery
-import com.example.android.writeitsayithearit.viewmodel.HasSortOrderSpinner
-import com.example.android.writeitsayithearit.vo.Cue
-import com.example.android.writeitsayithearit.vo.SortOrder
-import timber.log.Timber
+import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.model.SortOrder
 import javax.inject.Inject
 
-class CuesViewModel @Inject constructor(private val cueRepository: CueRepository) : ViewModel() ,
-    HasSortOrderSpinner {
+class CuesViewModel @Inject constructor(private val cueRepository: CueRepository) : ViewModel() {
 
     var filterQuery
         get() = _filterQuery.value ?: ""
@@ -57,7 +52,7 @@ class CuesViewModel @Inject constructor(private val cueRepository: CueRepository
         _hasResultsStatus.value = Event(false)
     }
 
-    override fun sortOrder(sortOrder: SortOrder) = _sortOrder.postValue(sortOrder)
+    fun sortOrder(sortOrder: SortOrder) = _sortOrder.postValue(sortOrder)
 
     fun setHasResults(hasResults: Boolean) {
         _hasResultsStatus.value = Event(hasResults)

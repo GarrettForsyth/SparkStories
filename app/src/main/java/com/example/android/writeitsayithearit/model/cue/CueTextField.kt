@@ -1,15 +1,15 @@
-package com.example.android.writeitsayithearit.ui.stories.models
+package com.example.android.writeitsayithearit.model.cue
 
 /**
  * This object represents the user input for a Story's text field.
  *
  * It is responsible for maintaining its validation state.
  */
-class StoryTextField(var text: String = "") {
+class CueTextField(var text: String = "") {
     fun isValid() = text.trim().length in minCharacters..maxCharacters
 
     companion object {
-        const val minCharacters = 10
-        const val maxCharacters = 5000
+        const val minCharacters = 5
+        const val maxCharacters = 200
     }
 }

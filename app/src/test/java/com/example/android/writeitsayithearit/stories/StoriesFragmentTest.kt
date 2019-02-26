@@ -18,13 +18,13 @@ import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
-import com.example.android.writeitsayithearit.ui.adapters.vh.StoryViewHolder
+import com.example.android.writeitsayithearit.ui.stories.StoryViewHolder
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragment
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragmentDirections
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
-import com.example.android.writeitsayithearit.vo.Story
-import com.example.android.writeitsayithearit.vo.SortOrder
+import com.example.android.writeitsayithearit.model.story.Story
+import com.example.android.writeitsayithearit.model.SortOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

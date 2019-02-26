@@ -1,7 +1,6 @@
-package com.example.android.writeitsayithearit.vo
+package com.example.android.writeitsayithearit.model.story
 
 import androidx.annotation.NonNull
-import androidx.databinding.BaseObservable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey

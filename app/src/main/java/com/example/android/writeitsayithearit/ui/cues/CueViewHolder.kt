@@ -1,10 +1,8 @@
-package com.example.android.writeitsayithearit.ui.adapters.vh
+package com.example.android.writeitsayithearit.ui.cues
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.writeitsayithearit.databinding.CueListItemBinding
-import com.example.android.writeitsayithearit.ui.adapters.ClickListener
-import com.example.android.writeitsayithearit.vo.Cue
-import timber.log.Timber
+import com.example.android.writeitsayithearit.model.cue.Cue
 
 class CueViewHolder(
         private val binding : CueListItemBinding

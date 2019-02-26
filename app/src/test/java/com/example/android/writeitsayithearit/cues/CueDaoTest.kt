@@ -11,8 +11,8 @@ import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.test.getValueBlocking
-import com.example.android.writeitsayithearit.vo.Cue
-import com.example.android.writeitsayithearit.vo.SortOrder
+import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.model.SortOrder
 import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before

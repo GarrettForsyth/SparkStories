@@ -2,7 +2,7 @@ package com.example.android.writeitsayithearit.helpers
 
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
-import com.example.android.writeitsayithearit.vo.SortOrder
+import com.example.android.writeitsayithearit.model.SortOrder
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

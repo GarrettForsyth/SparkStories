@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.test.OpenForTesting
-import com.example.android.writeitsayithearit.ui.stories.models.StoryTextField
+import com.example.android.writeitsayithearit.model.story.StoryTextField
 import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.vo.Cue
-import com.example.android.writeitsayithearit.vo.Story
+import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.model.story.Story
 import javax.inject.Inject
 
 @OpenForTesting
@@ -19,7 +19,8 @@ class NewStoryViewModel @Inject constructor(
     private val storyRepository: StoryRepository
 ) : ViewModel() {
 
-    var storyTextField: StoryTextField = StoryTextField()
+    var storyTextField: StoryTextField =
+        StoryTextField()
 
     private val _invalidStorySnackBar = MutableLiveData<Event<Boolean>>()
     val invalidStorySnackBar: LiveData<Event<Boolean>>
@@ -46,17 +47,24 @@ class NewStoryViewModel @Inject constructor(
     val topMenuStatus: LiveData<Event<Boolean>>
         get() = _topMenuStatus
 
+    private val _inPreviewMode = MutableLiveData<Event<Boolean>>()
+    val inPreviewMode: LiveData<Event<Boolean>>
+        get() = _inPreviewMode
+
     init {
         _topMenuStatus.value = Event(true)
+        _inPreviewMode.value = Event(false)
     }
+
+    fun getCue(id: Int) = cueId.postValue(id)
 
     fun onToggleMenu() {
        _topMenuStatus.value = Event(!_topMenuStatus.value!!.peekContent())
     }
 
-    fun submitStory(story: Story) = storyRepository.submitStory(story)
-
-    fun getCue(id: Int) = cueId.postValue(id)
+    fun onTogglePreviewMode() {
+        _inPreviewMode.value = Event(!_inPreviewMode.value!!.peekContent())
+    }
 
     fun onClickInfo(){
         _newStoryInfoDialog.value = Event(true)
@@ -75,4 +83,6 @@ class NewStoryViewModel @Inject constructor(
             _invalidStorySnackBar.value = Event(true)
         }
     }
+
+    fun submitStory(story: Story) = storyRepository.submitStory(story)
 }
