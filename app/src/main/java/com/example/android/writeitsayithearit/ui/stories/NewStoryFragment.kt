@@ -25,7 +25,12 @@ import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 import android.widget.EditText
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
+import com.example.android.writeitsayithearit.BR
+import timber.log.Timber
 
 
 @OpenForTesting
@@ -68,6 +73,16 @@ class NewStoryFragment : Fragment(), Injectable {
             }else {
                 enableEditText(binding.newStoryEditText)
             }
+        })
+
+        newStoryViewModel.characterCount.observe(this, Observer { count ->
+            binding.characterCountTextView.text = count.toString()
+        })
+
+        newStoryViewModel.characterCountColour.observe(this, Observer { colour ->
+            binding.characterCountTextView.setTextColor(
+                ContextCompat.getColor(context!!, colour)
+            )
         })
 
         return binding.root

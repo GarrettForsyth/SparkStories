@@ -14,4 +14,9 @@
 
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#000000</color>
+
+    <color name="character_count_invalid">#f45042</color>
+    <color name="character_count_warning">#f4c242</color>
+    <color name="character_count_valid">#6bf442</color>
+
 </resources>

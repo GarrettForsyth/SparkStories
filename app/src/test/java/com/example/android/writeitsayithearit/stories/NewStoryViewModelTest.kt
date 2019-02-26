@@ -1,9 +1,11 @@
 package com.example.android.writeitsayithearit.stories
 
+import android.text.Editable
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.test.filters.SmallTest
+import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.test.TestUtils
@@ -11,6 +13,7 @@ import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.model.story.StoryTextField
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -89,6 +92,28 @@ class NewStoryViewModelTest {
 
         newStoryViewModel.onTogglePreviewMode()
         assertFalse(newStoryViewModel.inPreviewMode.getValueBlocking().peekContent())
+    }
+
+    @Test
+    fun storyTextChange() {
+        // observe live data
+        val mockObserver: Observer<Int> = mockk(relaxed = true)
+        newStoryViewModel.characterCount.observeForever(mockObserver)
+        newStoryViewModel.characterCountColour.observeForever(mockObserver)
+
+        // create the text watcher
+        val textWatcher = newStoryViewModel.storyTextChangeListener()
+
+        // mock the response given from the edit text
+        val editable: Editable = mockk()
+        every { editable.toString() } returns "aaa"
+        // mock the response of what colour the text should be
+        every { newStoryViewModel.storyTextField.characterCountColour } returns R.color.character_count_invalid
+
+        textWatcher.afterTextChanged(editable)
+
+        assertEquals(3, newStoryViewModel.characterCount.getValueBlocking())
+        assertEquals(R.color.character_count_invalid, newStoryViewModel.characterCountColour.getValueBlocking())
     }
 
     @Test(expected = KotlinNullPointerException::class )

@@ -2,8 +2,7 @@ package com.example.android.writeitsayithearit.stories
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,6 +13,7 @@ import com.example.android.writeitsayithearit.R.id.*
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.model.story.StoryTextField
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
@@ -92,6 +92,50 @@ class NewStoryTest {
 
         // Then it should  have focus
         onView(withId(R.id.new_story_edit_text)).check(matches(hasFocus()))
+    }
+
+    @Test
+    fun characterCount() {
+        // When the fragment starts
+        // Then the character count is coloured invalid
+        // And is set to 0
+        checkCharacterCount("", R.color.character_count_invalid )
+
+        // When the text is just before the minimum valid character count
+        val invalidMin = "a".repeat(StoryTextField.minCharacters -1)
+        checkCharacterCount(invalidMin, R.color.character_count_invalid)
+
+        // When the text is just at the minimum valid character count
+        val validMin = "a".repeat(StoryTextField.minCharacters)
+        checkCharacterCount(validMin, R.color.character_count_valid)
+
+        // When the text is 51 characters before the max characters length
+        val validEnd = "a".repeat(StoryTextField.maxCharacters -51)
+        checkCharacterCount(validEnd, R.color.character_count_valid)
+
+        // When the text is 50 characters before the max characters length
+        val warningBegin = "a".repeat(StoryTextField.maxCharacters -50)
+        checkCharacterCount(warningBegin, R.color.character_count_warning)
+
+        // When the text is at max characters
+        val warningEnd = "a".repeat(StoryTextField.maxCharacters)
+        checkCharacterCount(warningEnd, R.color.character_count_warning)
+
+        // When the text is 1 more than max characters
+        val maxInvalid = "a".repeat(StoryTextField.maxCharacters + 1)
+        checkCharacterCount(maxInvalid, R.color.character_count_invalid)
+    }
+
+    private fun checkCharacterCount(text: String, expectedColour: Int) {
+        // When the text is 1 characters before the max characters length
+        onView(withId(R.id.new_story_edit_text))
+            .perform(replaceText(text))
+
+        // Then the character count is coloured warning
+        // And displays min count displays max - 1
+        onView(withId(R.id.character_count_text_view))
+            .check(matches(hasTextColor(expectedColour)))
+            .check(matches(withText(text.length.toString())))
     }
 
     @Test

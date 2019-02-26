@@ -3,6 +3,7 @@ package com.example.android.writeitsayithearit.stories
 import android.content.Context
 import android.os.Bundle
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario
@@ -29,6 +30,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.android.synthetic.main.fragment_new_story.*
 import org.hamcrest.CoreMatchers.allOf
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -185,6 +187,23 @@ class NewStoryFragmentTest {
     }
 
     @Test
+    fun characterCount() {
+        scenario.onFragment {
+            it.characterCount.value = 5
+            assertEquals("5",it.character_count_text_view.text.toString())
+        }
+    }
+
+    @Test
+    fun characterCountColour() {
+        scenario.onFragment {
+            val expectedColour = ContextCompat.getColor(context, R.color.character_count_invalid)
+            it.characterCountColour.value = R.color.character_count_invalid
+            assertEquals(expectedColour, it.character_count_text_view.currentTextColor)
+        }
+    }
+
+    @Test
     fun getCue() {
         scenario.onFragment {
             verify { it.newStoryViewModel.getCue(CUE.id) }
@@ -229,6 +248,8 @@ class NewStoryFragmentTest {
                 every { newStoryViewModel.shouldNavigateToStories } returns this.shouldNavigateToStories
                 every { newStoryViewModel.topMenuStatus } returns this.topMenuShown
                 every { newStoryViewModel.inPreviewMode } returns this.inPreviewMode
+                every { newStoryViewModel.characterCount } returns this.characterCount
+                every { newStoryViewModel.characterCountColour } returns this.characterCountColour
             }
         }
     }
@@ -250,6 +271,8 @@ class NewStoryFragmentTest {
         val shouldNavigateToStories = MutableLiveData<Event<Boolean>>()
         val topMenuShown = MutableLiveData<Event<Boolean>>()
         val inPreviewMode = MutableLiveData<Event<Boolean>>()
+        val characterCount = MutableLiveData<Int>()
+        val characterCountColour = MutableLiveData<Int>()
         val cue = MutableLiveData<Cue>()
     }
 
