@@ -15,6 +15,7 @@ import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.SortOrder
 import junit.framework.Assert.assertTrue
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -62,6 +63,22 @@ class CueDaoTest {
 
         val readCue = cueDao.cue(id).getValueBlocking()
         assertTrue(readCue.text.equals(cue.text))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun writeReadAndUpdateCue() {
+        val cue = TestUtils.createTestCue()
+        val id = cues.size + 1
+        cueDao.insert(cue)
+
+        val readCue = cueDao.cue(id).getValueBlocking()
+        readCue.rating = 100
+
+        cueDao.update(readCue)
+        val updatedCue = cueDao.cue(id).getValueBlocking()
+
+        assertEquals(100, updatedCue.rating)
     }
 
     @Test

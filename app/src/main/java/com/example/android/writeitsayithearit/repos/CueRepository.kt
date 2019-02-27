@@ -26,6 +26,12 @@ class CueRepository @Inject constructor(
         }
     }
 
+    fun updateCue(cue: Cue) {
+        appExecutors.diskIO().execute {
+            cueDao.update(cue)
+        }
+    }
+
     fun cue(id: Int) = cueDao.cue(id)
 
 }

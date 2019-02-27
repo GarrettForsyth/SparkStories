@@ -79,4 +79,11 @@ class CueRepositoryTest {
         verify(exactly = 1) { dao.insert(cue) }
     }
 
+    @Test
+    fun updateCue() {
+        val cue = TestUtils.createTestCue()
+        cueRepository.updateCue(cue)
+        verify(exactly = 1) { dao.update(cue)}
+    }
+
 }

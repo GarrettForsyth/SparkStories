@@ -1,9 +1,11 @@
 package com.example.android.writeitsayithearit.stories
 
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -12,6 +14,8 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.R.id.*
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.model.story.StoryTextField
+import com.example.android.writeitsayithearit.test.CustomMatchers.Companion.hasItemAtPosition
+import com.example.android.writeitsayithearit.ui.cues.CueViewHolder
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.not
@@ -19,6 +23,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import timber.log.Timber
 
 /**
  * As a writer
@@ -33,7 +38,7 @@ class NewStoryTest {
     @JvmField
     val executorRule = TaskExecutorWithIdlingResourceRule()
 
-    private val cue = TestUtils.STARTING_CUES.first()
+    private val cue = TestUtils.STARTING_CUES.last()
     private lateinit var scenario : ActivityScenario<MainActivity>
 
     @Before
@@ -161,6 +166,9 @@ class NewStoryTest {
         val validStoryText = "a".repeat(StoryTextField.minCharacters)
         onView(withId(R.id.new_story_edit_text))
             .perform(typeText(validStoryText))
+        Timber.d(cue.text)
+
+        Espresso.closeSoftKeyboard()
 
         // And I press the submit story button
         onView(withId(R.id.submit_story_button)).perform(click())
@@ -175,6 +183,14 @@ class NewStoryTest {
         // I should see a list of stories with my story in the list
         onView(withId(R.id.stories_list)).check(matches(isDisplayed()))
         onView(withText(validStoryText)).check(matches(isDisplayed()))
-    }
 
+        // When I navigate to cues
+        onView(withId(R.id.cuesFragment)).perform(click())
+        // Then I should see cue used in the story increased by one
+        val expectedRating = cue.rating + 1
+        onView(withId(R.id.cues_list))
+            .check(matches(hasItemAtPosition(
+                hasDescendant(withText(expectedRating.toString())), 0
+            )))
+    }
 }

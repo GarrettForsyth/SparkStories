@@ -71,7 +71,7 @@ class NewStoryViewModel @Inject constructor(
     fun getCue(id: Int) = cueId.postValue(id)
 
     fun storyTextChangeListener(): TextWatcher {
-        return object: TextWatcherAdapter() {
+        return object : TextWatcherAdapter() {
             override fun afterTextChanged(text: Editable?) {
                 val currentCharacterCount = text.toString().trim().length
                 _characterCount.value = (currentCharacterCount)
@@ -81,14 +81,14 @@ class NewStoryViewModel @Inject constructor(
     }
 
     fun onToggleMenu() {
-       _topMenuStatus.value = Event(!_topMenuStatus.value!!.peekContent())
+        _topMenuStatus.value = Event(!_topMenuStatus.value!!.peekContent())
     }
 
     fun onTogglePreviewMode() {
         _inPreviewMode.value = Event(!_inPreviewMode.value!!.peekContent())
     }
 
-    fun onClickInfo(){
+    fun onClickInfo() {
         _newStoryInfoDialog.value = Event(true)
     }
 
@@ -106,5 +106,9 @@ class NewStoryViewModel @Inject constructor(
         }
     }
 
-    fun submitStory(story: Story) = storyRepository.submitStory(story)
+    fun submitStory(story: Story) {
+        storyRepository.submitStory(story)
+        cue.value!!.rating++
+        cueRepository.updateCue(cue.value!!)
+    }
 }

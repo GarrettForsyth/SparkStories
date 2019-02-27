@@ -206,8 +206,10 @@ class StoriesTest {
             val expectedStory = STARTING_STORIES[expectedIndex]
             onView(withId(R.id.stories_list))
                 .perform(RecyclerViewActions.scrollToPosition<StoryViewHolder>(listPosition))
-            onView(hasItemAtPosition(hasDescendant(withText(expectedStory.text)),listPosition))
-                .check(matches(isDisplayed()))
+            onView(withId(R.id.stories_list))
+                .check(matches(
+                    hasItemAtPosition(hasDescendant(withText(expectedStory.text)),listPosition))
+                )
         }
     }
 

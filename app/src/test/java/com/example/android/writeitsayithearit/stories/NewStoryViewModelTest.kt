@@ -13,7 +13,6 @@ import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.cue.Cue
-import com.example.android.writeitsayithearit.model.story.StoryTextField
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -173,22 +172,32 @@ class NewStoryViewModelTest {
 
     @Test
     fun confirmValidSubmission() {
-        // mock a valid story
-        val expectedStory = TestUtils.createTestStory()
-
         // set observers
         val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
         val cueMockObserver: Observer<Cue> = mockk(relaxed = true)
         newStoryViewModel.shouldNavigateToStories.observeForever(mockObserver)
         newStoryViewModel.cue.observeForever(cueMockObserver)
 
+        // mock a valid story
+        val expectedStory = TestUtils.createTestStory()
+
+        // mock cue response from repository
+        val id = expectedStory.cueId
+        val liveCue = MutableLiveData<Cue>()
+        val cue = Cue("test", 0, 12, 15)
+        liveCue.value = cue
+        every { cueRepository.cue(expectedStory.cueId) } returns liveCue
+        newStoryViewModel.getCue(expectedStory.cueId)
+
         every { newStoryViewModel.storyTextField.isValid() } returns true
         every { newStoryViewModel.storyTextField.text } returns expectedStory.text
 
-        newStoryViewModel.getCue(expectedStory.cueId)
-        newStoryViewModel.onConfirmSubmission()
+        // expect to update with one more rating
+        val expectedCue = Cue("test", 0, 13, 15)
 
+        newStoryViewModel.onConfirmSubmission()
         verify { storyRepository.submitStory(expectedStory) }
+        verify(exactly = 1) { cueRepository.updateCue(expectedCue) }
 
         assertFalse(
             newStoryViewModel
@@ -200,21 +209,33 @@ class NewStoryViewModelTest {
 
     @Test
     fun confirmInvalidSubmission() {
-        val expectedStory = TestUtils.createTestStory()
-
         // set observers
         val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
         val cueMockObserver: Observer<Cue> = mockk(relaxed = true)
         newStoryViewModel.shouldNavigateToStories.observeForever(mockObserver)
         newStoryViewModel.cue.observeForever(cueMockObserver)
 
+        val expectedStory = TestUtils.createTestStory()
+
+        // mock cue response from repository
+        val id = expectedStory.cueId
+        val liveCue = MutableLiveData<Cue>()
+        val cue = Cue("test", 0, 12, 15)
+        liveCue.value = cue
+        every { cueRepository.cue(expectedStory.cueId) } returns liveCue
+        newStoryViewModel.getCue(expectedStory.cueId)
+
+        // expect to update with one more rating
+        val expectedCue = Cue("test", 0, 13, 15)
+
+
         every { newStoryViewModel.storyTextField.isValid() } returns false
         every { newStoryViewModel.storyTextField.text } returns expectedStory.text
 
-        newStoryViewModel.getCue(expectedStory.cueId)
         newStoryViewModel.onConfirmSubmission()
 
         verify(exactly = 0) { storyRepository.submitStory(expectedStory) }
+        verify(exactly = 0) { cueRepository.updateCue(expectedCue) }
 
         assertNotNull(
             newStoryViewModel

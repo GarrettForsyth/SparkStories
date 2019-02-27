@@ -201,8 +201,11 @@ class CuesTest {
             val expectedCue = STARTING_CUES[expectedIndex]
             onView(withId(R.id.cues_list))
                 .perform(RecyclerViewActions.scrollToPosition<CueViewHolder>(listPosition))
-            onView(hasItemAtPosition(hasDescendant(withText(expectedCue.text)),listPosition))
-                .check(matches(isDisplayed()))
+
+            onView(withId(R.id.cues_list))
+                .check(matches(
+                    hasItemAtPosition(hasDescendant(withText(expectedCue.text)),listPosition))
+                )
         }
     }
 

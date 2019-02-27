@@ -18,7 +18,7 @@ data class Cue(
 
         @NonNull
         @ColumnInfo(name = CueContract.COLUMN_RATING)
-        val rating: Int,
+        var rating: Int,
 
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = CueContract.COLUMN_ID)
@@ -34,6 +34,7 @@ data class Cue(
     override fun equals(other: Any?): Boolean {
         return (other is Cue)
                 && this.text.equals(other.text)
+                && this.rating == other.rating
     }
 }
 

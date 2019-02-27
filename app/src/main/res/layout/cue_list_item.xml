@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -22,7 +22,6 @@
         android:layout_marginLeft="@dimen/margin_regular"
         android:layout_marginEnd="@dimen/margin_regular"
         android:layout_marginRight="@dimen/margin_regular"
-        android:layout_marginBottom="@dimen/margin_regular"
         android:layout_marginTop="@dimen/margin_small"
         >
 
@@ -33,19 +32,31 @@
             android:paddingLeft="@dimen/padding_regular"
             android:paddingEnd="@dimen/padding_regular"
             android:paddingRight="@dimen/padding_regular"
-            android:paddingTop="@dimen/padding_regular"
             android:paddingBottom="@dimen/padding_regular">
 
             <TextView
                 style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                android:text="@{Integer.toString(cue.rating)}"
+                android:id="@+id/cue_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_headline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/cue_text"
+                tools:text="23"
+                />
+
+            <TextView
                 android:id="@+id/cue_text"
+                style="@style/Theme.WriteItSayItHearIt.CueCardText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{cue.text}"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/cue_rating"
+                tools:text="It was the best of times. It was the worst of times." />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
