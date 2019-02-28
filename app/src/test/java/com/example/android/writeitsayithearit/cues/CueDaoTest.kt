@@ -67,11 +67,8 @@ class CueDaoTest {
 
     @Test
     @Throws(IOException::class)
-    fun writeReadAndUpdateCue() {
-        val cue = TestUtils.createTestCue()
-        val id = cues.size + 1
-        cueDao.insert(cue)
-
+    fun readAndUpdateCue() {
+        val id = 1
         val readCue = cueDao.cue(id).getValueBlocking()
         readCue.rating = 100
 

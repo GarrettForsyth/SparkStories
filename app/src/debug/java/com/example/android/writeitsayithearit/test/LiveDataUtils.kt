@@ -1,6 +1,7 @@
 package com.example.android.writeitsayithearit.test
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -26,4 +27,13 @@ fun <T> LiveData<T>.getValueBlocking(): T {
 
     latch.await(2, TimeUnit.SECONDS)
     return value!!
+}
+
+/**
+ * Returns the data wrapped in LiveData
+ */
+fun <T> T.asLiveData(): LiveData<T>{
+    val liveData = MutableLiveData<T>()
+    liveData.value = this
+    return liveData
 }

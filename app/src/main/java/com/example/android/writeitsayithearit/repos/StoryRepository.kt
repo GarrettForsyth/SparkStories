@@ -20,6 +20,12 @@ class StoryRepository @Inject constructor(
         return storyDao.stories(wshQueryHelper.stories(filterText, sortOrder))
     }
 
+    fun story(id: Int) = storyDao.story(id)
+
+    fun update(story: Story) {
+        appExecutors.diskIO().execute { storyDao.update(story) }
+    }
+
     fun submitStory(story: Story) {
         appExecutors.diskIO().execute { storyDao.insert(story) }
     }

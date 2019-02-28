@@ -22,7 +22,7 @@ data class Story(
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_RATING)
-    val rating: Int,
+    var rating: Int,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = StoryContract.COLUMN_ID)
@@ -41,6 +41,7 @@ data class Story(
         return (other is Story)
                 && this.text.equals(other.text)
                 && this.cueId == other.cueId
+                && this.rating == other.rating
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.test
 
+import androidx.lifecycle.LiveData
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
 import java.util.*
@@ -123,7 +124,7 @@ object TestUtils {
         ),
         Story(
             "This is the tale about: A writer solos a night on the town for inspiration.",
-            1,
+            10,
             now,
             200
         )
@@ -142,4 +143,5 @@ object TestUtils {
 
     fun createTestStory(): Story =
         Story("this is a test story. sure is great", 0, now, 0)
+
 }

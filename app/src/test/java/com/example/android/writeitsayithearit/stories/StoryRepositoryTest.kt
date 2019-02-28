@@ -73,10 +73,24 @@ class StoryRepositoryTest {
     }
 
     @Test
+    fun loadStory() {
+        val storyId = 12
+        storyRepository.story(storyId)
+        verify(exactly = 1) { dao.story(storyId) }
+    }
+
+    @Test
     fun submitStory() {
         val story = TestUtils.createTestStory()
         storyRepository.submitStory(story)
         verify(exactly = 1) { dao.insert(story) }
+    }
+
+    @Test
+    fun updateStory() {
+        val story = TestUtils.createTestStory()
+        storyRepository.update(story)
+        verify(exactly = 1) { dao.update(story)}
     }
 
 }

@@ -108,7 +108,7 @@ class NewStoryViewModel @Inject constructor(
 
     fun submitStory(story: Story) {
         storyRepository.submitStory(story)
-        cue.value!!.rating++
-        cueRepository.updateCue(cue.value!!)
+        val updatedCue = cue.value!!.copy().apply { rating++ }
+        cueRepository.updateCue(updatedCue)
     }
 }
