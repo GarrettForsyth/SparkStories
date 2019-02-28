@@ -13,6 +13,8 @@ import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.test.asLiveData
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -40,20 +42,30 @@ class NewStoryViewModelTest {
     fun init() {
         newStoryViewModel = NewStoryViewModel(cueRepository, storyRepository)
         newStoryViewModel.storyTextField = mockk(relaxed = true)
+
+        mockObserversFor(newStoryViewModel.cue)
+
+        mockObserversFor(
+            newStoryViewModel.characterCount,
+            newStoryViewModel.characterCountColour
+        )
+
+        mockObserversFor(
+            newStoryViewModel.topMenuStatus,
+            newStoryViewModel.inPreviewMode,
+            newStoryViewModel.newStoryInfoDialog,
+            newStoryViewModel.confirmSubmissionDialog,
+            newStoryViewModel.shouldNavigateToStories,
+            newStoryViewModel.newStoryInfoDialog
+        )
     }
 
     @Test
     fun getCue() {
-        // observe cue
-        val mockObserver: Observer<Cue> = mockk(relaxed = true)
-        newStoryViewModel.cue.observeForever(mockObserver)
-
         // mock response from repository
         val id = 0
-        val liveCue = MutableLiveData<Cue>()
         val cue = Cue("test")
-        liveCue.value = cue
-        every { cueRepository.cue(id) } returns liveCue
+        every { cueRepository.cue(id) } returns cue.asLiveData()
 
         // call getCue
         newStoryViewModel.getCue(id)
@@ -65,9 +77,6 @@ class NewStoryViewModelTest {
 
     @Test
     fun toggleMenu() {
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        newStoryViewModel.topMenuStatus.observeForever(mockObserver)
-
         // initial state should be true
         assertTrue(newStoryViewModel.topMenuStatus.getValueBlocking().peekContent())
 
@@ -80,9 +89,6 @@ class NewStoryViewModelTest {
 
     @Test
     fun togglePreviewMode() {
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        newStoryViewModel.inPreviewMode.observeForever(mockObserver)
-
         // initial state should be false
         assertFalse(newStoryViewModel.inPreviewMode.getValueBlocking().peekContent())
 
@@ -95,11 +101,6 @@ class NewStoryViewModelTest {
 
     @Test
     fun storyTextChange() {
-        // observe live data
-        val mockObserver: Observer<Int> = mockk(relaxed = true)
-        newStoryViewModel.characterCount.observeForever(mockObserver)
-        newStoryViewModel.characterCountColour.observeForever(mockObserver)
-
         // create the text watcher
         val textWatcher = newStoryViewModel.storyTextChangeListener()
 
@@ -115,10 +116,8 @@ class NewStoryViewModelTest {
         assertEquals(R.color.character_count_invalid, newStoryViewModel.characterCountColour.getValueBlocking())
     }
 
-    @Test(expected = KotlinNullPointerException::class )
+    @Test(expected = KotlinNullPointerException::class)
     fun infoDialogInitiallyNull() {
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        newStoryViewModel.newStoryInfoDialog.observeForever(mockObserver)
         newStoryViewModel
             .newStoryInfoDialog
             .getValueBlocking()
@@ -126,8 +125,6 @@ class NewStoryViewModelTest {
 
     @Test
     fun infoDialog() {
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        newStoryViewModel.newStoryInfoDialog.observeForever(mockObserver)
         newStoryViewModel.onClickInfo()
 
         assertFalse(
@@ -138,10 +135,8 @@ class NewStoryViewModelTest {
         )
     }
 
-    @Test(expected = KotlinNullPointerException::class )
+    @Test(expected = KotlinNullPointerException::class)
     fun confirmationDialogInitiallyNull() {
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        newStoryViewModel.confirmSubmissionDialog.observeForever(mockObserver)
         newStoryViewModel
             .confirmSubmissionDialog
             .getValueBlocking()
@@ -149,8 +144,6 @@ class NewStoryViewModelTest {
 
     @Test
     fun confirmationDialog() {
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        newStoryViewModel.confirmSubmissionDialog.observeForever(mockObserver)
         newStoryViewModel.onClickSubmit()
 
         assertFalse(
@@ -161,10 +154,8 @@ class NewStoryViewModelTest {
         )
     }
 
-    @Test(expected = KotlinNullPointerException::class )
+    @Test(expected = KotlinNullPointerException::class)
     fun navigateToStoriesFragmentInitiallyNull() {
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        newStoryViewModel.shouldNavigateToStories.observeForever(mockObserver)
         newStoryViewModel
             .shouldNavigateToStories
             .getValueBlocking()
@@ -172,21 +163,13 @@ class NewStoryViewModelTest {
 
     @Test
     fun confirmValidSubmission() {
-        // set observers
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        val cueMockObserver: Observer<Cue> = mockk(relaxed = true)
-        newStoryViewModel.shouldNavigateToStories.observeForever(mockObserver)
-        newStoryViewModel.cue.observeForever(cueMockObserver)
-
         // mock a valid story
         val expectedStory = TestUtils.createTestStory()
 
         // mock cue response from repository
         val id = expectedStory.cueId
-        val liveCue = MutableLiveData<Cue>()
         val cue = Cue("test", 0, 12, 15)
-        liveCue.value = cue
-        every { cueRepository.cue(expectedStory.cueId) } returns liveCue
+        every { cueRepository.cue(expectedStory.cueId) } returns cue.asLiveData()
         newStoryViewModel.getCue(expectedStory.cueId)
 
         every { newStoryViewModel.storyTextField.isValid() } returns true
@@ -209,20 +192,12 @@ class NewStoryViewModelTest {
 
     @Test
     fun confirmInvalidSubmission() {
-        // set observers
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        val cueMockObserver: Observer<Cue> = mockk(relaxed = true)
-        newStoryViewModel.shouldNavigateToStories.observeForever(mockObserver)
-        newStoryViewModel.cue.observeForever(cueMockObserver)
-
         val expectedStory = TestUtils.createTestStory()
 
         // mock cue response from repository
         val id = expectedStory.cueId
-        val liveCue = MutableLiveData<Cue>()
         val cue = Cue("test", 0, 12, 15)
-        liveCue.value = cue
-        every { cueRepository.cue(expectedStory.cueId) } returns liveCue
+        every { cueRepository.cue(expectedStory.cueId) } returns cue.asLiveData()
         newStoryViewModel.getCue(expectedStory.cueId)
 
         // expect to update with one more rating

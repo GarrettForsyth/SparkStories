@@ -11,6 +11,8 @@ import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.test.asLiveData
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -37,17 +39,16 @@ class CuesViewModelTest {
     fun init() {
         cuesViewModel = CuesViewModel(cueRepository)
 
-        // observe cues
-        val mockObserver: Observer<List<Cue>> = mockk(relaxed = true)
-        cuesViewModel.cues.observeForever(mockObserver)
+        mockObserversFor(cuesViewModel.cues)
+        mockObserversFor(cuesViewModel.hasResultsStatus)
+        mockObserversFor(cuesViewModel.cueClicked)
+        mockObserversFor(cuesViewModel.newCueFabClick)
     }
 
     @Test
     fun getCues() {
         // mock response
-        val liveCues = MutableLiveData<List<Cue>>()
-        liveCues.value = STARTING_CUES
-        every { cueRepository.cues("", SortOrder.NEW) } returns liveCues
+        every { cueRepository.cues("", SortOrder.NEW) } returns STARTING_CUES.asLiveData()
 
         // set filter to be ""
         cuesViewModel.filterQuery = ""
@@ -58,6 +59,7 @@ class CuesViewModelTest {
             assertEquals(STARTING_CUES[index], observedCues[index])
         }
     }
+
     @Test
     fun filterQuery() {
         val filterString = "dogs"
@@ -110,10 +112,6 @@ class CuesViewModelTest {
 
     @Test
     fun setHasResults() {
-        // observe live data
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        cuesViewModel.hasResultsStatus.observeForever(mockObserver)
-
         cuesViewModel.setHasResults(true)
         assertTrue(cuesViewModel.hasResultsStatus.getValueBlocking().peekContent())
 
@@ -123,20 +121,12 @@ class CuesViewModelTest {
 
     @Test
     fun onClickCue(){
-        // observe live data
-        val mockObserver: Observer<Event<Int>> = mockk(relaxed = true)
-        cuesViewModel.cueClicked.observeForever(mockObserver)
-
         cuesViewModel.onClickCue(0)
         assertEquals(0, cuesViewModel.cueClicked.getValueBlocking().peekContent())
     }
 
     @Test
     fun onClickNewCue(){
-        // observe live data
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        cuesViewModel.newCueFabClick.observeForever(mockObserver)
-
         cuesViewModel.onClickNewCue()
         assertTrue(cuesViewModel.newCueFabClick.getValueBlocking().peekContent())
     }

@@ -11,6 +11,8 @@ import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.model.story.Story
+import com.example.android.writeitsayithearit.test.asLiveData
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -38,17 +40,15 @@ class StoriesViewModelTest {
     fun init() {
         storiesViewModel = StoriesViewModel(storyRepository)
 
-        // observe stories
-        val mockObserver: Observer<List<Story>> = mockk(relaxed = true)
-        storiesViewModel.stories.observeForever(mockObserver)
+        mockObserversFor(storiesViewModel.stories)
+        mockObserversFor(storiesViewModel.hasResultsStatus)
+        mockObserversFor(storiesViewModel.storyClicked)
     }
 
     @Test
     fun getStories() {
         // mock response
-        val liveStories = MutableLiveData<List<Story>>()
-        liveStories.value = STARTING_STORIES
-        every { storyRepository.stories("", SortOrder.NEW) } returns liveStories
+        every { storyRepository.stories("", SortOrder.NEW) } returns STARTING_STORIES.asLiveData()
 
         // set filter to be ""
         storiesViewModel.filterQuery = ""
@@ -111,10 +111,6 @@ class StoriesViewModelTest {
 
     @Test
     fun setHasResults() {
-        // observe live data
-        val mockObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        storiesViewModel.hasResultsStatus.observeForever(mockObserver)
-
         storiesViewModel.setHasResults(true)
         assertTrue(storiesViewModel.hasResultsStatus.getValueBlocking().peekContent())
 
@@ -124,10 +120,6 @@ class StoriesViewModelTest {
 
     @Test
     fun onClickStory(){
-        // observe live data
-        val mockObserver: Observer<Event<Int>> = mockk(relaxed = true)
-        storiesViewModel.storyClicked.observeForever(mockObserver)
-
         storiesViewModel.onClickStory(0)
         assertEquals(0, storiesViewModel.storyClicked.getValueBlocking().peekContent())
     }

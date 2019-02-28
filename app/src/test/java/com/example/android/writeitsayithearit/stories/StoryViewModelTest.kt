@@ -12,6 +12,7 @@ import com.example.android.writeitsayithearit.test.asLiveData
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.StoryViewModel
 import com.example.android.writeitsayithearit.ui.util.events.Event
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -39,13 +40,9 @@ class StoryViewModelTest {
     fun init() {
         storyViewModel = StoryViewModel(storyRepository, cueRepository)
 
-        // observe story
-        val mockStoryObserver: Observer<Story> = mockk(relaxed = true)
-        val mockCueObserver: Observer<Cue> = mockk(relaxed = true)
-        val mockMenuObserver: Observer<Event<Boolean>> = mockk(relaxed = true)
-        storyViewModel.story.observeForever(mockStoryObserver)
-        storyViewModel.cue.observeForever(mockCueObserver)
-        storyViewModel.topMenuStatus.observeForever(mockMenuObserver)
+        mockObserversFor(storyViewModel.story)
+        mockObserversFor(storyViewModel.cue)
+        mockObserversFor(storyViewModel.topMenuStatus)
     }
 
     @Test()
@@ -53,16 +50,12 @@ class StoryViewModelTest {
         // Mock the story's cue
         val cueId = 12
         val cue = Cue("This is some cue", 0, 0,  cueId)
-        val liveCue = MutableLiveData<Cue>()
-        liveCue.value = cue
-        every { cueRepository.cue(cueId) } returns liveCue
+        every { cueRepository.cue(cueId) } returns cue.asLiveData()
 
         // Mock the story
         val storyId = 0
         val story = Story("This is the story about something.", cueId)
-        val liveStory = MutableLiveData<Story>()
-        liveStory.value = story
-        every { storyRepository.story(storyId) } returns liveStory
+        every { storyRepository.story(storyId) } returns story.asLiveData()
 
         // Call get story
         storyViewModel.getStory(storyId)

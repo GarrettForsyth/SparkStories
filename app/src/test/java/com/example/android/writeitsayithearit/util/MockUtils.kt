@@ -9,13 +9,13 @@ object MockUtils {
     /**
      * Sets a mock to observe LiveData
      */
-    fun <T> mockObserver(liveData: LiveData<T>) {
-        val mockObserver: Observer<T> = mockk()
+    private fun <T> mockObserverFor(liveData: LiveData<T>) {
+        val mockObserver: Observer<T> = mockk(relaxed = true)
         liveData.observeForever(mockObserver)
     }
 
-    fun <T> mockObservers(liveDataList: List<LiveData<T>>) {
-        liveDataList.forEach { liveData -> mockObserver(liveData) }
+    fun <T: Any> mockObserversFor(vararg liveDataList : LiveData<T>) {
+        liveDataList.forEach { liveData -> mockObserverFor(liveData) }
     }
 
 }
