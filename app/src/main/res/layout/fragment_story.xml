@@ -46,7 +46,7 @@
 
                 <TextView
                     style="@style/Theme.WriteItSayItHearIt.TopMenuCueCardText"
-                    android:id="@+id/cue_rating"
+                    android:id="@+id/story_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{Integer.toString(story.rating)}"
@@ -55,6 +55,34 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/cue_text"
+                    />
+
+                <TextView
+                    style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                    android:text="@{story.author}"
+                    android:id="@+id/story_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginLeft="@dimen/margin_large"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/story_rating"
+                    app:layout_constraintBottom_toTopOf="@id/cue_text"
+                    tools:text="John Doe"
+                    />
+
+                <TextView
+                    style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                    android:text="@{story.formattedDate()}"
+                    android:id="@+id/story_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginLeft="@dimen/margin_large"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/cue_text"
+                    tools:text="08:04 19-03-01"
                     />
 
 
@@ -68,7 +96,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cue_rating"/>
+                    app:layout_constraintTop_toBottomOf="@id/story_rating"/>
 
                 <ImageButton
                     android:id="@+id/like_story_button"
@@ -96,14 +124,17 @@
             app:layout_constraintTop_toBottomOf="@id/story_top_menu"
             app:srcCompat="@drawable/ic_arrow_downward_black_24dp" />
 
-        <TextView
+        <com.example.android.writeitsayithearit.views.ScaleTextView
             android:id="@+id/story_text_view"
             android:text="@{story.text}"
             tools:text="@string/story_lorem_ipsum"
+            android:textColor="@color/secondaryTextColor"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:focusable="true"
+            android:scrollbars="vertical"
             android:padding="@dimen/padding_small"
-            app:layout_constraintTop_toBottomOf="@id/story_top_menu"
+            app:layout_constraintTop_toBottomOf="@id/toggle_menu_button"
             app:layout_constraintBottom_toBottomOf="parent" />
 
 

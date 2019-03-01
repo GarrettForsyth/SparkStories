@@ -58,6 +58,15 @@ class StoryTest {
 
         onView(withText(story.text))
             .check(matches(isDisplayed()))
+
+        onView(withText(story.rating.toString()))
+            .check(matches(isDisplayed()))
+
+        onView(withText(story.author))
+            .check(matches(isDisplayed()))
+
+        onView(withText(story.formattedDate()))
+            .check(matches(isDisplayed()))
     }
 
     @Test

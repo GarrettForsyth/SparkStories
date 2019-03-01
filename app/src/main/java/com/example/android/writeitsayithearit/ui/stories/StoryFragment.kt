@@ -2,6 +2,7 @@ package com.example.android.writeitsayithearit.ui.stories
 
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -33,11 +34,6 @@ class StoryFragment : Fragment(), Injectable {
 
     lateinit var binding: FragmentStoryBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(
@@ -49,6 +45,8 @@ class StoryFragment : Fragment(), Injectable {
 
         storyViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(StoryViewModel::class.java)
+
+        binding.storyTextView.movementMethod = ScrollingMovementMethod()
 
         observeStory()
         observeCue()

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="cue"
             type="com.example.android.writeitsayithearit.model.cue.Cue" />
@@ -108,7 +107,7 @@
             app:layout_constraintTop_toBottomOf="@id/new_story_top_menu"
             app:srcCompat="@drawable/ic_arrow_downward_black_24dp" />
 
-        <EditText
+        <com.example.android.writeitsayithearit.views.ScaleEditText
             android:id="@+id/new_story_edit_text"
             android:text="@={viewmodel.storyTextField.text}"
             app:addOnTextChangeListener="@{viewmodel.storyTextChangeListener()}"

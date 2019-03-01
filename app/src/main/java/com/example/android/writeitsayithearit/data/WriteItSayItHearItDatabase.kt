@@ -12,7 +12,7 @@ import com.example.android.writeitsayithearit.model.story.Story
             Story::class,
             Author::class
         ],
-        version = 7,
+        version = 8,
         exportSchema = false
 )
 abstract class WriteItSayItHearItDatabase : RoomDatabase() {
