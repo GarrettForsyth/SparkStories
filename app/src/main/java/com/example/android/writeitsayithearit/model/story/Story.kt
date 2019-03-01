@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.model.story
 
+import android.text.format.DateFormat
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -47,6 +48,11 @@ data class Story(
     @ColumnInfo(name = StoryContract.COLUMN_ID)
     var id: Int = 0
 ) {
+
+    fun formattedDate(): String {
+        //TODO: format date based on locale
+        return DateFormat.format("hh:mm    dd-MM-yy", creationDate).toString()
+    }
 
     constructor(storyText: String, author: String, cueId: Int) :
             this(

@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.model.cue
 
+import android.text.format.DateFormat
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -39,6 +40,11 @@ data class Cue(
     var id: Int = 0
 ) {
 
+    fun formattedDate(): String {
+        //TODO: format date based on locale
+        return DateFormat.format("hh:mm    dd-MM-yy", creationDate).toString()
+    }
+
     constructor(text: String, author: String) : this(
         text,
         author,
@@ -53,6 +59,8 @@ data class Cue(
                 && this.author.equals(other.author)
                 && this.rating == other.rating
     }
+
+
 }
 
 

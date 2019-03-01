@@ -62,6 +62,20 @@
                 />
 
             <TextView
+                style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                android:text="@{cue.formattedDate()}"
+                android:id="@+id/cue_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginLeft="@dimen/margin_large"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/cue_text"
+                tools:text="08:04 19-03-01"
+                />
+
+            <TextView
                 android:id="@+id/cue_text"
                 style="@style/Theme.WriteItSayItHearIt.CueCardText"
                 android:layout_width="match_parent"

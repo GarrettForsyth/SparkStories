@@ -241,7 +241,8 @@ class StoriesTest {
                         allOf(
                             hasItemAtPosition(hasDescendant(withText(expectedStory.text)), listPosition),
                             hasItemAtPosition(hasDescendant(withText(expectedStory.rating.toString())), listPosition),
-                            hasItemAtPosition(hasDescendant(withText(expectedStory.author)), listPosition)
+                            hasItemAtPosition(hasDescendant(withText(expectedStory.author)), listPosition),
+                            hasItemAtPosition(hasDescendant(withText(expectedStory.formattedDate())), listPosition)
                         )
                     )
                 )

@@ -236,7 +236,8 @@ class CuesTest {
                         allOf(
                             hasItemAtPosition(hasDescendant(withText(expectedCue.text)), listPosition),
                             hasItemAtPosition(hasDescendant(withText(expectedCue.rating.toString())), listPosition),
-                            hasItemAtPosition(hasDescendant(withText(expectedCue.author)), listPosition)
+                            hasItemAtPosition(hasDescendant(withText(expectedCue.author)), listPosition),
+                            hasItemAtPosition(hasDescendant(withText(expectedCue.formattedDate())), listPosition)
                         )
                     )
                 )
