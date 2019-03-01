@@ -3,6 +3,7 @@ package com.example.android.writeitsayithearit.repos
 import androidx.lifecycle.LiveData
 import com.example.android.writeitsayithearit.AppExecutors
 import com.example.android.writeitsayithearit.api.WriteItSayItHearItService
+import com.example.android.writeitsayithearit.data.AuthorDao
 import com.example.android.writeitsayithearit.data.StoryDao
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.model.SortOrder

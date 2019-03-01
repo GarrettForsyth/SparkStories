@@ -7,6 +7,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.android.writeitsayithearit.AppExecutors
 import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
 import com.example.android.writeitsayithearit.test.TestUtils
+import com.example.android.writeitsayithearit.test.TestUtils.STARTING_AUTHORS
+import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
+import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -29,8 +32,9 @@ class DatabaseModule {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         appExecutors.diskIO().execute {
-                            database.cueDao().insert(TestUtils.STARTING_CUES)
-                            database.storyDao().insert(TestUtils.STARTING_STORIES)
+                            database.authorDao().insert(STARTING_AUTHORS)
+                            database.cueDao().insert(STARTING_CUES)
+                            database.storyDao().insert(STARTING_STORIES)
                         }
                     }
                 })

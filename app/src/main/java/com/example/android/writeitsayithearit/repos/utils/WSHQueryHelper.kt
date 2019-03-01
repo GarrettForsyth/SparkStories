@@ -61,8 +61,8 @@ object WSHQueryHelper {
             filterString: String
     ) {
         queryBuilder.selection(
-                "${CueContract.COLUMN_TEXT} LIKE ?",
-                arrayOf("%$filterString%")
+                "${CueContract.COLUMN_TEXT} LIKE ? OR ${CueContract.COLUMN_AUTHOR} LIKE ?",
+                arrayOf("%$filterString%", "%$filterString%")
         )
     }
 

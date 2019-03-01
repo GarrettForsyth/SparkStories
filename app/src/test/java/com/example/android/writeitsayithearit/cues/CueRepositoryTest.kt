@@ -9,6 +9,7 @@ import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -74,14 +75,14 @@ class CueRepositoryTest {
 
     @Test
     fun submitCue() {
-        val cue = TestUtils.createTestCue()
+        val cue = createTestCue()
         cueRepository.submitCue(cue)
         verify(exactly = 1) { dao.insert(cue) }
     }
 
     @Test
     fun updateCue() {
-        val cue = TestUtils.createTestCue()
+        val cue = createTestCue()
         cueRepository.updateCue(cue)
         verify(exactly = 1) { dao.update(cue)}
     }

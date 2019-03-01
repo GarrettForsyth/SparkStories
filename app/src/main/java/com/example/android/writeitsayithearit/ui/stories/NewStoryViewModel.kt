@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.ui.stories
 
+import android.content.SharedPreferences
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.databinding.ObservableField
@@ -16,6 +17,7 @@ import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
 import com.example.android.writeitsayithearit.ui.util.TextWatcherAdapter
+import timber.log.Timber
 import javax.inject.Inject
 
 @OpenForTesting
@@ -23,6 +25,9 @@ class NewStoryViewModel @Inject constructor(
     private val cueRepository: CueRepository,
     private val storyRepository: StoryRepository
 ) : ViewModel() {
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     var storyTextField: StoryTextField = StoryTextField()
 
@@ -98,7 +103,9 @@ class NewStoryViewModel @Inject constructor(
 
     fun onConfirmSubmission() {
         if (storyTextField.isValid()) {
-            val story = Story(storyTextField.text, cueId.value!!)
+            val author = sharedPreferences.getString(PREFERENCE_AUTHOR, DEFAULT_AUTHOR)!!
+            val story = Story(storyTextField.text, author, cueId.value!!)
+            Timber.d("--> $story")
             submitStory(story)
             _navigateToStoriesFragment.value = Event(true)
         } else {
@@ -110,5 +117,10 @@ class NewStoryViewModel @Inject constructor(
         storyRepository.submitStory(story)
         val updatedCue = cue.value!!.copy().apply { rating++ }
         cueRepository.updateCue(updatedCue)
+    }
+
+    companion object {
+        const val PREFERENCE_AUTHOR = "preference_author"
+        const val DEFAULT_AUTHOR = "Unknown"
     }
 }

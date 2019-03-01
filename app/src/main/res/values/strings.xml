@@ -57,4 +57,5 @@ Nulla rutrum convallis sem tincidunt rhoncus. Ut id mi et felis imperdiet fermen
 
 Morbi euismod lectus nec condimentum tristique. Nam quis orci erat. Nunc tincidunt augue eget tortor efficitur, ut maximus magna interdum. Pellentesque vitae vestibulum ipsum, eget fringilla metus. Praesent ornare viverra finibus. Phasellus convallis massa id metus fermentum porta. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus ultricies, leo et consequat posuere, diam odio vulputate tortor, vel aliquet dolor enim at nisi.
     </string>
+    <string name="preference_author">PREFERENCE_USER</string>
 </resources>

@@ -1,17 +1,24 @@
 package com.example.android.writeitsayithearit.ui.cues
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.model.cue.CueTextField
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.cue.Cue
+import timber.log.Timber
 import javax.inject.Inject
 
 class NewCueViewModel @Inject constructor(
     private val cueRepository: CueRepository
 ): ViewModel() {
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     var cueTextField: CueTextField =
         CueTextField()
@@ -26,7 +33,9 @@ class NewCueViewModel @Inject constructor(
 
     fun onClickSubmitCue() {
         if (cueTextField.isValid()) {
-            val cue = Cue(cueTextField.text)
+            val author = sharedPreferences.getString(PREFERENCE_AUTHOR, DEFAULT_AUTHOR)!!
+            val cue = Cue(cueTextField.text, author)
+            Timber.d("--> $cue")
             submitCue(cue)
             _shouldNavigateToCues.value = Event(true)
         } else {
@@ -35,4 +44,10 @@ class NewCueViewModel @Inject constructor(
     }
 
     private fun submitCue(cue: Cue) { cueRepository.submitCue(cue) }
+
+    companion object {
+        const val PREFERENCE_AUTHOR = "preference_author"
+        const val DEFAULT_AUTHOR = "Unknown"
+    }
+
 }

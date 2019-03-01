@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -34,6 +35,33 @@
             android:paddingRight="@dimen/padding_regular"
             android:paddingTop="@dimen/padding_regular"
             android:paddingBottom="@dimen/padding_regular">
+
+            <TextView
+                style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                android:text="@{Integer.toString(story.rating)}"
+                android:id="@+id/story_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_headline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/story_text"
+                tools:text="23"
+                />
+
+            <TextView
+                style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                android:text="@{story.author}"
+                android:id="@+id/story_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginLeft="@dimen/margin_large"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/story_rating"
+                app:layout_constraintBottom_toTopOf="@id/story_text"
+                tools:text="John Doe"
+                />
 
             <TextView
                 style="@style/Theme.WriteItSayItHearIt.CueCardText"

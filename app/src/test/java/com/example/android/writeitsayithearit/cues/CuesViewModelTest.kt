@@ -1,18 +1,14 @@
 package com.example.android.writeitsayithearit.cues
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
-import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.asLiveData
-import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -39,10 +35,10 @@ class CuesViewModelTest {
     fun init() {
         cuesViewModel = CuesViewModel(cueRepository)
 
-        mockObserversFor(cuesViewModel.cues)
-        mockObserversFor(cuesViewModel.hasResultsStatus)
-        mockObserversFor(cuesViewModel.cueClicked)
-        mockObserversFor(cuesViewModel.newCueFabClick)
+        mockObserverFor(cuesViewModel.cues)
+        mockObserverFor(cuesViewModel.hasResultsStatus)
+        mockObserverFor(cuesViewModel.cueClicked)
+        mockObserverFor(cuesViewModel.newCueFabClick)
     }
 
     @Test

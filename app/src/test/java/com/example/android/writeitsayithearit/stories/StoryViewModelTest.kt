@@ -1,18 +1,15 @@
 package com.example.android.writeitsayithearit.stories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.test.filters.SmallTest
-import com.example.android.writeitsayithearit.model.cue.Cue
-import com.example.android.writeitsayithearit.model.story.Story
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.repos.StoryRepository
+import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
+import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
 import com.example.android.writeitsayithearit.test.asLiveData
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.StoryViewModel
-import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -40,28 +37,24 @@ class StoryViewModelTest {
     fun init() {
         storyViewModel = StoryViewModel(storyRepository, cueRepository)
 
-        mockObserversFor(storyViewModel.story)
-        mockObserversFor(storyViewModel.cue)
-        mockObserversFor(storyViewModel.topMenuStatus)
+        mockObserverFor(storyViewModel.story)
+        mockObserverFor(storyViewModel.cue)
+        mockObserverFor(storyViewModel.topMenuStatus)
     }
 
     @Test()
     fun getStory(){
-        // Mock the story's cue
-        val cueId = 12
-        val cue = Cue("This is some cue", 0, 0,  cueId)
-        every { cueRepository.cue(cueId) } returns cue.asLiveData()
+        val cue = createTestCue().apply{ id = 12}
+        every { cueRepository.cue(cue.id) } returns cue.asLiveData()
 
-        // Mock the story
-        val storyId = 0
-        val story = Story("This is the story about something.", cueId)
-        every { storyRepository.story(storyId) } returns story.asLiveData()
+        val story = createTestStory().apply { cueId = cue.id }
+        every { storyRepository.story(story.id) } returns story.asLiveData()
 
         // Call get story
-        storyViewModel.getStory(storyId)
+        storyViewModel.getStory(story.id)
 
-        verify { storyRepository.story(storyId)}
-        verify { cueRepository.cue(cueId) }
+        verify { storyRepository.story(story.id)}
+        verify { cueRepository.cue(cue.id) }
         assertEquals(storyViewModel.story.getValueBlocking(), story)
         assertEquals(storyViewModel.cue.getValueBlocking(), cue)
     }
@@ -80,12 +73,12 @@ class StoryViewModelTest {
 
     @Test
     fun likeStory() {
-        val story = Story("test", 14, 0, 52, 0)
-        every { storyRepository.story(0) } returns story.asLiveData()
-        storyViewModel.getStory(0)
+        val story = createTestStory().apply { id = 10 }
+        every { storyRepository.story(story.id) } returns story.asLiveData()
+        storyViewModel.getStory(story.id)
 
         storyViewModel.onLikeStoryClick()
-        val updatedStory = Story("test", 14, 0, 53, 0)
+        val updatedStory = story.copy().apply { rating++ }
         verify { storyRepository.update(updatedStory) }
     }
 

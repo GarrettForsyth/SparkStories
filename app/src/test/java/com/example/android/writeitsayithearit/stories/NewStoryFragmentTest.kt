@@ -167,7 +167,6 @@ class NewStoryFragmentTest {
         }
     }
 
-
     @Test
     fun inPreviewMode() {
         scenario.onFragment {

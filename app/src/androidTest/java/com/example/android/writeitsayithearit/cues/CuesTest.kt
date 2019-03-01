@@ -13,6 +13,7 @@ import com.example.android.writeitsayithearit.test.CustomMatchers.Companion.hasI
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.test.TestUtils
+import com.example.android.writeitsayithearit.test.TestUtils.FILTER_AUTHOR_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_TOP_INDICES
@@ -77,6 +78,21 @@ class CuesTest {
     }
 
     @Test
+    fun userFiltersByCueAuthor() {
+        // When I type 'Bob' into the filter edit text
+        onView(withId(R.id.filter_cues_edit_text))
+            .perform(typeText(FILTER_AUTHOR))
+
+        // Then the starting list should filter everything but the
+        // three  starting cue containing the author Bob
+        scenario.onActivity {
+            assert(it.cues_list.adapter?.itemCount!! == 3)
+        }
+
+        verifyExpectedOrder(FILTER_AUTHOR_NEW_INDICES)
+    }
+
+    @Test
     fun noResults() {
         // When I type 'zzz' into the filter edit text
         onView(withId(R.id.filter_cues_edit_text))
@@ -99,9 +115,11 @@ class CuesTest {
         // When I chooses order by 'new' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("New"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("New")
+            )
         ).perform(click())
 
         // Thent he cues are sorted by their creation date
@@ -113,9 +131,11 @@ class CuesTest {
         // When I chooses order by 'top' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("Top"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("Top")
+            )
         ).perform(click())
 
         // Then the cues are sorted by rating
@@ -127,9 +147,11 @@ class CuesTest {
         // When I chooses order by 'hot' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("Hot"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("Hot")
+            )
         ).perform(click())
 
         // Then the list is ordered by rating and only includes
@@ -146,9 +168,11 @@ class CuesTest {
         // And: I chooses order by 'hot' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("Hot"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("Hot")
+            )
         ).perform(click())
 
         // Then the list is sorted by 'hot' and filtered by 'to'
@@ -164,9 +188,11 @@ class CuesTest {
         // And I chooses order by 'new' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("New"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("New")
+            )
         ).perform(click())
 
         // Then the cues are ordered by 'new' and filtered by 'to'
@@ -182,9 +208,11 @@ class CuesTest {
         // And I chooses order by 'top' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("Top"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("Top")
+            )
         ).perform(click())
 
         // Then the cues are ordered by 'top' and filtered by "to"
@@ -203,14 +231,21 @@ class CuesTest {
                 .perform(RecyclerViewActions.scrollToPosition<CueViewHolder>(listPosition))
 
             onView(withId(R.id.cues_list))
-                .check(matches(
-                    hasItemAtPosition(hasDescendant(withText(expectedCue.text)),listPosition))
+                .check(
+                    matches(
+                        allOf(
+                            hasItemAtPosition(hasDescendant(withText(expectedCue.text)), listPosition),
+                            hasItemAtPosition(hasDescendant(withText(expectedCue.rating.toString())), listPosition),
+                            hasItemAtPosition(hasDescendant(withText(expectedCue.author)), listPosition)
+                        )
+                    )
                 )
         }
     }
 
     companion object {
         private val FILTER_STRING = "Dogs"
+        private val FILTER_AUTHOR = "Bob"
         private val FILTER_STRING_NO_MATCHES = "zzz"
     }
 

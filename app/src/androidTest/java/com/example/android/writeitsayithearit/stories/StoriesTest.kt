@@ -13,6 +13,7 @@ import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.test.CustomMatchers.Companion.hasItemAtPosition
 import com.example.android.writeitsayithearit.test.TestUtils
+import com.example.android.writeitsayithearit.test.TestUtils.FILTER_AUTHOR_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_TOP_INDICES
@@ -22,6 +23,7 @@ import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
 import com.example.android.writeitsayithearit.ui.stories.StoryViewHolder
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
+import kotlinx.android.synthetic.main.fragment_cues.*
 import kotlinx.android.synthetic.main.fragment_stories.*
 import org.hamcrest.CoreMatchers.*
 import org.junit.Before
@@ -80,6 +82,21 @@ class StoriesTest {
     }
 
     @Test
+    fun userFiltersByStoriesAuthor() {
+        // When I type 'Bob' into the filter edit text
+        onView(withId(R.id.filter_stories_edit_text))
+            .perform(typeText(FILTER_AUTHOR))
+
+        // Then the starting list should filter everything but the
+        // three  starting cue containing the author Bob
+        scenario.onActivity {
+            assert(it.stories_list.adapter?.itemCount!! == 3)
+        }
+
+        verifyExpectedOrder(FILTER_AUTHOR_NEW_INDICES)
+    }
+
+    @Test
     fun noResults() {
         // When I type 'zzz' into the filter edit text
         onView(withId(R.id.filter_stories_edit_text))
@@ -102,9 +119,11 @@ class StoriesTest {
         // When I chooses order by 'new' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("New"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("New")
+            )
         ).perform(click())
 
         // Then the stories are sorted by their creation date
@@ -116,9 +135,11 @@ class StoriesTest {
         // When I chooses order by 'top' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("Top"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("Top")
+            )
         ).perform(click())
 
         // Then the stories are sorted by rating
@@ -130,9 +151,11 @@ class StoriesTest {
         // When I chooses order by 'hot' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("Hot"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("Hot")
+            )
         ).perform(click())
 
         // Then the list is ordered by rating and only includes
@@ -149,9 +172,11 @@ class StoriesTest {
         // And: I chooses order by 'hot' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("Hot"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("Hot")
+            )
         ).perform(click())
 
         // Then the list is sorted by 'hot' and filtered by 'to'
@@ -167,9 +192,11 @@ class StoriesTest {
         // And I chooses order by 'new' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("New"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("New")
+            )
         ).perform(click())
 
         // Then the story are ordered by 'new' and filtered by 'to'
@@ -185,9 +212,11 @@ class StoriesTest {
         // And I chooses order by 'top' on the spinner
         onView(withId(R.id.sort_order_spinner))
             .perform(click())
-        onData(allOf(
-            `is`(instanceOf(String::class.java)),
-            `is`("Top"))
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`("Top")
+            )
         ).perform(click())
 
         // Then the stories are ordered by 'top' and filtered by "to"
@@ -207,14 +236,21 @@ class StoriesTest {
             onView(withId(R.id.stories_list))
                 .perform(RecyclerViewActions.scrollToPosition<StoryViewHolder>(listPosition))
             onView(withId(R.id.stories_list))
-                .check(matches(
-                    hasItemAtPosition(hasDescendant(withText(expectedStory.text)),listPosition))
+                .check(
+                    matches(
+                        allOf(
+                            hasItemAtPosition(hasDescendant(withText(expectedStory.text)), listPosition),
+                            hasItemAtPosition(hasDescendant(withText(expectedStory.rating.toString())), listPosition),
+                            hasItemAtPosition(hasDescendant(withText(expectedStory.author)), listPosition)
+                        )
+                    )
                 )
         }
     }
 
     companion object {
         private val FILTER_STRING = "Dogs"
+        private val FILTER_AUTHOR = "Bob"
         private val FILTER_STRING_NO_MATCHES = "zzz"
     }
 

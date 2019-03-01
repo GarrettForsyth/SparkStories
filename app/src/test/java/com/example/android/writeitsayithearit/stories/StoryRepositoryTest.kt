@@ -9,6 +9,7 @@ import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -81,14 +82,14 @@ class StoryRepositoryTest {
 
     @Test
     fun submitStory() {
-        val story = TestUtils.createTestStory()
+        val story = createTestStory()
         storyRepository.submitStory(story)
         verify(exactly = 1) { dao.insert(story) }
     }
 
     @Test
     fun updateStory() {
-        val story = TestUtils.createTestStory()
+        val story = createTestStory()
         storyRepository.update(story)
         verify(exactly = 1) { dao.update(story)}
     }

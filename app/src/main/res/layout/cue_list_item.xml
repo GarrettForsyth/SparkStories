@@ -48,6 +48,20 @@
                 />
 
             <TextView
+                style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                android:text="@{cue.author}"
+                android:id="@+id/cue_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_large"
+                android:layout_marginLeft="@dimen/margin_large"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cue_rating"
+                app:layout_constraintBottom_toTopOf="@id/cue_text"
+                tools:text="John Doe"
+                />
+
+            <TextView
                 android:id="@+id/cue_text"
                 style="@style/Theme.WriteItSayItHearIt.CueCardText"
                 android:layout_width="match_parent"

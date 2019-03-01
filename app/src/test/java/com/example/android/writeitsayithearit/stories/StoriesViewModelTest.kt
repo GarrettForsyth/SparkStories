@@ -1,18 +1,14 @@
 package com.example.android.writeitsayithearit.stories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
-import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.SortOrder
-import com.example.android.writeitsayithearit.model.story.Story
 import com.example.android.writeitsayithearit.test.asLiveData
-import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -40,9 +36,9 @@ class StoriesViewModelTest {
     fun init() {
         storiesViewModel = StoriesViewModel(storyRepository)
 
-        mockObserversFor(storiesViewModel.stories)
-        mockObserversFor(storiesViewModel.hasResultsStatus)
-        mockObserversFor(storiesViewModel.storyClicked)
+        mockObserverFor(storiesViewModel.stories)
+        mockObserverFor(storiesViewModel.hasResultsStatus)
+        mockObserverFor(storiesViewModel.storyClicked)
     }
 
     @Test

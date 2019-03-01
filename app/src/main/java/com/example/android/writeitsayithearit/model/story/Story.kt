@@ -3,22 +3,41 @@ package com.example.android.writeitsayithearit.model.story
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.android.writeitsayithearit.model.author.Author
+import com.example.android.writeitsayithearit.model.author.AuthorContract
+import com.example.android.writeitsayithearit.model.cue.CueContract
 import java.util.*
 
-@Entity(tableName = StoryContract.TABLE_NAME)
+@Entity(
+    tableName = StoryContract.TABLE_NAME
+    // TODO: Inserting a story throws an error indicating
+    // that the author (foreign key)
+    // isn't in the database. Similar setup
+    // for cues works fine. Investigate later.
+//    foreignKeys = [ForeignKey(
+//        entity = Author::class,
+//        parentColumns = [AuthorContract.COLUMN_NAME],
+//        childColumns = [StoryContract.COLUMN_AUTHOR]
+//    )]
+)
 data class Story(
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_TEXT)
     var text: String,
 
     @NonNull
+    @ColumnInfo(name = StoryContract.COLUMN_AUTHOR)
+    var author: String,
+
+    @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_CUE_ID)
-    val cueId: Int,
+    var cueId: Int,
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_CREATION_DATE)
-    val creationDate: Long,
+    var creationDate: Long,
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_RATING)
@@ -26,12 +45,13 @@ data class Story(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = StoryContract.COLUMN_ID)
-    val id: Int = 0
+    var id: Int = 0
 ) {
 
-    constructor(storyText: String, cueId: Int) :
+    constructor(storyText: String, author: String, cueId: Int) :
             this(
                 storyText,
+                author,
                 cueId,
                 Calendar.getInstance().timeInMillis,
                 0
@@ -40,6 +60,7 @@ data class Story(
     override fun equals(other: Any?): Boolean {
         return (other is Story)
                 && this.text.equals(other.text)
+                && this.author.equals(other.author)
                 && this.cueId == other.cueId
                 && this.rating == other.rating
     }

@@ -21,7 +21,7 @@ class WSHQueryHelperTest {
 
     @Test
     fun queryCuesFilterTest() {
-        val expectedSqlQuery = "SELECT  *  FROM cues WHERE text LIKE ? ORDER BY creation_date DESC"
+        val expectedSqlQuery = "SELECT  *  FROM cues WHERE text LIKE ? OR author LIKE ? ORDER BY creation_date DESC"
         val query = WSHQueryHelper.cues(filterString = "updog").sql
         assertEquals(query, expectedSqlQuery)
     }
@@ -63,7 +63,7 @@ class WSHQueryHelperTest {
 
     @Test
     fun queryStoriesFilterTest() {
-        val expectedSqlQuery = "SELECT  *  FROM stories WHERE text LIKE ? ORDER BY creation_date DESC"
+        val expectedSqlQuery = "SELECT  *  FROM stories WHERE text LIKE ? OR author LIKE ? ORDER BY creation_date DESC"
         val query = WSHQueryHelper.stories(filterString = "updog").sql
         assertEquals(query, expectedSqlQuery)
     }

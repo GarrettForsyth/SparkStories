@@ -2,9 +2,12 @@ package com.example.android.writeitsayithearit
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import com.example.android.writeitsayithearit.di.AppInjector
 import com.example.android.writeitsayithearit.di.DaggerAndroidTestAppComponent
 import com.example.android.writeitsayithearit.di.DaggerAppComponent
+import com.example.android.writeitsayithearit.test.TestUtils.STARTING_AUTHORS
+import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import timber.log.Timber
@@ -29,6 +32,8 @@ class AndroidTestApp : Application(), HasActivityInjector {
                 .build()
                 .inject(this)
         AppInjector.init(this)
+
+
         Timber.d("AndroidTest injection used.")
     }
 

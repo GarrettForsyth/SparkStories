@@ -15,7 +15,9 @@ import org.junit.runner.RunWith
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.model.cue.CueTextField
+import com.example.android.writeitsayithearit.test.CustomMatchers.Companion.hasItemAtPosition
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
 
 
@@ -34,6 +36,8 @@ class NewCueTest {
 
     private lateinit var scenario : ActivityScenario<MainActivity>
 
+    private lateinit var currentUser: String
+
     @Before
     fun navigateToCuesFragment(){
         // Given I have launched the app
@@ -41,6 +45,9 @@ class NewCueTest {
 
         // And clicked on the add cue fab
         onView(withId(R.id.add_cue_fab)).perform(click())
+
+        // And I am logged in as "Bob" (via dagger injection)
+        currentUser = "Bob"
     }
 
     @Test
@@ -74,6 +81,18 @@ class NewCueTest {
         // I should see a list of cues with my story in the list
         onView(withId(R.id.cues_list)).check(matches(isDisplayed()))
         onView(withText(validCueText)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.cues_list))
+            .check(
+                matches(
+                    allOf(
+                        hasItemAtPosition(hasDescendant(withText(validCueText)), 0),
+                        hasItemAtPosition(hasDescendant(withText(0.toString())), 0),
+                        hasItemAtPosition(hasDescendant(withText(currentUser)), 0)
+                    )
+                )
+            )
+
     }
 }
 

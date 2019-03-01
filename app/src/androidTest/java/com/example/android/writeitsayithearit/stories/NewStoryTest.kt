@@ -17,8 +17,7 @@ import com.example.android.writeitsayithearit.model.story.StoryTextField
 import com.example.android.writeitsayithearit.test.CustomMatchers.Companion.hasItemAtPosition
 import com.example.android.writeitsayithearit.ui.cues.CueViewHolder
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
-import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.CoreMatchers.not
+import org.hamcrest.CoreMatchers.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,6 +40,8 @@ class NewStoryTest {
     private val cue = TestUtils.STARTING_CUES.last()
     private lateinit var scenario : ActivityScenario<MainActivity>
 
+    private lateinit var currentUser: String
+
     @Before
     fun navigateToStoriesFragment(){
         // Given I have launched the app
@@ -48,6 +49,9 @@ class NewStoryTest {
 
         // And clicked on a cue that interests me
         onView(withText(cue.text)).perform(click())
+
+        // Given I am logged in as "Bob" (via dagger injection)
+        currentUser = "Bob"
     }
 
     @Test
@@ -181,8 +185,17 @@ class NewStoryTest {
         onView(withId(android.R.id.button1)).perform(click())
 
         // I should see a list of stories with my story in the list
-        onView(withId(R.id.stories_list)).check(matches(isDisplayed()))
         onView(withText(validStoryText)).check(matches(isDisplayed()))
+        onView(withId(R.id.stories_list))
+            .check(
+                matches(
+                    allOf(
+                        hasItemAtPosition(hasDescendant(withText(validStoryText)), 0),
+                        hasItemAtPosition(hasDescendant(withText(0.toString())), 0),
+                        hasItemAtPosition(hasDescendant(withText(currentUser)), 0)
+                    )
+                )
+            )
 
         // When I navigate to cues
         onView(withId(R.id.cuesFragment)).perform(click())
@@ -192,5 +205,6 @@ class NewStoryTest {
             .check(matches(hasItemAtPosition(
                 hasDescendant(withText(expectedRating.toString())), 0
             )))
+
     }
 }

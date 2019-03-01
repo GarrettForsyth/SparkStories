@@ -4,9 +4,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.test.TestUtils
+import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.cues.NewCueViewModel
-import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
+import com.example.android.writeitsayithearit.ui.cues.NewCueViewModel.Companion.DEFAULT_AUTHOR
+import com.example.android.writeitsayithearit.ui.cues.NewCueViewModel.Companion.PREFERENCE_AUTHOR
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -33,8 +36,9 @@ class NewCueViewModelTest {
     fun init() {
         newCueViewModel = NewCueViewModel(cueRepository)
         newCueViewModel.cueTextField = mockk(relaxed = true)
+        newCueViewModel.sharedPreferences = mockk(relaxed = true)
 
-        mockObserversFor(
+        mockObserverFor(
             newCueViewModel.shouldNavigateToCues,
             newCueViewModel.invalidCueSnackBar
         )
@@ -50,10 +54,14 @@ class NewCueViewModelTest {
     @Test
     fun submitValidCue() {
         // mock a valid cue
-        val expectedCue = TestUtils.createTestCue()
+        val expectedCue = createTestCue()
 
         every { newCueViewModel.cueTextField.isValid() } returns true
         every { newCueViewModel.cueTextField.text } returns expectedCue.text
+        every {
+            newCueViewModel.sharedPreferences
+                .getString(PREFERENCE_AUTHOR, DEFAULT_AUTHOR )
+        } returns expectedCue.author
 
         newCueViewModel.onClickSubmitCue()
 
@@ -74,6 +82,10 @@ class NewCueViewModelTest {
 
         every { newCueViewModel.cueTextField.isValid() } returns false
         every { newCueViewModel.cueTextField.text } returns expectedCue.text
+        every {
+            newCueViewModel.sharedPreferences
+                .getString(PREFERENCE_AUTHOR, DEFAULT_AUTHOR )
+        } returns expectedCue.author
 
         newCueViewModel.onClickSubmitCue()
 

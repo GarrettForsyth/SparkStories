@@ -2,8 +2,6 @@ package com.example.android.writeitsayithearit.stories
 
 import android.text.Editable
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.repos.CueRepository
@@ -11,10 +9,12 @@ import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel
-import com.example.android.writeitsayithearit.ui.util.events.Event
-import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
+import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
 import com.example.android.writeitsayithearit.test.asLiveData
-import com.example.android.writeitsayithearit.util.MockUtils.mockObserversFor
+import com.example.android.writeitsayithearit.ui.cues.NewCueViewModel.Companion.DEFAULT_AUTHOR
+import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
+import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -42,15 +42,16 @@ class NewStoryViewModelTest {
     fun init() {
         newStoryViewModel = NewStoryViewModel(cueRepository, storyRepository)
         newStoryViewModel.storyTextField = mockk(relaxed = true)
+        newStoryViewModel.sharedPreferences = mockk(relaxed = true)
 
-        mockObserversFor(newStoryViewModel.cue)
+        mockObserverFor(newStoryViewModel.cue)
 
-        mockObserversFor(
+        mockObserverFor(
             newStoryViewModel.characterCount,
             newStoryViewModel.characterCountColour
         )
 
-        mockObserversFor(
+        mockObserverFor(
             newStoryViewModel.topMenuStatus,
             newStoryViewModel.inPreviewMode,
             newStoryViewModel.newStoryInfoDialog,
@@ -64,7 +65,7 @@ class NewStoryViewModelTest {
     fun getCue() {
         // mock response from repository
         val id = 0
-        val cue = Cue("test")
+        val cue = createTestCue()
         every { cueRepository.cue(id) } returns cue.asLiveData()
 
         // call getCue
@@ -164,19 +165,22 @@ class NewStoryViewModelTest {
     @Test
     fun confirmValidSubmission() {
         // mock a valid story
-        val expectedStory = TestUtils.createTestStory()
+        val expectedStory = createTestStory()
 
         // mock cue response from repository
-        val id = expectedStory.cueId
-        val cue = Cue("test", 0, 12, 15)
+        val cue = createTestCue().apply { rating = 14 }
         every { cueRepository.cue(expectedStory.cueId) } returns cue.asLiveData()
         newStoryViewModel.getCue(expectedStory.cueId)
 
         every { newStoryViewModel.storyTextField.isValid() } returns true
         every { newStoryViewModel.storyTextField.text } returns expectedStory.text
+        every {
+            newStoryViewModel.sharedPreferences
+                .getString(PREFERENCE_AUTHOR, DEFAULT_AUTHOR )
+        } returns expectedStory.author
 
         // expect to update with one more rating
-        val expectedCue = Cue("test", 0, 13, 15)
+        val expectedCue = cue.copy().apply { rating++ }
 
         newStoryViewModel.onConfirmSubmission()
         verify { storyRepository.submitStory(expectedStory) }
@@ -195,17 +199,19 @@ class NewStoryViewModelTest {
         val expectedStory = TestUtils.createTestStory()
 
         // mock cue response from repository
-        val id = expectedStory.cueId
-        val cue = Cue("test", 0, 12, 15)
+        val cue = createTestCue().apply { rating = 14}
         every { cueRepository.cue(expectedStory.cueId) } returns cue.asLiveData()
         newStoryViewModel.getCue(expectedStory.cueId)
 
-        // expect to update with one more rating
-        val expectedCue = Cue("test", 0, 13, 15)
-
+        // expect to update with one more rating (if valid)
+        val expectedCue = cue.copy().apply { rating++ }
 
         every { newStoryViewModel.storyTextField.isValid() } returns false
         every { newStoryViewModel.storyTextField.text } returns expectedStory.text
+        every {
+            newStoryViewModel.sharedPreferences
+                .getString(PREFERENCE_AUTHOR, DEFAULT_AUTHOR )
+        } returns expectedStory.author
 
         newStoryViewModel.onConfirmSubmission()
 
