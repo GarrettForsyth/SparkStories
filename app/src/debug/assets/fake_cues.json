@@ -1,0 +1,59 @@
+{
+  "cues":[
+    {
+      "text": "Quisque porttitor nibh metus, eu aliquet turpis feugiat nec. Nullam nulla dui, sagittis eget risus non, finibus cursus urna. Pellentesque scelerisque ipsum in nibh accumsan pretium. Duis vestibulum accumsan volutpat. Nam vitae magna imperdiet, tristique ex quis, congue lacus. Aliquam pharetra urna ac magna aliquet maximus. Donec sit amet scelerisque.",
+      "author":  "Chauncey Harber",
+      "rating": 0
+    },
+    {
+      "text": "Curabitur urna diam, feugiat ut mi eget, iaculis auctor sapien.",
+      "author":  "Chauncey Harber",
+      "rating": 10
+    },
+    {
+      "text": "Sed a lorem quis urna tincidunt rutrum. Aenean et fermentum ex, ac vehicula massa. Aliquam porttitor sem consequat lorem maximus vestibulum. Nulla facilisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum rhoncus sollicitudin lorem ut ultrices. Praesent eget aliquam nisl, eget fermentum dui. Aliquam sagittis augue id purus sagittis, vitae egestas tellus commodo. Nullam magna augue, molestie sit amet diam sit amet, tristique dictum lorem. Curabitur id tincidunt dolor, vitae.",
+      "author":  "Cordelia Kassulke IV",
+      "rating": 25
+    },
+    {
+      "text": "Ut ex risus, imperdiet a maximus a, laoreet sit amet sem. Aliquam bibendum enim vitae est ultricies condimentum.",
+      "author":  "Cordelia Kassulke IV",
+      "rating": 32
+    },
+    {
+      "text": "Suspendisse eget efficitur nibh, a lobortis magna. In molestie ex ut risus sollicitudin fermentum. Sed et commodo ante. Curabitur quis ultricies urna, a lobortis ex. Praesent suscipit, ligula non feugiat facilisis, libero dolor aliquam dui, vel condimentum sem magna sed eros. Donec tempus malesuada sodales. Suspendisse potenti. Fusce scelerisque laoreet ex, in ornare nibh tempus eget. Ut sed ultricies turpis. Aliquam felis nibh, luctus sit amet sollicitudin et, tristique.",
+      "author":  "Prayag Rawat",
+      "rating": 54
+    },
+    {
+      "text": "Morbi vestibulum malesuada justo, quis pulvinar lorem molestie ac. Cras euismod justo lorem. Fusce finibus urna ex, sit amet egestas purus vulputate nec. Integer luctus nisl sit amet mauris dictum, in rutrum quam cursus. Donec vel consectetur est. Nullam dolor nisi, tincidunt imperdiet.",
+      "author":  "Prayag Rawat",
+      "rating": 65
+    },
+    {
+      "text": "Nunc nec consectetur ipsum. Mauris sed purus nec diam scelerisque volutpat. Nulla nisl nunc, vehicula sit amet molestie quis, gravida consectetur enim. Nullam ac dolor nec lorem scelerisque.",
+      "author":  "Imelda Cremin",
+      "rating": 101
+    },
+    {
+      "text": "Curabitur a metus arcu. Quisque lorem nulla, mattis sed bibendum vitae, pretium vel diam. Fusce sed ornare neque, non finibus orci. Etiam pretium magna eget mauris fermentum sodales a maximus lacus. Nunc tristique ligula felis, a elementum purus pulvinar quis. Aliquam in ipsum lobortis, molestie libero nec, facilisis lorem. Nullam id est vel tortor fringilla auctor.",
+      "author":  "Imelda Cremin",
+      "rating": 500
+    },
+    {
+      "text": "Suspendisse ac odio ligula. Aliquam sit amet nulla id turpis tincidunt scelerisque. Quisque finibus dapibus libero, eget suscipit sapien pretium non. Suspendisse sem purus, porta at blandit non, dapibus et neque. Cras semper tincidunt imperdiet. Maecenas tellus ex, sodales eu erat at, blandit venenatis.",
+      "author":  "Scarlett Rose",
+      "rating": 505
+    },
+    {
+      "text": "Nulla facilisi. Curabitur hendrerit tincidunt ligula quis maximus. Proin faucibus metus non posuere auctor. Nam ullamcorper metus eros, vitae elementum elit venenatis eget. Vestibulum nec leo luctus, aliquet neque sed, vehicula ex. Fusce.",
+      "author":  "Scarlett Rose",
+      "rating": 590
+    },
+    {
+      "text": "Phasellus porta pretium suscipit. Nam ornare elit a lectus mollis suscipit. Vestibulum.",
+      "author":  "Reilly Beahan",
+      "rating": 1500
+    }
+  ]
+}

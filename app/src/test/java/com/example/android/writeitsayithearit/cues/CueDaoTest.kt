@@ -12,15 +12,15 @@ import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.SortOrder
-import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_HOT_INDICES
-import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_NEW_INDICES
-import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_TOP_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_SORT_HOT_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_SORT_NEW_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_SORT_TOP_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_TEXT
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_AUTHORS
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
+import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -38,9 +38,13 @@ class CueDaoTest {
     @JvmField
     val instantTaskExecutor = InstantTaskExecutorRule()
 
+    private val dbSeed = DatabaseSeed(ApplicationProvider.getApplicationContext())
+    private val cues = dbSeed.SEED_CUES
+    private val authors = dbSeed.SEED_AUTHORS
+
     private lateinit var cueDao: CueDao
     private lateinit var db: WriteItSayItHearItDatabase
-    private val cues = STARTING_CUES
+
 
     @Before
     fun createAndSeedDb() {
@@ -53,7 +57,7 @@ class CueDaoTest {
         cueDao = db.cueDao()
 
         // seed with starting data
-        db.authorDao().insert(STARTING_AUTHORS)
+        db.authorDao().insert(authors)
         cueDao.insert(cues)
     }
 
@@ -67,7 +71,7 @@ class CueDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCue() {
         val cue = createTestCue().apply {
-            author = STARTING_AUTHORS.first().name
+            author = authors.first().name
         }
         cueDao.insert(cue)
 
@@ -102,9 +106,9 @@ class CueDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadCueListWithFilter() {
-        val query = WSHQueryHelper.cues("Dogs")
+        val query = WSHQueryHelper.cues(CUE_FILTER_TEXT)
         val readCues = cueDao.cues(query).getValueBlocking()
-        assert(readCues.size == 1)
+        assert(readCues.size == 6)
     }
 
     @Test
@@ -140,30 +144,30 @@ class CueDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadCueListWithHotWithFilter() {
-        val query = WSHQueryHelper.cues("to", SortOrder.HOT)
+        val query = WSHQueryHelper.cues(CUE_FILTER_TEXT, SortOrder.HOT)
         val readCues = cueDao.cues(query).getValueBlocking()
 
-        val expectedCueOrder = FILTER_SORT_HOT_INDICES
+        val expectedCueOrder = CUE_FILTER_SORT_HOT_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
     }
 
     @Test
     @Throws(IOException::class)
     fun writeAndReadCueListWithTopWithFilter() {
-        val query = WSHQueryHelper.cues("to", SortOrder.TOP)
+        val query = WSHQueryHelper.cues(CUE_FILTER_TEXT, SortOrder.TOP)
         val readCues = cueDao.cues(query).getValueBlocking()
 
-        val expectedCueOrder = FILTER_SORT_TOP_INDICES
+        val expectedCueOrder = CUE_FILTER_SORT_TOP_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
     }
 
     @Test
     @Throws(IOException::class)
     fun writeAndReadCueListWithNewWithFilter() {
-        val query = WSHQueryHelper.cues("to", SortOrder.NEW)
+        val query = WSHQueryHelper.cues(CUE_FILTER_TEXT, SortOrder.NEW)
         val readCues = cueDao.cues(query).getValueBlocking()
 
-        val expectedCueOrder = FILTER_SORT_NEW_INDICES
+        val expectedCueOrder = CUE_FILTER_SORT_NEW_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
     }
 

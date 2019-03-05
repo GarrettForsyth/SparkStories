@@ -10,14 +10,7 @@ import com.example.android.writeitsayithearit.model.author.Author
 import com.example.android.writeitsayithearit.model.author.AuthorContract
 import java.util.*
 
-@Entity(
-    tableName = CueContract.TABLE_NAME
-//    foreignKeys = [ForeignKey(
-//        entity = Author::class,
-//        parentColumns = [AuthorContract.COLUMN_NAME],
-//        childColumns = [CueContract.COLUMN_AUTHOR]
-//    )]
-)
+@Entity(tableName = CueContract.TABLE_NAME)
 data class Cue(
     @NonNull
     @ColumnInfo(name = CueContract.COLUMN_TEXT)

@@ -14,13 +14,14 @@ abstract class CueDao {
     @Insert
     abstract fun insert(cues: List<Cue>)
 
+    @Update
+    abstract fun update(cue: Cue)
+
     @Query("SELECT * from cues WHERE id = :id")
     abstract fun cue(id: Int): LiveData<Cue>
 
     @RawQuery(observedEntities = [ Cue::class ])
     abstract fun cues(query: SupportSQLiteQuery): LiveData<List<Cue>>
 
-    @Update
-    abstract fun update(cue: Cue)
 
 }

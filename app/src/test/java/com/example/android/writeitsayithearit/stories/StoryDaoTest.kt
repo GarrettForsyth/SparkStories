@@ -12,13 +12,15 @@ import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.model.story.Story
-import com.example.android.writeitsayithearit.test.TestUtils.FILTER_SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_AUTHORS
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
+import com.example.android.writeitsayithearit.test.TestUtils.STORY_FILTER_SORT_HOT_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.STORY_FILTER_SORT_NEW_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.STORY_FILTER_SORT_TOP_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.STORY_FILTER_TEXT
 import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
+import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.junit.After
@@ -27,7 +29,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
-import kotlin.reflect.jvm.internal.impl.types.checker.TypeIntersector
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -37,9 +38,12 @@ class StoryDaoTest {
     @JvmField
     val instantTaskExecutor = InstantTaskExecutorRule()
 
+    private val dbSeed = DatabaseSeed(ApplicationProvider.getApplicationContext())
+    private val authors = dbSeed.SEED_AUTHORS
+    private val stories = dbSeed.SEED_STORIES
+
     private lateinit var storyDao: StoryDao
     private lateinit var db: WriteItSayItHearItDatabase
-    private val stories = STARTING_STORIES
 
     @Before
     fun createAndSeedDb() {
@@ -52,7 +56,7 @@ class StoryDaoTest {
         storyDao = db.storyDao()
 
         // seed with starting data
-        db.authorDao().insert(STARTING_AUTHORS)
+        db.authorDao().insert(authors)
         storyDao.insert(stories)
     }
 
@@ -66,7 +70,7 @@ class StoryDaoTest {
     @Throws(IOException::class)
     fun writeAndReadStory() {
         val story = createTestStory().apply {
-            author = STARTING_AUTHORS[0].name
+            author = authors.first().name
         }
         val id = stories.size + 1
         storyDao.insert(story)
@@ -102,9 +106,9 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithFilter() {
-        val query = WSHQueryHelper.stories("Dogs")
+        val query = WSHQueryHelper.stories(STORY_FILTER_TEXT)
         val readStories = storyDao.stories(query).getValueBlocking()
-        assert(readStories.size == 1)
+        assert(readStories.size == 3)
     }
 
     @Test
@@ -140,10 +144,30 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithHotWithFilter() {
-        val query = WSHQueryHelper.stories("to", SortOrder.HOT)
+        val query = WSHQueryHelper.stories(STORY_FILTER_TEXT, SortOrder.HOT)
         val readStories = storyDao.stories(query).getValueBlocking()
 
-        val expectedStoryOrder = FILTER_SORT_HOT_INDICES
+        val expectedStoryOrder = STORY_FILTER_SORT_HOT_INDICES
+        assertCorrectOrder(expectedStoryOrder, readStories)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun writeAndReadStoryListWithTopWithFilter() {
+        val query = WSHQueryHelper.stories(STORY_FILTER_TEXT, SortOrder.TOP)
+        val readStories = storyDao.stories(query).getValueBlocking()
+
+        val expectedStoryOrder = STORY_FILTER_SORT_TOP_INDICES
+        assertCorrectOrder(expectedStoryOrder, readStories)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun writeAndReadStoryListWithNewWithFilter() {
+        val query = WSHQueryHelper.stories(STORY_FILTER_TEXT, SortOrder.NEW)
+        val readStories = storyDao.stories(query).getValueBlocking()
+
+        val expectedStoryOrder = STORY_FILTER_SORT_NEW_INDICES
         assertCorrectOrder(expectedStoryOrder, readStories)
     }
 

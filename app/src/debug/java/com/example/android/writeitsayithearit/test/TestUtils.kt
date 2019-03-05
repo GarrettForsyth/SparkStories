@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.test
 
+import android.app.Application
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.test.core.app.ApplicationProvider
@@ -7,167 +8,59 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.model.author.Author
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
+import org.json.JSONArray
+import org.json.JSONObject
+import timber.log.Timber
+import java.io.*
+import java.lang.Exception
+import java.lang.StringBuilder
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Some predefined data and helper functions for testing.
  */
 object TestUtils {
 
-    private val now = Calendar.getInstance().timeInMillis
-    private val twoDays = 172800000
+    /**
+     * These values are set when the database is seeded.
+     */
+//    var SEED_AUTHORS: List<Author> = mutableListOf()
+//    var SEED_CUES: List<Cue> = mutableListOf()
+//    var SEED_STORIES: List<Story> = mutableListOf()
 
-    val STARTING_AUTHORS = listOf(
-        Author( "Bob"),
-        Author("Anna"),
-        Author("Joe"),
-        Author("Eve")
-    )
-    val STARTING_CUES = listOf(
-        Cue(
-            "You find a rock, and realize anyone holding it must tell the truth.",
-            STARTING_AUTHORS[0].name,
-            now - 9 - twoDays,
-            90
-        ),
-        Cue(
-            "One day you look up at the sky and notice the moon is gone.",
-            STARTING_AUTHORS[0].name,
-            now - 100 - twoDays,
-            3
-        ),
-        Cue(
-            "A new submarine design reaches depths never before explored.",
-            STARTING_AUTHORS[0].name,
-            now - 7,
-            100
-        ),
-        Cue(
-            "A mad scientist threatens the world with his death ray.",
-            STARTING_AUTHORS[1].name,
-            now - 50 - twoDays,
-            5
-        ),
-        Cue(
-            "The largest hurricane in history is approaching.",
-            STARTING_AUTHORS[1].name,
-            now - 5,
-            4
-        ),
-        Cue(
-            "The allies lost the first world war.",
-            STARTING_AUTHORS[1].name,
-            now - 25 - twoDays,
-            20
-        ),
-        Cue(
-            "Dogs suddenly gain the ability to speak.",
-            STARTING_AUTHORS[2].name,
-            now - 3,
-            16
-        ),
-        Cue(
-            "A man drives his motorcycle across the country.",
-            STARTING_AUTHORS[3].name,
-            now - 2,
-            12
-        ),
-        Cue(
-            "A criminal tries to reintegrate with society.",
-            STARTING_AUTHORS[3].name,
-            now - 1,
-            10
-        ),
-        Cue(
-            "A writer solos a night on the town for inspiration.",
-            STARTING_AUTHORS[3].name,
-            now,
-            200
-        )
-    )
+    /**
+     * The expected orderings for each sort order.
+     */
+    val SORT_NEW_INDICES = listOf(0,1,2,3,4,5,6,7,8,9, 10)
+    val SORT_TOP_INDICES = listOf(10, 9,8,7,6,5,4,3,2,1,0)
+    val SORT_HOT_INDICES = listOf(5,4,3,2,1,0)
+
+    /**
+     * The expected cue orderings for each sort order with a filter query
+     */
+    val CUE_FILTER_TEXT = "ip"
+    val CUE_FILTER_SORT_HOT_INDICES = listOf(4,0)
+    val CUE_FILTER_SORT_NEW_INDICES = listOf(0,4,6,7,8,10)
+    val CUE_FILTER_SORT_TOP_INDICES = listOf(10,8,7,6,4,0)
+
+    val CUE_FILTER_AUTHOR = "Rose"
+    val CUE_FILTER_AUTHOR_NEW_INDICES = listOf(8,9)
+
+    /**
+     * The expected story orderings for each sort order with a filter query
+     */
+    val STORY_FILTER_TEXT = "vivamus a"
+    val STORY_FILTER_SORT_HOT_INDICES = listOf(1)
+    val STORY_FILTER_SORT_NEW_INDICES = listOf(1,6,7)
+    val STORY_FILTER_SORT_TOP_INDICES = listOf(7,6,1)
+
+    val STORY_FILTER_AUTHOR = "Cremin"
+    val STORY_FILTER_AUTHOR_NEW_INDICES = listOf(6,7)
+
+    val FILTER_STRING_NO_MATCHES = "zzz"
 
 
-    val STARTING_STORIES = listOf(
-        Story(
-            "This is the tale about: You find a rock, and realize anyone holding it must tell the truth.",
-            STARTING_AUTHORS[0].name,
-            1,
-            now - 9 - twoDays,
-            90
-        ),
-        Story(
-            "This is the tale about: One day you look up at the sky and notice the moon is gone.",
-            STARTING_AUTHORS[0].name,
-            2,
-            now - 100 - twoDays,
-            3
-        ),
-        Story(
-            "This is the tale about: A new submarine design reaches depths never before explored.",
-            STARTING_AUTHORS[0].name,
-            3,
-            now - 7,
-            100
-        ),
-        Story(
-            "This is the tale about: A mad scientist threatens the world with his death ray.",
-            STARTING_AUTHORS[1].name,
-            4,
-            now - 50 - twoDays,
-            5
-        ),
-        Story(
-            "This is the tale about: The largest hurricane in history is approaching.",
-            STARTING_AUTHORS[1].name,
-            5,
-            now - 5,
-            4
-        ),
-        Story(
-            "This is the tale about: The allies lost the first world war.",
-            STARTING_AUTHORS[1].name,
-            6,
-            now - 25 - twoDays,
-            20
-        ),
-        Story(
-            "This is the tale about: Dogs suddenly gain the ability to speak.",
-            STARTING_AUTHORS[2].name,
-            7,
-            now - 3,
-            16
-        ),
-        Story(
-            "This is the tale about: A man drives his motorcycle across the country.",
-            STARTING_AUTHORS[3].name,
-            8,
-            now - 2,
-            12
-        ),
-        Story(
-            "This is the tale about: A criminal tries to reintegrate with society.",
-            STARTING_AUTHORS[3].name,
-            10,
-            now - 1,
-            10
-        ),
-        Story(
-            "This is the tale about: A writer solos a night on the town for inspiration.",
-            STARTING_AUTHORS[3].name,
-            10,
-            now,
-            200
-        )
-    )
-
-    val SORT_NEW_INDICES = listOf(9,8,7,6,4,2,0,5,3,1)
-    val SORT_TOP_INDICES = listOf(9,2,0,5,6,7,8,3,4,1)
-    val SORT_HOT_INDICES = listOf(9,2,6,7,8,4)
-    val FILTER_SORT_HOT_INDICES = listOf(9,6,7,8) // filter on 'to'
-    val FILTER_SORT_NEW_INDICES = listOf(9,8,7,6) // filter on 'to'
-    val FILTER_SORT_TOP_INDICES = listOf(9,6,7,8) // filter on 'to'
-    val FILTER_AUTHOR_NEW_INDICES = listOf(2,0,1)
-    val FILTER_STRING_TO = "to"
 
     fun createTestCue() = Cue(
         text = "Test cue text. Very interesting stuff.",
@@ -175,6 +68,21 @@ object TestUtils {
         creationDate = 0,
         rating = 0
     )
+
+    fun createTestCueList(n: Int): List<Cue> {
+        val cues: MutableList<Cue> = mutableListOf()
+        for (i in 0..n) {
+            cues.add(
+                Cue(
+                    text = "Text for cue $i. This is the text.",
+                    author = "Author for cue $i",
+                    creationDate = 0,
+                    rating = 0
+                )
+            )
+        }
+        return cues
+    }
 
     fun createTestStory() = Story(
         text = "This is a test story. It was the best of stories, it was the worst of stories.",
@@ -184,6 +92,30 @@ object TestUtils {
         rating = 0
     )
 
+    fun createTestStoryList(n: Int): List<Story> {
+        val stories: MutableList<Story> = mutableListOf()
+        for (i in 0 until n) {
+            stories.add(
+                Story(
+                    text = "Text for cue $i. This is the text.",
+                    author = "Author for cue $i",
+                    cueId = i,
+                    creationDate = 0,
+                    rating = 0
+                )
+            )
+        }
+        return stories
+    }
+
     fun createTestAuthor() = Author(name = "Test Author")
+
+    fun createTestAuthorList(n: Int): List<Author> {
+        val authors: MutableList<Author> = mutableListOf()
+        for (i in 0..n) {
+            authors.add(Author("Author$i"))
+        }
+        return authors
+    }
 
 }

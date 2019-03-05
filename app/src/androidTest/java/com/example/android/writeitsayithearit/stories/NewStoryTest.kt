@@ -1,21 +1,24 @@
 package com.example.android.writeitsayithearit.stories
 
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.R.id.*
-import com.example.android.writeitsayithearit.test.TestUtils
+import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.StoryTextField
 import com.example.android.writeitsayithearit.test.CustomMatchers.Companion.hasItemAtPosition
-import com.example.android.writeitsayithearit.ui.cues.CueViewHolder
+import com.example.android.writeitsayithearit.test.data.DatabaseSeed
+import com.example.android.writeitsayithearit.util.CountingAppExecutorsRule
+import com.example.android.writeitsayithearit.util.DataBindingIdlingResourceRule
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
 import org.hamcrest.CoreMatchers.*
 import org.junit.Before
@@ -23,6 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * As a writer
@@ -35,23 +39,29 @@ class NewStoryTest {
 
     @Rule
     @JvmField
+    val scenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
+
+    @Rule
+    @JvmField
     val executorRule = TaskExecutorWithIdlingResourceRule()
 
-    private val cue = TestUtils.STARTING_CUES.last()
-    private lateinit var scenario : ActivityScenario<MainActivity>
+    @Rule
+    @JvmField
+    val countingAppExecutorsRule = CountingAppExecutorsRule()
 
-    private lateinit var currentUser: String
+    val dbSeed: DatabaseSeed = DatabaseSeed(ApplicationProvider.getApplicationContext())
+
+    private val cue = dbSeed.SEED_CUES.first()
+
+    // Given I am logged in as the first seeded author (via dagger injection)
+    private val currentUser = dbSeed.SEED_AUTHORS.first().name
 
     @Before
     fun navigateToStoriesFragment(){
-        // Given I have launched the app
-        scenario = ActivityScenario.launch(MainActivity::class.java)
+        DataBindingIdlingResourceRule(scenarioRule)
 
         // And clicked on a cue that interests me
-        onView(withText(cue.text)).perform(click())
-
-        // Given I am logged in as "Bob" (via dagger injection)
-        currentUser = "Bob"
+        onView(withText(startsWith(cue.text.take(30)))).perform(click())
     }
 
     @Test

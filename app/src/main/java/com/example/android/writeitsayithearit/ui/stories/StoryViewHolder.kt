@@ -10,6 +10,7 @@ class StoryViewHolder (
 
     fun bind(story: Story) {
         binding.story = story
+        binding.executePendingBindings()
     }
 
 }

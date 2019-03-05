@@ -10,6 +10,7 @@ import com.example.android.writeitsayithearit.data.AuthorDao
 import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.TestUtils
+import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import junit.framework.Assert.assertTrue
 import org.junit.After
@@ -27,9 +28,11 @@ class AuthorDaoTest {
     @JvmField
     val instantTaskExecutor = InstantTaskExecutorRule()
 
+    private val dbSeed = DatabaseSeed(ApplicationProvider.getApplicationContext())
+
     private lateinit var authorDao: AuthorDao
     private lateinit var db: WriteItSayItHearItDatabase
-    private val authors = TestUtils.STARTING_AUTHORS
+    private val authors = dbSeed.SEED_AUTHORS
 
     @Before
     fun createAndSeedDb() {

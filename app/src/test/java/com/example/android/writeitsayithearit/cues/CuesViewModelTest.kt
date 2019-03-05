@@ -3,10 +3,10 @@ package com.example.android.writeitsayithearit.cues
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.CueRepository
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
 import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.test.TestUtils.createTestCueList
 import com.example.android.writeitsayithearit.test.asLiveData
 import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
@@ -44,15 +44,16 @@ class CuesViewModelTest {
     @Test
     fun getCues() {
         // mock response
-        every { cueRepository.cues("", SortOrder.NEW) } returns STARTING_CUES.asLiveData()
+        val cues = createTestCueList(5)
+        every { cueRepository.cues("", SortOrder.NEW) } returns cues.asLiveData()
 
         // set filter to be ""
         cuesViewModel.filterQuery = ""
         verify { cueRepository.cues("", SortOrder.NEW) }
 
         val observedCues = cuesViewModel.cues.getValueBlocking()
-        STARTING_CUES.forEachIndexed { index, cue ->
-            assertEquals(STARTING_CUES[index], observedCues[index])
+        cues.forEachIndexed { index, cue ->
+            assertEquals(cues[index], observedCues[index])
         }
     }
 

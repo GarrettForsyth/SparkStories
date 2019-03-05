@@ -13,6 +13,7 @@ import javax.inject.Singleton
             AndroidInjectionModule::class,
             AppModule::class,
             AndroidTestDatabaseModule::class,
+            AndroidTestAppExecutorsModule::class,
             MainActivityModule::class
         ]
 )

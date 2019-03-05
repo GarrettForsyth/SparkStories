@@ -120,11 +120,11 @@ project.tasks["sonarqube"].dependsOn "fullCoverageReport"
 
 dependencies {
 
+
     /* Production dependencies: */
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation deps.kotlin.stdlib
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // Timber for logging
     implementation deps.timber
@@ -134,6 +134,8 @@ dependencies {
     implementation deps.support.ktx
     implementation deps.support.constraint_layout
     implementation deps.material_support
+    implementation deps.multidex_support
+    implementation deps.legacy_support_v4
 
     // dagger
     implementation deps.dagger.runtime

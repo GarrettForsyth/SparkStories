@@ -17,6 +17,8 @@ import java.util.*
     // that the author (foreign key)
     // isn't in the database. Similar setup
     // for cues works fine. Investigate later.
+    // Does it even make sense to have this constraint in local
+    // storage?
 //    foreignKeys = [ForeignKey(
 //        entity = Author::class,
 //        parentColumns = [AuthorContract.COLUMN_NAME],

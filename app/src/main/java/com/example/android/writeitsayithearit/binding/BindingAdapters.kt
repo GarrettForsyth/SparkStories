@@ -1,16 +1,10 @@
 package com.example.android.writeitsayithearit.binding
 
-import android.app.Application
-import android.content.Context
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import androidx.test.core.app.ApplicationProvider
-import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.extensions.SpinnerExtensions
 import com.example.android.writeitsayithearit.extensions.SpinnerExtensions.setSpinnerEntries
 import com.example.android.writeitsayithearit.extensions.SpinnerExtensions.setSpinnerItemSelectedListener

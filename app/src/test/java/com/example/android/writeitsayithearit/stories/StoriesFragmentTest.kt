@@ -17,7 +17,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
 import com.example.android.writeitsayithearit.ui.stories.StoryViewHolder
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragment
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragmentDirections
@@ -25,6 +24,7 @@ import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.model.story.Story
 import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.test.TestUtils.createTestStoryList
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -58,9 +58,10 @@ class StoriesFragmentTest {
     @Test
     fun storiesAreInsideStoryList() {
         scenario.onFragment {
-            it.liveResponseStories.postValue(STARTING_STORIES)
-            val indices = (0 until STARTING_STORIES.size).toList()
-            verifyInsideRecyclerView(indices)
+            val stories = createTestStoryList(5)
+            it.liveResponseStories.postValue(stories)
+            val indices = (0 until stories.size).toList()
+            verifyInsideRecyclerView(indices, stories)
             verify(exactly = 1) { it.storiesViewModel.setHasResults(true) }
         }
     }
@@ -107,7 +108,8 @@ class StoriesFragmentTest {
     @Test
     fun clickStoryEventSent() {
         scenario.onFragment {
-            it.liveResponseStories.value = STARTING_STORIES
+            val stories = createTestStoryList(5)
+            it.liveResponseStories.value = stories
             it.stories_list.children.first().callOnClick()
             verify(exactly = 1) { it.storiesViewModel.onClickStory(0) }
         }
@@ -167,9 +169,9 @@ class StoriesFragmentTest {
     /**
      * Checks if each story is inside the recyclerView
      */
-    private fun verifyInsideRecyclerView(expectedOrder: List<Int>) {
+    private fun verifyInsideRecyclerView(expectedOrder: List<Int>, stories: List<Story>) {
         expectedOrder.forEachIndexed { listPosition, expectedIndex ->
-            val expectedStory = STARTING_STORIES[expectedIndex]
+            val expectedStory = stories[expectedIndex]
             onView(withId(R.id.stories_list))
                 .perform(RecyclerViewActions.scrollToPosition<StoryViewHolder>(listPosition))
             onView(withId(R.id.stories_list))

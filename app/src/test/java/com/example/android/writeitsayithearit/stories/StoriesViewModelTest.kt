@@ -3,10 +3,10 @@ package com.example.android.writeitsayithearit.stories
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.StoryRepository
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
 import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.test.TestUtils.createTestStoryList
 import com.example.android.writeitsayithearit.test.asLiveData
 import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
@@ -44,15 +44,16 @@ class StoriesViewModelTest {
     @Test
     fun getStories() {
         // mock response
-        every { storyRepository.stories("", SortOrder.NEW) } returns STARTING_STORIES.asLiveData()
+        val stories = createTestStoryList(5)
+        every { storyRepository.stories("", SortOrder.NEW) } returns stories.asLiveData()
 
         // set filter to be ""
         storiesViewModel.filterQuery = ""
         verify { storyRepository.stories("", SortOrder.NEW) }
 
         val observedStories = storiesViewModel.stories.getValueBlocking()
-        STARTING_STORIES.forEachIndexed { index, story ->
-            assertEquals(STARTING_STORIES[index], observedStories[index])
+        stories.forEachIndexed { index, story ->
+            assertEquals(stories[index], observedStories[index])
         }
     }
     @Test

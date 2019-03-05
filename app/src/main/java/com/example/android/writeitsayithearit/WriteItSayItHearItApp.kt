@@ -2,6 +2,8 @@ package com.example.android.writeitsayithearit
 
 import android.app.Activity
 import android.app.Application
+import androidx.multidex.MultiDex
+import androidx.multidex.MultiDexApplication
 import com.example.android.writeitsayithearit.di.AppInjector
 import com.example.android.writeitsayithearit.di.DaggerAppComponent
 import dagger.android.DispatchingAndroidInjector
@@ -9,7 +11,7 @@ import dagger.android.HasActivityInjector
 import timber.log.Timber
 import javax.inject.Inject
 
-class WriteItSayItHearItApp : Application(), HasActivityInjector {
+class WriteItSayItHearItApp : MultiDexApplication(), HasActivityInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>

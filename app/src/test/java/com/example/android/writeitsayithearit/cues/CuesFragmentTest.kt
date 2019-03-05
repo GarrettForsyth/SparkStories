@@ -17,7 +17,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
 import com.example.android.writeitsayithearit.ui.cues.CuesFragment
 import com.example.android.writeitsayithearit.ui.cues.CueViewHolder
 import com.example.android.writeitsayithearit.ui.cues.CuesFragmentDirections
@@ -25,6 +24,7 @@ import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.test.TestUtils.createTestCueList
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -52,15 +52,17 @@ class CuesFragmentTest {
     fun cuesAreObserved() {
         scenario.onFragment {
             verify(exactly = 1) { it.cuesViewModel.cues }
+
         }
     }
 
     @Test
     fun cuesAreInsideCueList() {
         scenario.onFragment {
-            it.liveResponseCues.postValue(STARTING_CUES)
-            val indices = (0 until STARTING_CUES.size).toList()
-            verifyInsideRecyclerView(indices)
+            val cues = createTestCueList(5)
+            it.liveResponseCues.postValue(cues)
+            val expectedOrder = (0 until cues.size).toList()
+            verifyInsideRecyclerView(expectedOrder, cues)
             verify(exactly = 1) { it.cuesViewModel.setHasResults(true) }
         }
     }
@@ -107,7 +109,7 @@ class CuesFragmentTest {
     @Test
     fun clickCueEventSent() {
         scenario.onFragment {
-            it.liveResponseCues.value = STARTING_CUES
+            it.liveResponseCues.value = createTestCueList(5)
             it.cues_list.children.first().callOnClick()
             verify(exactly = 1) { it.cuesViewModel.onClickCue(0) }
         }
@@ -120,7 +122,9 @@ class CuesFragmentTest {
             verify {
                 it.navController.navigate(
                     CuesFragmentDirections.actionCuesFragmentToNewStoryFragment(
-                        0))
+                        0
+                    )
+                )
             }
         }
     }
@@ -137,8 +141,10 @@ class CuesFragmentTest {
     fun navigateToNewCueFragmentWhenClickNewCueEventReceived() {
         scenario.onFragment {
             it.newCueButtonClick.value = Event(true)
-            verify { it.navController.navigate(
-                    CuesFragmentDirections.actionCuesFragmentToNewCueFragment())
+            verify {
+                it.navController.navigate(
+                    CuesFragmentDirections.actionCuesFragmentToNewCueFragment()
+                )
             }
         }
     }
@@ -147,7 +153,7 @@ class CuesFragmentTest {
     fun typingInFilterEditTextQueriesViewModel() {
         val filterString = "dogs"
         onView(withId(R.id.filter_cues_edit_text))
-                .perform(typeText(filterString))
+            .perform(typeText(filterString))
         scenario.onFragment {
             verify {
                 it.cuesViewModel.filterQuery = "d"
@@ -182,55 +188,55 @@ class CuesFragmentTest {
         }
     }
 
-        /**
-         * Checks if each cue is inside the recyclerView
-         */
-        private fun verifyInsideRecyclerView(expectedOrder: List<Int>) {
-            expectedOrder.forEachIndexed { listPosition, expectedIndex ->
-                val expectedCue = STARTING_CUES[expectedIndex]
-                onView(withId(R.id.cues_list))
-                    .perform(RecyclerViewActions.scrollToPosition<CueViewHolder>(listPosition))
-                onView(withId(R.id.cues_list))
-                    .check(matches(hasDescendant(withText(expectedCue.text))))
-            }
+    /**
+     * Checks if each cue is inside the recyclerView
+     */
+    private fun verifyInsideRecyclerView(expectedOrder: List<Int>, cues: List<Cue>) {
+        expectedOrder.forEachIndexed { listPosition, expectedIndex ->
+            val expectedCue = cues[expectedIndex]
+            onView(withId(R.id.cues_list))
+                .perform(RecyclerViewActions.scrollToPosition<CueViewHolder>(listPosition))
+            onView(withId(R.id.cues_list))
+                .check(matches(hasDescendant(withText(expectedCue.text))))
         }
-
-
-        /**
-         * A factory that returns a CuesFragment with mocked dependencies.
-         *
-         * This allows the dependencies to be mocked BEFORE the fragment
-         * is attached using FragmentScenario.launch.
-         */
-        class TestCuesFragmentFactory : FragmentFactory() {
-
-            override fun instantiate(classLoader: ClassLoader, className: String, args: Bundle?): Fragment {
-                return (super.instantiate(classLoader, className, args) as TestCuesFragment).apply {
-                    this.cuesViewModel = mockk(relaxed = true)
-                    this.viewModelFactory = ViewModelUtil.createFor(this.cuesViewModel)
-
-                    every { cuesViewModel.cues } returns liveResponseCues
-                    every { cuesViewModel.hasResultsStatus } returns hasResults
-                    every { cuesViewModel.cueClicked } returns cueClicked
-                    every { cuesViewModel.newCueFabClick } returns newCueButtonClick
-                }
-            }
-        }
-
-        /**
-         * Overrides the nav controller to verify correct actions are
-         * being called when expected.
-         *
-         * Also exposes the live data returned by the viewmodel as a
-         * testing courtesy.
-         */
-        class TestCuesFragment : CuesFragment() {
-            val navController: NavController = mockk(relaxed = true)
-            val liveResponseCues = MutableLiveData<List<Cue>>()
-            val hasResults = MutableLiveData<Event<Boolean>>()
-            val cueClicked = MutableLiveData<Event<Int>>()
-            val newCueButtonClick = MutableLiveData<Event<Boolean>>()
-            override fun navController() = navController
-        }
-
     }
+
+
+    /**
+     * A factory that returns a CuesFragment with mocked dependencies.
+     *
+     * This allows the dependencies to be mocked BEFORE the fragment
+     * is attached using FragmentScenario.launch.
+     */
+    class TestCuesFragmentFactory : FragmentFactory() {
+
+        override fun instantiate(classLoader: ClassLoader, className: String, args: Bundle?): Fragment {
+            return (super.instantiate(classLoader, className, args) as TestCuesFragment).apply {
+                this.cuesViewModel = mockk(relaxed = true)
+                this.viewModelFactory = ViewModelUtil.createFor(this.cuesViewModel)
+
+                every { cuesViewModel.cues } returns liveResponseCues
+                every { cuesViewModel.hasResultsStatus } returns hasResults
+                every { cuesViewModel.cueClicked } returns cueClicked
+                every { cuesViewModel.newCueFabClick } returns newCueButtonClick
+            }
+        }
+    }
+
+    /**
+     * Overrides the nav controller to verify correct actions are
+     * being called when expected.
+     *
+     * Also exposes the live data returned by the viewmodel as a
+     * testing courtesy.
+     */
+    class TestCuesFragment : CuesFragment() {
+        val navController: NavController = mockk(relaxed = true)
+        val liveResponseCues = MutableLiveData<List<Cue>>()
+        val hasResults = MutableLiveData<Event<Boolean>>()
+        val cueClicked = MutableLiveData<Event<Int>>()
+        val newCueButtonClick = MutableLiveData<Event<Boolean>>()
+        override fun navController() = navController
+    }
+
+}

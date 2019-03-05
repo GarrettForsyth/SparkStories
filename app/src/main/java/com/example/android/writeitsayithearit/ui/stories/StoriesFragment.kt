@@ -17,6 +17,7 @@ import com.example.android.writeitsayithearit.databinding.FragmentStoriesBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
+import timber.log.Timber
 import javax.inject.Inject
 
 @OpenForTesting
@@ -28,6 +29,11 @@ class StoriesFragment : Fragment(), Injectable {
     lateinit var storiesViewModel: StoriesViewModel
 
     lateinit var binding: FragmentStoriesBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.d("StoriesFragment onCreate() mytrace")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

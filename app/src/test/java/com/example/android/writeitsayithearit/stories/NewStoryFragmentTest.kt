@@ -25,6 +25,7 @@ import com.example.android.writeitsayithearit.model.story.StoryTextField
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -51,7 +52,7 @@ class NewStoryFragmentTest {
             MINIMUM_STORY_LENGTH, MAXIMUM_STORY_LENGTH
         )
         private val CUE_ID_EXTRA = "cue_id"
-        private val CUE = TestUtils.STARTING_CUES.last()
+        private val CUE = createTestCue()
     }
 
     private var scenario: FragmentScenario<TestNewStoryFragment>

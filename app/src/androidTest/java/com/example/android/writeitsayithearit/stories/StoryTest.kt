@@ -1,22 +1,27 @@
 package com.example.android.writeitsayithearit.stories
 
+import android.app.Application
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
-import com.example.android.writeitsayithearit.test.TestUtils
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
+import com.example.android.writeitsayithearit.test.data.DatabaseSeed
+import com.example.android.writeitsayithearit.util.CountingAppExecutorsRule
+import com.example.android.writeitsayithearit.util.DataBindingIdlingResourceRule
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
 
 /**
  * As a writer
@@ -29,15 +34,23 @@ class StoryTest {
 
     @Rule
     @JvmField
+    val scenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
+
+    @Rule
+    @JvmField
     val executorRule = TaskExecutorWithIdlingResourceRule()
 
-    private val story = TestUtils.STARTING_STORIES.last()
-    private lateinit var scenario : ActivityScenario<MainActivity>
+    @Rule
+    @JvmField
+    val countingAppExecutorsRule = CountingAppExecutorsRule()
+
+    private val dbSeed = DatabaseSeed(ApplicationProvider.getApplicationContext())
+
+    private val story = dbSeed.SEED_STORIES.first()
 
     @Before
     fun navigateToStoriesFragment(){
-        // Given I have launched the app
-        scenario = ActivityScenario.launch(MainActivity::class.java)
+        DataBindingIdlingResourceRule(scenarioRule)
 
         // And navigated to the stories list
         onView(withId(R.id.storiesFragment)).perform(click())
@@ -48,7 +61,7 @@ class StoryTest {
 
     @Test
     fun initialViewsVisible() {
-        val cueText = STARTING_CUES.last().text
+        val cueText = dbSeed.SEED_CUES.first().text
 
         onView(withText(cueText))
             .check(matches(isDisplayed()))

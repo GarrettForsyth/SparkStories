@@ -28,6 +28,8 @@ import javax.inject.Inject
 @OpenForTesting
 class CuesFragment : Fragment(), Injectable {
 
+
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 

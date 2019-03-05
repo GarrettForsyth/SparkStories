@@ -1,9 +1,6 @@
 package com.example.android.writeitsayithearit.stories
 
 import android.os.Bundle
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario
@@ -19,10 +16,9 @@ import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
+import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
+import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
 import com.example.android.writeitsayithearit.ui.stories.StoryFragment
-import com.example.android.writeitsayithearit.ui.util.AnimationAdapter
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import io.mockk.every
@@ -40,8 +36,8 @@ class StoryFragmentTest {
 
     companion object {
         private val STORY_ID_EXTRA = "story_id"
-        private val STORY = STARTING_STORIES.last()
-        private val CUE = STARTING_CUES.last()
+        private val STORY = createTestStory()
+        private val CUE = createTestCue()
     }
 
     private var scenario: FragmentScenario<TestStoryFragment>

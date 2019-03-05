@@ -6,10 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.android.writeitsayithearit.AppExecutors
 import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
-import com.example.android.writeitsayithearit.test.TestUtils
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_AUTHORS
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_CUES
-import com.example.android.writeitsayithearit.test.TestUtils.STARTING_STORIES
+import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -21,7 +18,11 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDb(app: Application, appExecutors: AppExecutors): WriteItSayItHearItDatabase {
+    fun provideDb(
+        app: Application,
+        appExecutors: AppExecutors,
+        dbSeed: DatabaseSeed
+    ): WriteItSayItHearItDatabase {
         database = Room
                 .databaseBuilder(
                         app,
@@ -32,14 +33,20 @@ class DatabaseModule {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         appExecutors.diskIO().execute {
-                            database.authorDao().insert(STARTING_AUTHORS)
-                            database.cueDao().insert(STARTING_CUES)
-                            database.storyDao().insert(STARTING_STORIES)
+                            database.authorDao().insert(dbSeed.SEED_AUTHORS)
+                            database.cueDao().insert(dbSeed.SEED_CUES)
+                            database.storyDao().insert(dbSeed.SEED_STORIES)
                         }
                     }
                 })
                 .fallbackToDestructiveMigration() //todo pick a nondestructive migration
                 .build()
         return database
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabaseSeed(application: Application): DatabaseSeed {
+        return DatabaseSeed(application)
     }
 }
