@@ -11,9 +11,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.example.android.writeitsayithearit.test.CustomMatchers.Companion.hasItemAtPosition
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
+import com.example.android.writeitsayithearit.test.CustomMatchers.hasItemAtPosition
 import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_AUTHOR
 import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_AUTHOR_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_SORT_HOT_INDICES

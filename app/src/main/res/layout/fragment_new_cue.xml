@@ -7,6 +7,10 @@
         <variable
             name="viewmodel"
             type="com.example.android.writeitsayithearit.ui.cues.NewCueViewModel" />
+
+        <variable
+            name="newCueEditTextHasFocus"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,12 +18,15 @@
         android:layout_height="match_parent"
         android:background="@mipmap/table_top_port"
         tools:context=".ui.cues.NewCueFragment"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:id="@+id/new_cue_constraint_layout">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/new_cue_info_card"
             android:layout_width="@dimen/new_cue_card_width"
             android:layout_height="wrap_content"
+            app:visibleGone="@{!newCueEditTextHasFocus}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -43,6 +50,9 @@
             android:layout_width="@dimen/new_cue_card_width"
             android:layout_height="@dimen/new_cue_card_height"
             android:layout_marginTop="@dimen/margin_xlarge"
+            app:fillCondition="@{newCueEditTextHasFocus}"
+            app:unFilledWidth="@{@integer/new_cue_card_width_dp}"
+            app:unFilledHeight="@{@integer/new_cue_card_height_dp}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -54,16 +64,15 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/margin_large" >
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.example.android.writeitsayithearit.views.ScaleTextInputEditText
                     android:id="@+id/new_cue_edit_text"
+                    app:onFocusChangeListener="@{viewmodel.newCueEditTextFocusChangeListener()}"
                     android:text="@={viewmodel.cueTextField.text}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/cue_text"
                     android:textColor="@color/colorPrimaryDark"
                     android:inputType="textMultiLine"
-                    android:lines="5"
-                    android:maxLines="10"
                     android:scrollbars="vertical"
                     app:errorEnabled="true" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -72,6 +81,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/submit_cue_btn"
+            app:visibleGone="@{!newCueEditTextHasFocus}"
             android:onClick="@{() -> viewmodel.onClickSubmitCue()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

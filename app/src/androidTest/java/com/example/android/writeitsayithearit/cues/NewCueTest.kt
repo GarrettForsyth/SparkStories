@@ -1,6 +1,5 @@
 package com.example.android.writeitsayithearit.cues
 
-import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -17,7 +16,7 @@ import org.junit.runner.RunWith
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.model.cue.CueTextField
-import com.example.android.writeitsayithearit.test.CustomMatchers.Companion.hasItemAtPosition
+import com.example.android.writeitsayithearit.test.CustomMatchers.hasItemAtPosition
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import com.example.android.writeitsayithearit.util.CountingAppExecutorsRule
 import com.example.android.writeitsayithearit.util.DataBindingIdlingResourceRule
@@ -84,8 +83,8 @@ class NewCueTest {
         onView(withId(R.id.new_cue_edit_text))
             .perform(typeText(validCueText))
 
-        // And I press the submit story button
-        Espresso.closeSoftKeyboard()
+        // And I press the back button to close the keyboard
+        Espresso.pressBack()
         onView(withId(R.id.submit_cue_btn)).perform(click())
 
         // I should see a list of cues with my story in the list

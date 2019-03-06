@@ -2,6 +2,7 @@ package com.example.android.writeitsayithearit.ui.cues
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,9 +18,7 @@ class NewCueViewModel @Inject constructor(
     private val cueRepository: CueRepository
 ): ViewModel() {
 
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
-
+    @Inject lateinit var sharedPreferences: SharedPreferences
     var cueTextField: CueTextField =
         CueTextField()
 
@@ -30,6 +29,20 @@ class NewCueViewModel @Inject constructor(
     private val _invalidCueSnackBar = MutableLiveData<Event<Boolean>>()
     val invalidCueSnackBar: LiveData<Event<Boolean>>
         get() = _invalidCueSnackBar
+
+    private val _newCueEditTextFocusStatus = MutableLiveData<Event<Boolean>>()
+    val newCueEditTextFocusStatus: LiveData<Event<Boolean>>
+        get() = _newCueEditTextFocusStatus
+
+    init {
+        _newCueEditTextFocusStatus.value = Event(false)
+    }
+
+    fun newCueEditTextFocusChangeListener(): View.OnFocusChangeListener {
+        return View.OnFocusChangeListener { v, hasFocus ->
+            _newCueEditTextFocusStatus.value = Event(hasFocus)
+        }
+    }
 
     fun onClickSubmitCue() {
         if (cueTextField.isValid()) {

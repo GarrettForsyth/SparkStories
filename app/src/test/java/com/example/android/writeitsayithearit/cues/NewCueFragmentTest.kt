@@ -24,6 +24,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.android.synthetic.main.fragment_new_cue.*
 import org.hamcrest.CoreMatchers.allOf
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -49,6 +51,27 @@ class NewCueFragmentTest {
             null,
             TestNewCueFragmentFactory()
     )
+
+    @Test
+    fun onNewCueEditTextHasFocus() {
+        scenario.onFragment {
+            it.newCueEditTextFocusStatus.value = Event(true)
+            assertFalse(it.new_cue_info_card.isShown)
+            assertFalse(it.submit_cue_btn.isShown)
+            assertTrue(it.new_cue_edit_text.isShown)
+        }
+    }
+
+    @Test
+    fun onNewCueEditTextLostFocus() {
+        scenario.onFragment {
+            it.newCueEditTextFocusStatus.value = Event(false)
+            assertTrue(it.new_cue_info_card.isShown)
+            assertTrue(it.submit_cue_btn.isShown)
+            assertTrue(it.new_cue_edit_text.isShown)
+        }
+    }
+
 
     @Test
     fun submitCueButton() {
@@ -97,6 +120,7 @@ class NewCueFragmentTest {
 
                 every { newCueViewModel.shouldNavigateToCues } returns shouldNavigateToCues
                 every { newCueViewModel.invalidCueSnackBar } returns invalidCueSnackBar
+                every { newCueViewModel.newCueEditTextFocusStatus } returns newCueEditTextFocusStatus
             }
         }
     }
@@ -111,6 +135,7 @@ class NewCueFragmentTest {
 
         val invalidCueSnackBar = MutableLiveData<Event<Boolean>>()
         val shouldNavigateToCues = MutableLiveData<Event<Boolean>>()
+        val newCueEditTextFocusStatus = MutableLiveData<Event<Boolean>>()
     }
 
 }

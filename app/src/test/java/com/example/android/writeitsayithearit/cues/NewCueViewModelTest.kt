@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.cues
 
+import android.widget.EditText
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.repos.CueRepository
@@ -13,13 +14,13 @@ import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertNotNull
+import junit.framework.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.Mockito.mock
 
 @SmallTest
 @RunWith(JUnit4::class)
@@ -42,6 +43,20 @@ class NewCueViewModelTest {
             newCueViewModel.shouldNavigateToCues,
             newCueViewModel.invalidCueSnackBar
         )
+    }
+
+    @Test
+    fun newCueEditTextFocusChange() {
+        val cueEditText: EditText = mockk(relaxed = true)
+
+        // create a focus change listener
+        val focusChangeListener = newCueViewModel.newCueEditTextFocusChangeListener()
+
+        focusChangeListener.onFocusChange( cueEditText, true)
+        assertTrue(newCueViewModel.newCueEditTextFocusStatus.getValueBlocking().peekContent())
+
+        focusChangeListener.onFocusChange( cueEditText, false)
+        assertFalse(newCueViewModel.newCueEditTextFocusStatus.getValueBlocking().peekContent())
     }
 
     @Test(expected = KotlinNullPointerException::class )

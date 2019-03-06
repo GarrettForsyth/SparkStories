@@ -1,22 +1,30 @@
 package com.example.android.writeitsayithearit.ui.cues
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 
 import com.example.android.writeitsayithearit.R
+import com.example.android.writeitsayithearit.binding.BindingUtil
 import com.example.android.writeitsayithearit.databinding.FragmentNewCueBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.model.cue.CueTextField
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
 import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber
 import javax.inject.Inject
 
 @OpenForTesting
@@ -46,6 +54,22 @@ class NewCueFragment : Fragment(), Injectable {
 
         observeInvalidSnackBar()
         observeShouldNavigateToCues()
+
+        newCueViewModel.newCueEditTextFocusStatus.observe(this, EventObserver { hasFocus ->
+            Timber.d("TEST --> hasFocus = $hasFocus")
+            binding.newCueEditTextHasFocus = hasFocus
+        })
+
+//        binding.newCueCard.setOnKeyListener { view, keyCode, event ->
+//            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+//                if(event.getAction() == KeyEvent.ACTION_UP) {
+//                    binding.newCueCard.clearFocus()
+//                    val imm: InputMethodManager = context!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+//                }
+//            }
+//            false
+//        }
 
         return binding.root
     }

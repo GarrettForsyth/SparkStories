@@ -45,15 +45,16 @@ class StoryFragment : Fragment(), Injectable {
             false
         )
 
-        binding.viewmodel = storyViewModel
-        binding.storyTextView.movementMethod = ScrollingMovementMethod()
-
         storyViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(StoryViewModel::class.java)
+
+        binding.viewmodel = storyViewModel
+        binding.storyTextView.movementMethod = ScrollingMovementMethod()
 
         observeStory()
         observeCue()
         observeMenuStatus()
+
         return binding.root
     }
 

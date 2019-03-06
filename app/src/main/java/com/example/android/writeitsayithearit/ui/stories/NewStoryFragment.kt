@@ -61,7 +61,6 @@ class NewStoryFragment : Fragment(), Injectable {
             .get(NewStoryViewModel::class.java)
 
         binding.viewmodel = newStoryViewModel
-//        binding.executePendingBindings()
 
         observeCue()
         observeSnackbar()
