@@ -20,6 +20,8 @@ import com.example.android.writeitsayithearit.databinding.FragmentStoryBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.ui.util.AnimationAdapter
+import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils
+import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
 import com.example.android.writeitsayithearit.viewmodel.WriteItSayItHearItViewModelFactory
 import javax.inject.Inject
@@ -43,17 +45,15 @@ class StoryFragment : Fragment(), Injectable {
             false
         )
 
+        binding.viewmodel = storyViewModel
+        binding.storyTextView.movementMethod = ScrollingMovementMethod()
+
         storyViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(StoryViewModel::class.java)
-
-        binding.storyTextView.movementMethod = ScrollingMovementMethod()
 
         observeStory()
         observeCue()
         observeMenuStatus()
-
-        binding.viewmodel = storyViewModel
-
         return binding.root
     }
 
@@ -78,15 +78,15 @@ class StoryFragment : Fragment(), Injectable {
         val menu = binding.storyTopMenu
         val button = binding.toggleMenuButton
         val textView = binding.storyTextView
-        val slideUp = setUpSlideUpAnimation(menu)
-        val slideDown = setUpSlideDownAnimation(menu)
+        val slideUp = WriteItSayItHearItAnimationUtils.setUpSlideUpAnimation(menu)
+        val slideDown = WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation(menu)
 
         storyViewModel.topMenuStatus.observe(this, EventObserver { isShown ->
-            if (isShown) { //slide the menu and toggle button up
+            if (isShown) { //slide the menu, and toggle button, and story text up
                 menu.startAnimation(slideUp)
                 button.startAnimation(slideUp)
                 textView.startAnimation(slideUp)
-            } else { //slide the menu and toggle button down
+            } else { //slide the menu and toggle button, and story text down
                 menu.startAnimation(slideDown)
                 button.startAnimation(slideDown)
                 textView.startAnimation(slideDown)
@@ -94,28 +94,6 @@ class StoryFragment : Fragment(), Injectable {
         })
     }
 
-    private fun setUpSlideUpAnimation(menu: View): Animation {
-        val slideUp: Animation = AnimationUtils.loadAnimation(context, com.example.android.writeitsayithearit.R.anim.top_menu_slide_down)
-        slideUp.setAnimationListener(object : AnimationAdapter(){
-            // set the view state to match the end state of the animation
-            override fun onAnimationEnd(p0: Animation?) { menu.visibility = View.VISIBLE }
-
-            // Set visibility to zero onStart so the toggle button clings to the menu
-            override fun onAnimationStart(p0: Animation?){ menu.visibility = View.INVISIBLE}
-        })
-        return slideUp
-    }
-
-    private fun setUpSlideDownAnimation(menu: View): Animation {
-        val slideDown: Animation = AnimationUtils.loadAnimation(context, com.example.android.writeitsayithearit.R.anim.top_menu_slide_up)
-        slideDown.setAnimationListener(object : AnimationAdapter(){
-            // set the view state to match the end state of the animation
-            override fun onAnimationEnd(p0: Animation?) { menu.visibility = View.GONE }
-        })
-        return slideDown
-    }
-
     fun navController() = findNavController()
-
 
 }

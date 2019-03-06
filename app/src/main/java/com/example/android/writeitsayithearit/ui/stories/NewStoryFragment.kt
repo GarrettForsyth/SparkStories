@@ -30,6 +30,9 @@ import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import com.example.android.writeitsayithearit.BR
+import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils
+import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation
+import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils.setUpSlideUpAnimation
 import timber.log.Timber
 
 
@@ -58,7 +61,7 @@ class NewStoryFragment : Fragment(), Injectable {
             .get(NewStoryViewModel::class.java)
 
         binding.viewmodel = newStoryViewModel
-        binding.executePendingBindings()
+//        binding.executePendingBindings()
 
         observeCue()
         observeSnackbar()
@@ -66,26 +69,35 @@ class NewStoryFragment : Fragment(), Injectable {
         observeConfirmationDialog()
         observeNavigateToStoriesFragment()
         observeMenuStatus()
+        observePreviewModeStatus()
+        observeCharacterCount()
+        observeCharacterCountColour()
 
-        newStoryViewModel.inPreviewMode.observe(this, EventObserver { inPreviewMode ->
-            if (inPreviewMode) {
-                disableEditText(binding.newStoryEditText)
-            }else {
-                enableEditText(binding.newStoryEditText)
-            }
-        })
+        return binding.root
+    }
 
-        newStoryViewModel.characterCount.observe(this, Observer { count ->
-            binding.characterCountTextView.text = count.toString()
-        })
-
+    private fun observeCharacterCountColour() {
         newStoryViewModel.characterCountColour.observe(this, Observer { colour ->
             binding.characterCountTextView.setTextColor(
                 ContextCompat.getColor(context!!, colour)
             )
         })
+    }
 
-        return binding.root
+    private fun observeCharacterCount() {
+        newStoryViewModel.characterCount.observe(this, Observer { count ->
+            binding.characterCountTextView.text = count.toString()
+        })
+    }
+
+    private fun observePreviewModeStatus() {
+        newStoryViewModel.inPreviewMode.observe(this, EventObserver { inPreviewMode ->
+            if (inPreviewMode) {
+                disableEditText(binding.newStoryEditText)
+            } else {
+                enableEditText(binding.newStoryEditText)
+            }
+        })
     }
 
     private fun enableEditText(editText: EditText) {
@@ -123,8 +135,8 @@ class NewStoryFragment : Fragment(), Injectable {
         val menu = binding.newStoryTopMenu
         val button = binding.toggleMenuButton
         val editText = binding.newStoryEditText
-        val slideUp = setUpSlideUpAnimation(menu)
-        val slideDown = setUpSlideDownAnimation(menu)
+        val slideUp = WriteItSayItHearItAnimationUtils.setUpSlideUpAnimation(menu)
+        val slideDown = WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation(menu)
 
         newStoryViewModel.topMenuStatus.observe(this, EventObserver { isShown ->
             if (isShown) { //slide the menu and toggle button up
@@ -137,27 +149,6 @@ class NewStoryFragment : Fragment(), Injectable {
                 editText.startAnimation(slideDown)
             }
         })
-    }
-
-    private fun setUpSlideUpAnimation(menu: View): Animation {
-        val slideUp: Animation = AnimationUtils.loadAnimation(context, com.example.android.writeitsayithearit.R.anim.top_menu_slide_down)
-        slideUp.setAnimationListener(object : AnimationAdapter(){
-            // set the view state to match the end state of the animation
-            override fun onAnimationEnd(p0: Animation?) { menu.visibility = View.VISIBLE }
-
-            // Set visibility to zero onStart so the toggle button clings to the menu
-            override fun onAnimationStart(p0: Animation?){ menu.visibility = View.INVISIBLE}
-        })
-        return slideUp
-    }
-
-    private fun setUpSlideDownAnimation(menu: View): Animation {
-        val slideDown: Animation = AnimationUtils.loadAnimation(context, com.example.android.writeitsayithearit.R.anim.top_menu_slide_up)
-        slideDown.setAnimationListener(object : AnimationAdapter(){
-            // set the view state to match the end state of the animation
-            override fun onAnimationEnd(p0: Animation?) { menu.visibility = View.GONE }
-        })
-        return slideDown
     }
 
     private fun observeNavigateToStoriesFragment() {
