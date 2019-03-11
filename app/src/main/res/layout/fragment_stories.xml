@@ -90,18 +90,6 @@
             visibleGone="@{!hasResults}"
         />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_cue_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="@dimen/margin_large"
-            android:layout_marginRight="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_large"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

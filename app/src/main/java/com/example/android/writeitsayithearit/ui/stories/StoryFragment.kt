@@ -1,14 +1,13 @@
 package com.example.android.writeitsayithearit.ui.stories
 
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,14 +15,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 
 import com.example.android.writeitsayithearit.R
+import com.example.android.writeitsayithearit.databinding.CueListItemBinding
 import com.example.android.writeitsayithearit.databinding.FragmentStoryBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
-import com.example.android.writeitsayithearit.ui.util.AnimationAdapter
 import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils
-import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
-import com.example.android.writeitsayithearit.viewmodel.WriteItSayItHearItViewModelFactory
 import javax.inject.Inject
 
 @OpenForTesting
@@ -35,6 +32,7 @@ class StoryFragment : Fragment(), Injectable {
     lateinit var storyViewModel: StoryViewModel
 
     lateinit var binding: FragmentStoryBinding
+    lateinit var cueBinding: CueListItemBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,17 +43,28 @@ class StoryFragment : Fragment(), Injectable {
             false
         )
 
+        cueBinding = DataBindingUtil.inflate(
+            inflater, R.layout.cue_list_item, null, false)
+
         storyViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(StoryViewModel::class.java)
 
         binding.viewmodel = storyViewModel
-        binding.storyTextView.movementMethod = ScrollingMovementMethod()
+        binding.executePendingBindings()
 
         observeStory()
         observeCue()
         observeMenuStatus()
+        observeCueDialog()
 
         return binding.root
+    }
+
+    private fun observeCueDialog() {
+        val cueDialog = createCueDialog()!!
+        storyViewModel.cueDialog.observe(this, EventObserver<Boolean> {
+            cueDialog.show()
+        })
     }
 
     private fun observeStory() {
@@ -71,14 +80,19 @@ class StoryFragment : Fragment(), Injectable {
 
     private fun observeCue() {
         storyViewModel.cue.observe(this, Observer { cue ->
-            cue?.let { binding.cue = cue }
+            cue?.let {
+                binding.cue = cue
+                cueBinding.cue = cue
+                binding.executePendingBindings()
+                cueBinding.executePendingBindings()
+            }
         })
     }
 
     private fun observeMenuStatus() {
         val menu = binding.storyTopMenu
         val button = binding.toggleMenuButton
-        val textView = binding.storyTextView
+        val textContainer = binding.storyTextScrollView
         val slideUp = WriteItSayItHearItAnimationUtils.setUpSlideUpAnimation(menu)
         val slideDown = WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation(menu)
 
@@ -86,13 +100,21 @@ class StoryFragment : Fragment(), Injectable {
             if (isShown) { //slide the menu, and toggle button, and story text up
                 menu.startAnimation(slideUp)
                 button.startAnimation(slideUp)
-                textView.startAnimation(slideUp)
+                textContainer.startAnimation(slideUp)
             } else { //slide the menu and toggle button, and story text down
                 menu.startAnimation(slideDown)
                 button.startAnimation(slideDown)
-                textView.startAnimation(slideDown)
+                textContainer.startAnimation(slideDown)
             }
         })
+    }
+
+    private fun createCueDialog(): AlertDialog? {
+        return activity?.let {
+            val builder = AlertDialog.Builder(it, com.example.android.writeitsayithearit.R.style.Theme_WriteItSayItHearIt_AlertDialogStyle)
+            builder.setView(cueBinding.root)
+            builder.create()
+        }
     }
 
     fun navController() = findNavController()

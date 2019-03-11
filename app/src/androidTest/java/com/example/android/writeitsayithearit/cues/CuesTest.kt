@@ -29,7 +29,6 @@ import com.example.android.writeitsayithearit.ui.cues.CueViewHolder
 import com.example.android.writeitsayithearit.util.CountingAppExecutorsRule
 import com.example.android.writeitsayithearit.util.DataBindingIdlingResourceRule
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
-import kotlinx.android.synthetic.main.fragment_cues.*
 import org.hamcrest.CoreMatchers.*
 import org.junit.Before
 import org.junit.Rule
@@ -167,7 +166,8 @@ class CuesTest {
                             hasItemAtPosition(hasDescendant(withText(startsWith(expectedCue.text))), listPosition),
                             hasItemAtPosition(hasDescendant(withText(expectedCue.rating.toString())), listPosition),
                             hasItemAtPosition(hasDescendant(withText(expectedCue.author)), listPosition),
-                            hasItemAtPosition(hasDescendant(withText(expectedCue.formattedDate())), listPosition)
+                            hasItemAtPosition(hasDescendant(withText(expectedCue.formattedDate())), listPosition),
+                            hasItemAtPosition(hasDescendant(withText(expectedCue.formattedTime())), listPosition)
                         )
                     )
                 )

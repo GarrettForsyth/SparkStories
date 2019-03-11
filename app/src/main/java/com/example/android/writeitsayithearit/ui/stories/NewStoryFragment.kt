@@ -30,6 +30,8 @@ import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import com.example.android.writeitsayithearit.BR
+import com.example.android.writeitsayithearit.R
+import com.example.android.writeitsayithearit.databinding.CueListItemBinding
 import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils
 import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation
 import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils.setUpSlideUpAnimation
@@ -45,6 +47,7 @@ class NewStoryFragment : Fragment(), Injectable {
     lateinit var newStoryViewModel: NewStoryViewModel
 
     lateinit var binding: FragmentNewStoryBinding
+    lateinit var cueBinding: CueListItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,10 +60,14 @@ class NewStoryFragment : Fragment(), Injectable {
             false
         )
 
+        cueBinding = DataBindingUtil.inflate(
+            inflater, R.layout.cue_list_item, null, false)
+
         newStoryViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(NewStoryViewModel::class.java)
 
         binding.viewmodel = newStoryViewModel
+        binding.executePendingBindings()
 
         observeCue()
         observeSnackbar()
@@ -71,8 +78,16 @@ class NewStoryFragment : Fragment(), Injectable {
         observePreviewModeStatus()
         observeCharacterCount()
         observeCharacterCountColour()
+        observeCueDialog()
 
         return binding.root
+    }
+
+    private fun observeCueDialog() {
+        val cueDialog = createCueDialog()!!
+        newStoryViewModel.cueDialog.observe(this, EventObserver<Boolean> {
+            cueDialog.show()
+        })
     }
 
     private fun observeCharacterCountColour() {
@@ -80,12 +95,14 @@ class NewStoryFragment : Fragment(), Injectable {
             binding.characterCountTextView.setTextColor(
                 ContextCompat.getColor(context!!, colour)
             )
+            binding.executePendingBindings()
         })
     }
 
     private fun observeCharacterCount() {
         newStoryViewModel.characterCount.observe(this, Observer { count ->
             binding.characterCountTextView.text = count.toString()
+            binding.executePendingBindings()
         })
     }
 
@@ -192,7 +209,12 @@ class NewStoryFragment : Fragment(), Injectable {
         newStoryViewModel.getCue(args.cueId)
 
         newStoryViewModel.cue.observe(this, Observer { cue ->
-            cue?.let { binding.cue = cue }
+            cue?.let {
+                binding.cue = cue
+                cueBinding.cue = cue
+                binding.executePendingBindings()
+                cueBinding.executePendingBindings()
+            }
         })
     }
 
@@ -219,6 +241,14 @@ class NewStoryFragment : Fragment(), Injectable {
 
                 this.setNegativeButton(getString(com.example.android.writeitsayithearit.R.string.cancel)) { _, _ -> }
             }
+            builder.create()
+        }
+    }
+
+    private fun createCueDialog(): AlertDialog? {
+        return activity?.let {
+            val builder = AlertDialog.Builder(it, com.example.android.writeitsayithearit.R.style.Theme_WriteItSayItHearIt_AlertDialogStyle)
+            builder.setView(cueBinding.root)
             builder.create()
         }
     }

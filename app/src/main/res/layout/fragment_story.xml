@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="story"
             type="com.example.android.writeitsayithearit.model.story.Story" />
@@ -13,11 +12,9 @@
             name="cue"
             type="com.example.android.writeitsayithearit.model.cue.Cue" />
 
-
         <variable
             name="viewmodel"
             type="com.example.android.writeitsayithearit.ui.stories.StoryViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,76 +36,84 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
                 android:paddingStart="@dimen/padding_regular"
                 android:paddingLeft="@dimen/padding_regular"
                 android:paddingEnd="@dimen/padding_regular"
                 android:paddingRight="@dimen/padding_regular">
 
                 <TextView
-                    style="@style/Theme.WriteItSayItHearIt.TopMenuCueCardText"
+                    style="@style/Theme.WriteItSayItHearIt.CardText"
                     android:id="@+id/story_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{Integer.toString(story.rating)}"
-                    tools:text="123"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:layout_marginRight="@dimen/margin_regular"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/cue_text"
-                    />
+                    app:layout_constraintBottom_toTopOf="@id/first_row"
+                    app:layout_constraintEnd_toStartOf="@id/story_datetime"
+                    app:layout_constraintRight_toLeftOf="@id/story_datetime"
+                    android:textSize="@dimen/text_size_rating"
+                    tools:text="23" />
+
+                <include
+                    android:id="@+id/story_datetime"
+                    layout="@layout/date_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/first_row"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:datable="@{story}" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/first_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="story_rating, story_datetime" />
 
                 <TextView
-                    style="@style/Theme.WriteItSayItHearIt.CueCardText"
-                    android:text="@{story.author}"
                     android:id="@+id/story_author"
+                    style="@style/Theme.WriteItSayItHearIt.CardText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_large"
-                    android:layout_marginLeft="@dimen/margin_large"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/story_rating"
-                    app:layout_constraintBottom_toTopOf="@id/cue_text"
-                    tools:text="John Doe"
-                    />
-
-                <TextView
-                    style="@style/Theme.WriteItSayItHearIt.CueCardText"
-                    android:text="@{story.formattedDate()}"
-                    android:id="@+id/story_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_large"
-                    android:layout_marginLeft="@dimen/margin_large"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@{story.author}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/cue_text"
-                    tools:text="08:04 19-03-01"
-                    />
-
-
-                <TextView
-                    style="@style/Theme.WriteItSayItHearIt.TopMenuCueCardText"
-                    android:id="@+id/cue_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@{cue.text}"
-                    tools:text="@string/cue_lorem_ipsum"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/story_rating"/>
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/first_row"
+                    tools:text="John Doe" />
 
                 <ImageButton
                     android:id="@+id/like_story_button"
                     style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
-                    android:onClick="@{() -> viewmodel.onLikeStoryClick()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:srcCompat="@drawable/ic_favorite_black_24dp"
                     android:background="@null"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cue_text"
-                    app:srcCompat="@drawable/ic_action_like" />
+                    android:onClick="@{() -> viewmodel.onLikeStoryClick()}" />
 
+                <ImageButton
+                    android:id="@+id/view_cue_button"
+                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_small"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/like_story_button"
+                    app:layout_constraintLeft_toRightOf="@id/like_story_button"
+                    app:srcCompat="@drawable/ic_action_cues_black_24dp"
+                    android:background="@null"
+                    android:onClick="@{() -> viewmodel.onShowCueClick()}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,18 +129,23 @@
             app:layout_constraintTop_toBottomOf="@id/story_top_menu"
             app:srcCompat="@drawable/ic_arrow_downward_black_24dp" />
 
-        <com.example.android.writeitsayithearit.views.ScaleTextView
-            android:id="@+id/story_text_view"
-            android:text="@{story.text}"
-            tools:text="@string/story_lorem_ipsum"
-            android:textColor="@color/secondaryTextColor"
+        <ScrollView
+            android:id="@+id/story_text_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:focusable="true"
-            android:scrollbars="vertical"
-            android:padding="@dimen/padding_small"
             app:layout_constraintTop_toBottomOf="@id/toggle_menu_button"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.example.android.writeitsayithearit.views.ScaleTextView
+                android:textColor="@color/secondaryTextColor"
+                android:id="@+id/story_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_small"
+                android:text="@{story.text}"
+                tools:text="@string/story_lorem_ipsum" />
+
+        </ScrollView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

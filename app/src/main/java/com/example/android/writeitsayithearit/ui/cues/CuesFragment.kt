@@ -54,6 +54,7 @@ class CuesFragment : Fragment(), Injectable {
         binding.viewmodel = cuesViewModel
         binding.listAdapter = CueAdapter(cuesViewModel)
         binding.hasResults = false
+        binding.executePendingBindings()
 
         observeCues()
         observeResultStatus()
@@ -84,6 +85,7 @@ class CuesFragment : Fragment(), Injectable {
     private fun observeResultStatus() {
         cuesViewModel.hasResultsStatus.observe(this, EventObserver { hasResults ->
             binding.hasResults = hasResults
+            binding.executePendingBindings()
         })
     }
 
@@ -92,6 +94,7 @@ class CuesFragment : Fragment(), Injectable {
             if (cues != null) {
                 binding.listAdapter?.setList(cues)
                 binding.listAdapter?.notifyDataSetChanged()
+                binding.executePendingBindings()
                 cuesViewModel.setHasResults(!cues.isEmpty())
             } else {
                 cuesViewModel.setHasResults(false)

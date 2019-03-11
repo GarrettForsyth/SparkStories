@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.android.writeitsayithearit.model.Datable
 import com.example.android.writeitsayithearit.model.author.Author
 import com.example.android.writeitsayithearit.model.author.AuthorContract
 import com.example.android.writeitsayithearit.model.cue.CueContract
@@ -49,12 +50,21 @@ data class Story(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = StoryContract.COLUMN_ID)
     var id: Int = 0
-) {
+): Datable {
 
-    fun formattedDate(): String {
+    override fun formattedDateTime(): String {
         //TODO: format date based on locale
-        return DateFormat.format("hh:mm    dd-MM-yy", creationDate).toString()
+        return DateFormat.format("hh:mm    dd/MM/yy", creationDate).toString()
     }
+
+    override fun formattedTime(): String {
+        return DateFormat.format("hh:mm", creationDate).toString()
+    }
+
+    override fun formattedDate(): String {
+        return DateFormat.format("dd/MM/yy", creationDate).toString()
+    }
+
 
     constructor(storyText: String, author: String, cueId: Int) :
             this(

@@ -40,6 +40,19 @@ class StoryViewModelTest {
         mockObserverFor(storyViewModel.story)
         mockObserverFor(storyViewModel.cue)
         mockObserverFor(storyViewModel.topMenuStatus)
+        mockObserverFor(storyViewModel.cueDialog)
+    }
+
+    @Test()
+    fun showCue() {
+        storyViewModel.onShowCueClick()
+
+        assertFalse(
+            storyViewModel
+                .cueDialog
+                .getValueBlocking()
+                .hasBeenHandled
+        )
     }
 
     @Test()

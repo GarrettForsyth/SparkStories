@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/cuesFragment"
-        android:icon="@drawable/ic_action_cue"
+        android:icon="@drawable/ic_action_cues_black_24dp"
         android:title="@string/cues" />
 
     <item
         android:id="@+id/storiesFragment"
-        android:icon="@drawable/ic_action_stories"
+        android:icon="@drawable/ic_stories_black_24dp"
         android:title="@string/stories" />
 
     <item
         android:id="@+id/narrationsFragment"
-        android:icon="@drawable/ic_action_narrations"
+        android:icon="@drawable/ic_narrations_black_24dp"
         android:title="@string/narrations" />
 
 

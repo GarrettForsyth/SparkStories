@@ -41,6 +41,9 @@ class ScaleTextInputEditText(
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         scaleDetector.onTouchEvent(event)
+        if (scaleDetector.isInProgress) {
+            parent.requestDisallowInterceptTouchEvent(true)
+        }
         return super.onTouchEvent(event)
     }
 

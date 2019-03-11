@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="story"
             type="com.example.android.writeitsayithearit.model.story.Story" />
@@ -15,82 +14,81 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:onClick="@{() -> viewmodel.onClickStory(story.id)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_regular"
         android:layout_marginLeft="@dimen/margin_regular"
+        android:layout_marginTop="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_regular"
         android:layout_marginRight="@dimen/margin_regular"
-        android:layout_marginBottom="@dimen/margin_regular"
-        android:layout_marginTop="@dimen/margin_small"
-        >
+        android:onClick="@{() -> viewmodel.onClickStory(story.id)}" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/padding_regular"
-            android:paddingLeft="@dimen/padding_regular"
-            android:paddingEnd="@dimen/padding_regular"
-            android:paddingRight="@dimen/padding_regular"
-            android:paddingTop="@dimen/padding_regular"
-            android:paddingBottom="@dimen/padding_regular">
+            android:padding="@dimen/padding_regular" >
 
             <TextView
-                style="@style/Theme.WriteItSayItHearIt.CueCardText"
-                android:text="@{Integer.toString(story.rating)}"
+                style="@style/Theme.WriteItSayItHearIt.CardText"
                 android:id="@+id/story_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_headline"
+                android:text="@{Integer.toString(story.rating)}"
+                android:layout_marginEnd="@dimen/margin_regular"
+                android:layout_marginRight="@dimen/margin_regular"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/story_text"
-                tools:text="23"
-                />
+                app:layout_constraintBottom_toTopOf="@id/first_row"
+                app:layout_constraintEnd_toStartOf="@id/story_datetime"
+                app:layout_constraintRight_toLeftOf="@id/story_datetime"
+                android:textSize="@dimen/text_size_rating"
+                tools:text="23" />
 
-            <TextView
-                style="@style/Theme.WriteItSayItHearIt.CueCardText"
-                android:text="@{story.author}"
-                android:id="@+id/story_author"
+            <include
+                android:id="@+id/story_datetime"
+                layout="@layout/date_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginLeft="@dimen/margin_large"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/story_rating"
-                app:layout_constraintBottom_toTopOf="@id/story_text"
-                tools:text="John Doe"
-                />
-
-            <TextView
-                style="@style/Theme.WriteItSayItHearIt.CueCardText"
-                android:text="@{story.formattedDate()}"
-                android:id="@+id/story_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginLeft="@dimen/margin_large"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/first_row"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/story_text"
-                tools:text="08:04 19-03-01"
-                />
+                app:layout_constraintRight_toRightOf="parent"
+                app:datable="@{story}" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/first_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="story_rating, story_datetime" />
 
             <TextView
-                style="@style/Theme.WriteItSayItHearIt.CueCardText"
+                android:id="@+id/story_author"
+                style="@style/Theme.WriteItSayItHearIt.CardText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{story.author}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/first_row"
+                tools:text="John Doe" />
+
+            <TextView
+                style="@style/Theme.WriteItSayItHearIt.CardText"
                 android:id="@+id/story_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{story.text}"
-                android:maxLines="10"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="@dimen/padding_small"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/story_author"
+                android:ellipsize="end"
+                android:maxLines="10"
+                android:text="@{story.text}"
+                tools:text="It was the best of times. It was the worst of times." />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
 </layout>

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="cue"
             type="com.example.android.writeitsayithearit.model.cue.Cue" />
@@ -15,76 +14,77 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:onClick="@{() -> viewmodel.onClickCue(cue.id)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_regular"
         android:layout_marginLeft="@dimen/margin_regular"
+        android:layout_marginTop="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_regular"
         android:layout_marginRight="@dimen/margin_regular"
-        android:layout_marginTop="@dimen/margin_small"
-        >
+        android:onClick="@{() -> viewmodel.onClickCue(cue.id)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/padding_regular"
-            android:paddingLeft="@dimen/padding_regular"
-            android:paddingEnd="@dimen/padding_regular"
-            android:paddingRight="@dimen/padding_regular"
-            android:paddingBottom="@dimen/padding_regular">
+            android:padding="@dimen/padding_regular" >
+
+                <TextView
+                    style="@style/Theme.WriteItSayItHearIt.CardText"
+                    android:id="@+id/cue_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{Integer.toString(cue.rating)}"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:layout_marginRight="@dimen/margin_regular"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/first_row"
+                    app:layout_constraintEnd_toStartOf="@id/cue_datetime"
+                    app:layout_constraintRight_toLeftOf="@id/cue_datetime"
+                    android:textSize="@dimen/text_size_rating"
+                    tools:text="23" />
+
+                <include
+                    android:id="@+id/cue_datetime"
+                    layout="@layout/date_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/first_row"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:datable="@{cue}" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/first_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="cue_rating, cue_datetime" />
+
+                <TextView
+                    android:id="@+id/cue_author"
+                    style="@style/Theme.WriteItSayItHearIt.CardText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{cue.author}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/first_row"
+                    tools:text="John Doe" />
 
             <TextView
-                style="@style/Theme.WriteItSayItHearIt.CueCardText"
-                android:text="@{Integer.toString(cue.rating)}"
-                android:id="@+id/cue_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_headline"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/cue_text"
-                tools:text="23"
-                />
-
-            <TextView
-                style="@style/Theme.WriteItSayItHearIt.CueCardText"
-                android:text="@{cue.author}"
-                android:id="@+id/cue_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginLeft="@dimen/margin_large"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/cue_rating"
-                app:layout_constraintBottom_toTopOf="@id/cue_text"
-                tools:text="John Doe"
-                />
-
-            <TextView
-                style="@style/Theme.WriteItSayItHearIt.CueCardText"
-                android:text="@{cue.formattedDate()}"
-                android:id="@+id/cue_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginLeft="@dimen/margin_large"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/cue_text"
-                tools:text="08:04 19-03-01"
-                />
-
-            <TextView
+                style="@style/Theme.WriteItSayItHearIt.CardText"
                 android:id="@+id/cue_text"
-                style="@style/Theme.WriteItSayItHearIt.CueCardText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{cue.text}"
+                android:layout_marginTop="@dimen/padding_small"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cue_rating"
+                app:layout_constraintTop_toBottomOf="@id/cue_author"
+                android:text="@{cue.text}"
                 tools:text="It was the best of times. It was the worst of times." />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

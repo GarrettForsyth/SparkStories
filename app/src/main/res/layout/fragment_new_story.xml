@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="cue"
             type="com.example.android.writeitsayithearit.model.cue.Cue" />
@@ -33,65 +34,78 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
                 android:paddingStart="@dimen/padding_regular"
                 android:paddingLeft="@dimen/padding_regular"
                 android:paddingEnd="@dimen/padding_regular"
                 android:paddingRight="@dimen/padding_regular">
 
-                <TextView
-                    style="@style/Theme.WriteItSayItHearIt.TopMenuCueCardText"
-                    android:id="@+id/cue_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@{cue.text}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
+                <ImageButton
+                    android:id="@+id/new_story_info_button"
                     style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
-                    android:id="@+id/character_count_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/cue_text"
+                    android:background="@null"
+                    android:onClick="@{() -> viewmodel.onClickInfo()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_help_outline_black_24dp" />
+
+                <ImageButton
+                    android:id="@+id/view_cue_button"
+                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_small"
+                    android:background="@null"
+                    android:onClick="@{() -> viewmodel.onShowCueClick()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/new_story_info_button"
+                    app:layout_constraintStart_toEndOf="@id/new_story_info_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_action_cues_black_24dp" />
 
                 <ImageButton
                     android:id="@+id/toggle_preview_button"
                     style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
-                    android:onClick="@{() -> viewmodel.onTogglePreviewMode()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_small"
                     android:background="@null"
-                    app:layout_constraintEnd_toStartOf="@id/new_story_info_button"
-                    app:layout_constraintTop_toBottomOf="@id/cue_text"
+                    android:onClick="@{() -> viewmodel.onTogglePreviewMode()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/view_cue_button"
+                    app:layout_constraintStart_toEndOf="@id/view_cue_button"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_pageview_black_24dp" />
 
                 <ImageButton
-                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
-                    android:id="@+id/new_story_info_button"
-                    android:onClick="@{() -> viewmodel.onClickInfo()}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    app:layout_constraintEnd_toStartOf="@id/submit_story_button"
-                    app:layout_constraintTop_toBottomOf="@id/cue_text"
-                    app:srcCompat="@drawable/ic_help_outline_black_24dp" />
-
-                <ImageButton
-                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
                     android:id="@+id/submit_story_button"
-                    android:onClick="@{() -> viewmodel.onClickSubmit()}"
+                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_marginRight="@dimen/margin_small"
                     android:background="@null"
-                    app:layout_constraintEnd_toEndOf="@id/cue_text"
-                    app:layout_constraintTop_toBottomOf="@id/cue_text"
-                    app:srcCompat="@drawable/ic_done_black_24dp"
-                    />
+                    android:onClick="@{() -> viewmodel.onClickSubmit()}"
+                    app:layout_constraintEnd_toStartOf="@id/character_count_text_view"
+                    app:layout_constraintRight_toLeftOf="@id/character_count_text_view"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_done_black_24dp" />
 
+                <TextView
+                    android:id="@+id/character_count_text_view"
+                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -99,27 +113,38 @@
 
         <ImageButton
             android:id="@+id/toggle_menu_button"
-            android:onClick="@{() -> viewmodel.onToggleMenu()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:onClick="@{() -> viewmodel.onToggleMenu()}"
             app:layout_constraintEnd_toEndOf="@id/new_story_top_menu"
             app:layout_constraintTop_toBottomOf="@id/new_story_top_menu"
             app:srcCompat="@drawable/ic_arrow_downward_black_24dp" />
 
-        <com.example.android.writeitsayithearit.views.ScaleEditText
-            android:id="@+id/new_story_edit_text"
-            android:text="@={viewmodel.storyTextField.text}"
-            app:addOnTextChangeListener="@{viewmodel.storyTextChangeListener()}"
+        <ScrollView
+            android:id="@+id/new_story_text_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="@dimen/padding_small"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:textColor="@color/colorPrimaryDark"
-            android:background="@null"
-            app:layout_constraintTop_toBottomOf="@id/toggle_menu_button"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toggle_menu_button">
+
+            <com.example.android.writeitsayithearit.views.ScaleEditText
+                android:id="@+id/new_story_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:padding="@dimen/padding_small"
+                android:text="@={viewmodel.storyTextField.text}"
+                android:textColor="@color/colorPrimaryDark"
+                app:addOnTextChangeListener="@{viewmodel.storyTextChangeListener()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toggle_menu_button" />
+
+        </ScrollView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

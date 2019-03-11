@@ -77,6 +77,26 @@ class NewStoryTest {
     }
 
     @Test
+    fun viewCue() {
+        onView(withId(R.id.view_cue_button)).perform(click())
+
+        onView(withText(cue.text))
+            .check(matches(isDisplayed()))
+
+        onView(withText(cue.rating.toString()))
+            .check(matches(isDisplayed()))
+
+        onView(withText(cue.author))
+            .check(matches(isDisplayed()))
+
+        onView(withText(cue.formattedDate()))
+            .check(matches(isDisplayed()))
+
+        onView(withText(cue.formattedTime()))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
     fun infoDialog() {
         // When I click the info button
         onView(withId(R.id.new_story_info_button)).perform(click())

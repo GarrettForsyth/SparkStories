@@ -168,6 +168,7 @@ class StoriesTest {
                             hasItemAtPosition(hasDescendant(withText(startsWith(expectedStory.text.take(30)))), listPosition),
                             hasItemAtPosition(hasDescendant(withText(expectedStory.rating.toString())), listPosition),
                             hasItemAtPosition(hasDescendant(withText(expectedStory.author)), listPosition),
+                            hasItemAtPosition(hasDescendant(withText(expectedStory.formattedTime())), listPosition),
                             hasItemAtPosition(hasDescendant(withText(expectedStory.formattedDate())), listPosition)
                         )
                     )

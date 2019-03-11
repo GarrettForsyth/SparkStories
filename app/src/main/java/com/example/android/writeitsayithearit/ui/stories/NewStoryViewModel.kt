@@ -68,6 +68,10 @@ class NewStoryViewModel @Inject constructor(
     val inPreviewMode: LiveData<Event<Boolean>>
         get() = _inPreviewMode
 
+    private val _cueDialog = MutableLiveData<Event<Boolean>>()
+    val cueDialog: LiveData<Event<Boolean>>
+        get() = _cueDialog
+
     init {
         _topMenuStatus.value = Event(true)
         _inPreviewMode.value = Event(false)
@@ -99,6 +103,10 @@ class NewStoryViewModel @Inject constructor(
 
     fun onClickSubmit() {
         _confirmSubmissionDialog.value = Event(true)
+    }
+
+    fun onShowCueClick() {
+        _cueDialog.value = Event(true)
     }
 
     fun onConfirmSubmission() {

@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_story.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowAlertDialog
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -70,11 +71,11 @@ class StoryFragmentTest {
     }
 
     @Test
-    fun displayCue() {
+    fun showCueDialog() {
         scenario.onFragment {
-            it.cue.postValue(CUE)
-            onView(withId(R.id.story_constraint_layout))
-                .check(matches(hasDescendant(withText(CUE.text))))
+            assert(ShadowAlertDialog.getShownDialogs().isEmpty())
+            it.cueDialog.value = Event(true)
+            assert(ShadowAlertDialog.getShownDialogs()[0].isShowing)
         }
     }
 
@@ -115,6 +116,7 @@ class StoryFragmentTest {
                 every { storyViewModel.story } returns this.story
                 every { storyViewModel.cue } returns this.cue
                 every { storyViewModel.topMenuStatus } returns this.topMenuShown
+                every { storyViewModel.cueDialog } returns this.cueDialog
             }
         }
     }
@@ -122,9 +124,9 @@ class StoryFragmentTest {
         val navController: NavController = mockk(relaxed = true)
         override fun navController() = navController
 
-
         val story = MutableLiveData<Story>()
         val cue = MutableLiveData<Cue>()
         val topMenuShown = MutableLiveData<Event<Boolean>>()
+        val cueDialog = MutableLiveData<Event<Boolean>>()
     }
 }

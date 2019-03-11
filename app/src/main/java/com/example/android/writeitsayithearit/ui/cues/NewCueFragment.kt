@@ -51,27 +51,20 @@ class NewCueFragment : Fragment(), Injectable {
         newCueViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(NewCueViewModel::class.java)
         binding.viewmodel = newCueViewModel
+        binding.executePendingBindings()
 
         observeInvalidSnackBar()
         observeShouldNavigateToCues()
-
-        newCueViewModel.newCueEditTextFocusStatus.observe(this, EventObserver { hasFocus ->
-            Timber.d("TEST --> hasFocus = $hasFocus")
-            binding.newCueEditTextHasFocus = hasFocus
-        })
-
-//        binding.newCueCard.setOnKeyListener { view, keyCode, event ->
-//            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-//                if(event.getAction() == KeyEvent.ACTION_UP) {
-//                    binding.newCueCard.clearFocus()
-//                    val imm: InputMethodManager = context!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//                    imm.hideSoftInputFromWindow(view.windowToken, 0)
-//                }
-//            }
-//            false
-//        }
+        observeNewCueEditTextFocus()
 
         return binding.root
+    }
+
+    private fun observeNewCueEditTextFocus() {
+        newCueViewModel.newCueEditTextFocusStatus.observe(this, EventObserver { hasFocus ->
+            binding.newCueEditTextHasFocus = hasFocus
+            binding.executePendingBindings()
+        })
     }
 
     private fun observeShouldNavigateToCues() {

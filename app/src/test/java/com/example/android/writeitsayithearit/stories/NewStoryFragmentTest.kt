@@ -145,6 +145,15 @@ class NewStoryFragmentTest {
     }
 
     @Test
+    fun showCueDialog() {
+        scenario.onFragment {
+            assert(ShadowAlertDialog.getShownDialogs().isEmpty())
+            it.cueDialog.value = Event(true)
+            assert(ShadowAlertDialog.getShownDialogs()[0].isShowing)
+        }
+    }
+
+    @Test
     fun toggleMenuButton() {
         scenario.onFragment {
             it.toggle_menu_button.callOnClick()
@@ -211,15 +220,6 @@ class NewStoryFragmentTest {
     }
 
     @Test
-    fun displayCue() {
-        scenario.onFragment {
-            it.cue.postValue(CUE)
-            onView(withId(R.id.new_story_constraint_layout))
-                .check(matches(hasDescendant(withText(CUE.text))))
-        }
-    }
-
-    @Test
     fun shouldNavigateToStories() {
          scenario.onFragment {
              it.shouldNavigateToStories.value = Event(true)
@@ -250,6 +250,7 @@ class NewStoryFragmentTest {
                 every { newStoryViewModel.inPreviewMode } returns this.inPreviewMode
                 every { newStoryViewModel.characterCount } returns this.characterCount
                 every { newStoryViewModel.characterCountColour } returns this.characterCountColour
+                every { newStoryViewModel.cueDialog } returns this.cueDialog
             }
         }
     }
@@ -274,6 +275,7 @@ class NewStoryFragmentTest {
         val characterCount = MutableLiveData<Int>()
         val characterCountColour = MutableLiveData<Int>()
         val cue = MutableLiveData<Cue>()
+        val cueDialog = MutableLiveData<Event<Boolean>>()
     }
 
 }

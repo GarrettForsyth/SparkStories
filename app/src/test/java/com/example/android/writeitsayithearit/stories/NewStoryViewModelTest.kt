@@ -136,6 +136,19 @@ class NewStoryViewModelTest {
         )
     }
 
+    @Test()
+    fun showCue() {
+        newStoryViewModel.onShowCueClick()
+
+        assertFalse(
+            newStoryViewModel
+                .cueDialog
+                .getValueBlocking()
+                .hasBeenHandled
+        )
+    }
+
+
     @Test(expected = KotlinNullPointerException::class)
     fun confirmationDialogInitiallyNull() {
         newStoryViewModel

@@ -30,11 +30,6 @@ class StoriesFragment : Fragment(), Injectable {
 
     lateinit var binding: FragmentStoriesBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Timber.d("StoriesFragment onCreate() mytrace")
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +47,7 @@ class StoriesFragment : Fragment(), Injectable {
         binding.viewmodel = storiesViewModel
         binding.listAdapter = StoryAdapter(storiesViewModel)
         binding.hasResults = false
+        binding.executePendingBindings()
 
         observeStories()
         observeResultStatus()
@@ -72,6 +68,7 @@ class StoriesFragment : Fragment(), Injectable {
     private fun observeResultStatus() {
         storiesViewModel.hasResultsStatus.observe(this, EventObserver { hasResults ->
             binding.hasResults = hasResults
+            binding.executePendingBindings()
         })
     }
 
@@ -80,6 +77,7 @@ class StoriesFragment : Fragment(), Injectable {
             if (stories != null) {
                 binding.listAdapter?.setList(stories)
                 binding.listAdapter?.notifyDataSetChanged()
+                binding.executePendingBindings()
                 storiesViewModel.setHasResults(!stories.isEmpty())
             } else {
                 storiesViewModel.setHasResults(false)

@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.TextView
+import timber.log.Timber
 
 class ScaleTextView(
     context: Context,
@@ -25,9 +26,13 @@ class ScaleTextView(
         scaleDetector = ScaleGestureDetector(context, PinchListener())
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        scaleDetector.onTouchEvent(event)
-        return super.onTouchEvent(event)
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        Timber.d("mytest View onTouchEvent")
+        scaleDetector.onTouchEvent(ev)
+        if (scaleDetector.isInProgress) {
+            parent.requestDisallowInterceptTouchEvent(true)
+        }
+        return true
     }
 
     private inner class PinchListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
