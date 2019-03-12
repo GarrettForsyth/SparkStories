@@ -3,6 +3,8 @@ package com.example.android.writeitsayithearit.ui.stories
 import android.content.SharedPreferences
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.GestureDetector
+import android.view.MotionEvent
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -113,11 +115,22 @@ class NewStoryViewModel @Inject constructor(
         if (storyTextField.isValid()) {
             val author = sharedPreferences.getString(PREFERENCE_AUTHOR, DEFAULT_AUTHOR)!!
             val story = Story(storyTextField.text, author, cueId.value!!)
-            Timber.d("--> $story")
             submitStory(story)
             _navigateToStoriesFragment.value = Event(true)
         } else {
             _invalidStorySnackBar.value = Event(true)
+        }
+    }
+
+    fun toggleTopMenuDoubleClickListener(): GestureDetector.SimpleOnGestureListener {
+        return object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+                return true
+            }
+            override fun onDoubleTap(e: MotionEvent?): Boolean {
+                onToggleMenu()
+                return super.onDoubleTap(e)
+            }
         }
     }
 

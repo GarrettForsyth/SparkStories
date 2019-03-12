@@ -19,23 +19,16 @@ import com.example.android.writeitsayithearit.databinding.FragmentNewStoryBindin
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.model.story.StoryTextField
-import com.example.android.writeitsayithearit.ui.util.AnimationAdapter
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 import android.widget.EditText
 import android.content.Context.INPUT_METHOD_SERVICE
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
-import com.example.android.writeitsayithearit.BR
+import androidx.transition.TransitionManager
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.CueListItemBinding
-import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils
-import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation
-import com.example.android.writeitsayithearit.ui.util.WriteItSayItHearItAnimationUtils.setUpSlideUpAnimation
-import timber.log.Timber
 
 
 @OpenForTesting
@@ -148,21 +141,22 @@ class NewStoryFragment : Fragment(), Injectable {
     }
 
     private fun observeMenuStatus() {
+        val rootView = binding.newStoryConstraintLayout
         val menu = binding.newStoryTopMenu
-        val button = binding.toggleMenuButton
-        val editText = binding.newStoryEditText
-        val slideUp = WriteItSayItHearItAnimationUtils.setUpSlideUpAnimation(menu)
-        val slideDown = WriteItSayItHearItAnimationUtils.setUpSlideDownAnimation(menu)
+        val text = binding.newStoryTextScrollView
 
         newStoryViewModel.topMenuStatus.observe(this, EventObserver { isShown ->
-            if (isShown) { //slide the menu and toggle button up
-                menu.startAnimation(slideUp)
-                button.startAnimation(slideUp)
-                editText.startAnimation(slideUp)
-            } else { //slide the menu and toggle button down
-                menu.startAnimation(slideDown)
-                button.startAnimation(slideDown)
-                editText.startAnimation(slideDown)
+            if (isShown) {
+                TransitionManager.beginDelayedTransition(rootView)
+                rootView.removeView(menu)
+                rootView.removeView(text)
+                rootView.addView(text)
+                rootView.addView(menu)
+            } else {
+                TransitionManager.beginDelayedTransition(rootView)
+                rootView.removeView(menu)
+                rootView.removeView(text)
+                rootView.addView(text)
             }
         })
     }

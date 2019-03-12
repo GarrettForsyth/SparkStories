@@ -42,6 +42,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/filter_cues_edit_text"
                 android:text="@={viewmodel.filterQuery}"
+                android:imeOptions="actionDone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/filter_cues"

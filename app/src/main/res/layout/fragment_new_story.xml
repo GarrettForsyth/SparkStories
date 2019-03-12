@@ -111,40 +111,35 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <ImageButton
-            android:id="@+id/toggle_menu_button"
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/top_barrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:onClick="@{() -> viewmodel.onToggleMenu()}"
-            app:layout_constraintEnd_toEndOf="@id/new_story_top_menu"
-            app:layout_constraintTop_toBottomOf="@id/new_story_top_menu"
-            app:srcCompat="@drawable/ic_arrow_downward_black_24dp" />
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="new_story_top_menu" />
 
-        <ScrollView
-            android:id="@+id/new_story_text_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toggle_menu_button">
 
-            <com.example.android.writeitsayithearit.views.ScaleEditText
-                android:id="@+id/new_story_edit_text"
+            <ScrollView
+                android:id="@+id/new_story_text_scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:gravity="top"
-                android:inputType="textMultiLine"
-                android:padding="@dimen/padding_small"
-                android:text="@={viewmodel.storyTextField.text}"
-                android:textColor="@color/colorPrimaryDark"
-                app:addOnTextChangeListener="@{viewmodel.storyTextChangeListener()}"
+                android:layout_height="0dp"
+                android:fillViewport="true"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/toggle_menu_button" />
+                app:layout_constraintTop_toBottomOf="@id/top_barrier">
 
-        </ScrollView>
-
+                <com.example.android.writeitsayithearit.views.ScaleTextInputEditText
+                    style="@style/Theme.WriteItSayItHearIt.CardText"
+                    android:id="@+id/new_story_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/padding_small"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:text="@={viewmodel.storyTextField.text}"
+                    app:addOnTextChangeListener="@{viewmodel.storyTextChangeListener()}"
+                    app:onDoubleClickListener="@{viewmodel.toggleTopMenuDoubleClickListener()}" />
+            </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

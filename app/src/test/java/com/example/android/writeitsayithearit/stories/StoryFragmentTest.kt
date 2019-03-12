@@ -8,6 +8,7 @@ import androidx.fragment.app.testing.FragmentScenario.launchInContainer
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.doubleClick
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -25,6 +26,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.android.synthetic.main.fragment_story.*
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -80,14 +82,6 @@ class StoryFragmentTest {
     }
 
     @Test
-    fun toggleMenuButton() {
-        scenario.onFragment {
-            it.toggle_menu_button.callOnClick()
-            verify(exactly = 1) { it.storyViewModel.onToggleMenu() }
-        }
-    }
-
-    @Test
     fun showMenu() {
         scenario.onFragment {
             it.topMenuShown.value = Event(true)
@@ -99,7 +93,7 @@ class StoryFragmentTest {
     fun hideMenu() {
         scenario.onFragment {
             it.topMenuShown.value = Event(false)
-            assert(!it.story_top_menu.isShown)
+            assertNull(it.story_top_menu)
         }
     }
 

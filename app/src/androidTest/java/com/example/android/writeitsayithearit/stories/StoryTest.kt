@@ -3,6 +3,8 @@ package com.example.android.writeitsayithearit.stories
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.doubleClick
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -83,11 +85,11 @@ class StoryTest {
         // I should see the top menu
         onView(withId(R.id.story_top_menu)).check(matches(isDisplayed()))
 
-        // When I click the toggle menu button
-        onView(withId(R.id.toggle_menu_button)).perform(click())
+        // When I double tap the screen
+        onView(withId(R.id.story_constraint_layout)).perform(doubleClick())
 
         // I should no longer see the top menu
-        onView(withId(R.id.story_top_menu)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.story_top_menu)).check(doesNotExist())
     }
 
     @Test

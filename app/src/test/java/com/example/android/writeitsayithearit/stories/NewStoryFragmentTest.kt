@@ -32,6 +32,7 @@ import io.mockk.verify
 import kotlinx.android.synthetic.main.fragment_new_story.*
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -154,14 +155,6 @@ class NewStoryFragmentTest {
     }
 
     @Test
-    fun toggleMenuButton() {
-        scenario.onFragment {
-            it.toggle_menu_button.callOnClick()
-            verify(exactly = 1) { it.newStoryViewModel.onToggleMenu() }
-        }
-    }
-
-    @Test
     fun showMenu() {
         scenario.onFragment {
             it.topMenuShown.value = Event(true)
@@ -173,7 +166,7 @@ class NewStoryFragmentTest {
     fun hideMenu() {
         scenario.onFragment {
             it.topMenuShown.value = Event(false)
-            assert(!it.new_story_top_menu.isShown)
+            assertNull(it.new_story_top_menu)
         }
     }
 

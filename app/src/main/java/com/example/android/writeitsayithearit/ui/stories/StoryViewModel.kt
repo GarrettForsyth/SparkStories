@@ -1,11 +1,17 @@
 package com.example.android.writeitsayithearit.ui.stories
 
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.GestureDetector
+import android.view.MotionEvent
 import androidx.lifecycle.*
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.repos.StoryRepository
+import com.example.android.writeitsayithearit.ui.util.TextWatcherAdapter
 import com.example.android.writeitsayithearit.ui.util.events.Event
+import timber.log.Timber
 import javax.inject.Inject
 
 class StoryViewModel @Inject constructor(
@@ -38,6 +44,17 @@ class StoryViewModel @Inject constructor(
 
     fun getStory(id: Int) {
         storyId.value = id
+    }
+
+    fun toggleTopMenuDoubleClickListener(): GestureDetector.SimpleOnGestureListener {
+        return object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(e: MotionEvent?) = true
+
+            override fun onDoubleTap(e: MotionEvent?): Boolean {
+                onToggleMenu()
+                return super.onDoubleTap(e)
+            }
+        }
     }
 
     fun onToggleMenu() {
