@@ -90,6 +90,8 @@
                 <ImageButton
                     android:id="@+id/like_story_button"
                     style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    android:stateListAnimator="@animator/top_menu_button_state"
+                    android:backgroundTint="@android:color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent"
@@ -97,12 +99,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:srcCompat="@drawable/ic_favorite_black_24dp"
-                    android:background="@null"
                     android:onClick="@{() -> viewmodel.onLikeStoryClick()}" />
 
                 <ImageButton
                     android:id="@+id/view_cue_button"
                     style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    android:stateListAnimator="@animator/top_menu_button_state"
+                    android:backgroundTint="@android:color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
@@ -112,7 +115,6 @@
                     app:layout_constraintStart_toEndOf="@id/like_story_button"
                     app:layout_constraintLeft_toRightOf="@id/like_story_button"
                     app:srcCompat="@drawable/ic_action_cues_black_24dp"
-                    android:background="@null"
                     android:onClick="@{() -> viewmodel.onShowCueClick()}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

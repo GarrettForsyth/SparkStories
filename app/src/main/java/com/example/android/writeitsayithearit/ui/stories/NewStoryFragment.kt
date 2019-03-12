@@ -103,8 +103,10 @@ class NewStoryFragment : Fragment(), Injectable {
         newStoryViewModel.inPreviewMode.observe(this, EventObserver { inPreviewMode ->
             if (inPreviewMode) {
                 disableEditText(binding.newStoryEditText)
+                binding.togglePreviewButton.isActivated = true
             } else {
                 enableEditText(binding.newStoryEditText)
+                binding.togglePreviewButton.isActivated = false
             }
         })
     }
