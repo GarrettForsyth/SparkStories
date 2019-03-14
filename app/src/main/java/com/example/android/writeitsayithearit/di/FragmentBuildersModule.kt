@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.di
 
+import com.example.android.writeitsayithearit.ui.cues.CueFragment
 import com.example.android.writeitsayithearit.ui.cues.CuesFragment
 import com.example.android.writeitsayithearit.ui.cues.NewCueFragment
 import com.example.android.writeitsayithearit.ui.narrations.NarrationsFragment
@@ -13,6 +14,9 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentBuildersModule {
     @ContributesAndroidInjector
     abstract fun contributeCuesFragment() : CuesFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeCueFragment() : CueFragment
 
     @ContributesAndroidInjector
     abstract fun contributeNewCueFragment() : NewCueFragment

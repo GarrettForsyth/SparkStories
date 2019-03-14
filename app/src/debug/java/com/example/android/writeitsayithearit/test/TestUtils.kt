@@ -60,7 +60,7 @@ object TestUtils {
 
     val FILTER_STRING_NO_MATCHES = "zzz"
 
-
+    val STORIES_FROM_FIRST_CUE_INDICES = listOf(0,1)
 
     fun createTestCue() = Cue(
         text = "Test cue text. Very interesting stuff.",

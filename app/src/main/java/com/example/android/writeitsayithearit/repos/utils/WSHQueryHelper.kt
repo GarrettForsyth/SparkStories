@@ -14,29 +14,32 @@ import java.util.*
 object WSHQueryHelper {
 
     fun cues(
-            filterString: String = "",
-            sortOrder: SortOrder = SortOrder.NEW
+        filterString: String = "",
+        sortOrder: SortOrder = SortOrder.NEW,
+        cueId: Int = -1
     ): SupportSQLiteQuery {
         val queryBuilder = SupportSQLiteQueryBuilder.builder(CueContract.TABLE_NAME)
-        addSelection(queryBuilder, filterString, sortOrder)
+        addSelection(queryBuilder, filterString, sortOrder, cueId)
         addSortOrder(queryBuilder, sortOrder)
         return queryBuilder.create()
     }
 
     fun stories(
-            filterString: String = "",
-            sortOrder: SortOrder = SortOrder.NEW
+        filterString: String = "",
+        sortOrder: SortOrder = SortOrder.NEW,
+        cueId: Int = -1
     ): SupportSQLiteQuery {
         val queryBuilder = SupportSQLiteQueryBuilder.builder(StoryContract.TABLE_NAME)
-        addSelection(queryBuilder, filterString, sortOrder)
+        addSelection(queryBuilder, filterString, sortOrder, cueId)
         addSortOrder(queryBuilder, sortOrder)
         return queryBuilder.create()
     }
 
     private fun addSelection(
-            queryBuilder: SupportSQLiteQueryBuilder,
-            filterString: String,
-            sortOrder: SortOrder
+        queryBuilder: SupportSQLiteQueryBuilder,
+        filterString: String,
+        sortOrder: SortOrder,
+        cueId: Int
     ) {
 
         if (sortOrder == SortOrder.HOT) {
@@ -44,51 +47,100 @@ object WSHQueryHelper {
             val yesterdayInMillis = Calendar.getInstance().timeInMillis - millisInADay
 
             if (filterString.isBlank()) {
-                addHotSelection(queryBuilder, yesterdayInMillis)
+                if (cueId == -1) {
+                    addHotSelection(queryBuilder, yesterdayInMillis)
+                } else {
+                    addHotSelectionFilterCue(queryBuilder, yesterdayInMillis, cueId)
+                }
             } else {
-                addFilterAndHotSelection(queryBuilder, filterString, yesterdayInMillis)
+                if (cueId == -1) {
+                    addFilterAndHotSelection(queryBuilder, filterString, yesterdayInMillis)
+                } else {
+                    addFilterAndHotSelectionFilterCue(queryBuilder, filterString, yesterdayInMillis, cueId)
+                }
             }
 
         } else {
             if (!filterString.isBlank()) {
-                addFilterSelection(queryBuilder, filterString)
+                if (cueId == -1) {
+                    addFilterSelection(queryBuilder, filterString)
+                } else {
+                    addFilterSelectionFilterCue(queryBuilder, filterString, cueId)
+                }
+            } else {
+                if (cueId != -1) {
+                    addFilterCue(queryBuilder, cueId)
+                }
             }
         }
     }
 
+    private fun addFilterCue(queryBuilder: SupportSQLiteQueryBuilder, cueId: Int) {
+        queryBuilder.selection(
+            "${StoryContract.COLUMN_CUE_ID} == ? ",
+            arrayOf(cueId)
+        )
+    }
+
     private fun addFilterSelection(
-            queryBuilder: SupportSQLiteQueryBuilder,
-            filterString: String
+        queryBuilder: SupportSQLiteQueryBuilder,
+        filterString: String
     ) {
         queryBuilder.selection(
-                "${CueContract.COLUMN_TEXT} LIKE ? OR ${CueContract.COLUMN_AUTHOR} LIKE ?",
-                arrayOf("%$filterString%", "%$filterString%")
+            "${CueContract.COLUMN_TEXT} LIKE ? OR ${CueContract.COLUMN_AUTHOR} LIKE ?",
+            arrayOf("%$filterString%", "%$filterString%")
+        )
+    }
+
+    private fun addFilterSelectionFilterCue(queryBuilder: SupportSQLiteQueryBuilder, filterString: String, cueId: Int) {
+        queryBuilder.selection(
+            "${CueContract.COLUMN_TEXT} LIKE ? OR ${CueContract.COLUMN_AUTHOR} LIKE ? AND ${StoryContract.COLUMN_CUE_ID} == ? ",
+            arrayOf("%$filterString%", "%$filterString%", cueId)
         )
     }
 
     private fun addFilterAndHotSelection(
-            queryBuilder: SupportSQLiteQueryBuilder,
-            filterString: String, yesterdayInMillis: Long
+        queryBuilder: SupportSQLiteQueryBuilder,
+        filterString: String, yesterdayInMillis: Long
     ) {
         queryBuilder.selection(
-                "${CueContract.COLUMN_TEXT} LIKE ? AND ${CueContract.COLUMN_CREATION_DATE} > ? ",
-                arrayOf("%$filterString%", yesterdayInMillis)
+            "${CueContract.COLUMN_TEXT} LIKE ? AND ${CueContract.COLUMN_CREATION_DATE} > ? ",
+            arrayOf("%$filterString%", yesterdayInMillis)
+        )
+    }
+
+    private fun addFilterAndHotSelectionFilterCue(
+        queryBuilder: SupportSQLiteQueryBuilder,
+        filterString: String,
+        yesterdayInMillis: Long,
+        cueId: Int
+    ) {
+        queryBuilder.selection(
+            "${CueContract.COLUMN_TEXT} LIKE ? AND ${CueContract.COLUMN_CREATION_DATE} > ? AND ${StoryContract.COLUMN_CUE_ID} == ? ",
+            arrayOf("%$filterString%", yesterdayInMillis, cueId)
         )
     }
 
     private fun addHotSelection(
-            queryBuilder: SupportSQLiteQueryBuilder,
-            yesterdayInMillis: Long
+        queryBuilder: SupportSQLiteQueryBuilder,
+        yesterdayInMillis: Long
     ) {
         queryBuilder.selection(
-                "${CueContract.COLUMN_CREATION_DATE}  > ? ",
-                arrayOf(yesterdayInMillis)
+            "${CueContract.COLUMN_CREATION_DATE}  > ? ",
+            arrayOf(yesterdayInMillis)
+        )
+    }
+
+    private fun addHotSelectionFilterCue(queryBuilder: SupportSQLiteQueryBuilder, yesterdayInMillis: Long, cueId: Int) {
+        queryBuilder.selection(
+            "${CueContract.COLUMN_CREATION_DATE}  > ? AND ${StoryContract.COLUMN_CUE_ID} == ? ",
+            arrayOf(yesterdayInMillis, cueId)
         )
     }
 
     private fun addSortOrder(
-            queryBuilder: SupportSQLiteQueryBuilder,
-            sortOrder: SortOrder
+        queryBuilder: SupportSQLiteQueryBuilder,
+        sortOrder: SortOrder
     ) {
         if (sortOrder == SortOrder.NEW) {
             queryBuilder.orderBy("${CueContract.COLUMN_CREATION_DATE} DESC")
@@ -98,3 +150,4 @@ object WSHQueryHelper {
         }
     }
 }
+

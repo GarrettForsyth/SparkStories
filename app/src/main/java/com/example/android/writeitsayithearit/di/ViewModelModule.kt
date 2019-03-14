@@ -2,6 +2,7 @@ package com.example.android.writeitsayithearit.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.android.writeitsayithearit.ui.cues.CueViewModel
 import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
 import com.example.android.writeitsayithearit.ui.cues.NewCueViewModel
 import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel
@@ -14,6 +15,11 @@ import dagger.multibindings.IntoMap
 
 @Module
 abstract class ViewModelModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CueViewModel::class)
+    abstract fun bindCueViewModel(cueViewModel: CueViewModel) : ViewModel
 
     @Binds
     @IntoMap

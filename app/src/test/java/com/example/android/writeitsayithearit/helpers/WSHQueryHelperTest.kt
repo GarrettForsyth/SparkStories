@@ -48,23 +48,37 @@ class WSHQueryHelperTest {
     }
 
     @Test
-    fun queryCuesSortHotAndFilterTest() {
+    fun queryCuesSortHotAndFilter() {
         val expectedSqlQuery = "SELECT  *  FROM cues WHERE text LIKE ? AND creation_date > ?  ORDER BY rating DESC"
         val query = WSHQueryHelper.cues(filterString = "updog", sortOrder = SortOrder.HOT).sql
         assertEquals(query,expectedSqlQuery)
     }
 
     @Test
-    fun queryAllStoriesTest(){
+    fun queryAllStories(){
         val expectedSqlQuery = "SELECT  *  FROM stories ORDER BY creation_date DESC"
         val query = WSHQueryHelper.stories().sql
         assertEquals(query,expectedSqlQuery)
     }
 
     @Test
-    fun queryStoriesFilterTest() {
+    fun queryStoriesFilter() {
         val expectedSqlQuery = "SELECT  *  FROM stories WHERE text LIKE ? OR author LIKE ? ORDER BY creation_date DESC"
         val query = WSHQueryHelper.stories(filterString = "updog").sql
+        assertEquals(query, expectedSqlQuery)
+    }
+
+    @Test
+    fun queryStoriesFilterCue() {
+        val expectedSqlQuery = "SELECT  *  FROM stories WHERE cue_id == ?  ORDER BY creation_date DESC"
+        val query = WSHQueryHelper.stories(filterString = "", cueId = 1).sql
+        assertEquals(query, expectedSqlQuery)
+    }
+
+    @Test
+    fun queryStoriesFilterAndFilterCue() {
+        val expectedSqlQuery = "SELECT  *  FROM stories WHERE text LIKE ? OR author LIKE ? AND cue_id == ?  ORDER BY creation_date DESC"
+        val query = WSHQueryHelper.stories(filterString = "updog", cueId = 1).sql
         assertEquals(query, expectedSqlQuery)
     }
 
@@ -76,9 +90,23 @@ class WSHQueryHelperTest {
     }
 
     @Test
+    fun queryStoriesSortNewAndFilterCue() {
+        val expectedSqlQuery = "SELECT  *  FROM stories WHERE cue_id == ?  ORDER BY creation_date DESC"
+        val query = WSHQueryHelper.stories(cueId = 1).sql
+        assertEquals(query,expectedSqlQuery)
+    }
+
+    @Test
     fun queryStoriesSortTop() {
         val expectedSqlQuery = "SELECT  *  FROM stories ORDER BY rating DESC"
         val query = WSHQueryHelper.stories(sortOrder = SortOrder.TOP).sql
+        assertEquals(query,expectedSqlQuery)
+    }
+
+    @Test
+    fun queryStoriesSortTopAndFilterCue() {
+        val expectedSqlQuery = "SELECT  *  FROM stories WHERE cue_id == ?  ORDER BY rating DESC"
+        val query = WSHQueryHelper.stories(sortOrder = SortOrder.TOP, cueId = 1).sql
         assertEquals(query,expectedSqlQuery)
     }
 
@@ -90,9 +118,23 @@ class WSHQueryHelperTest {
     }
 
     @Test
+    fun queryStoriesSortHotAndFilterCue() {
+        val expectedSqlQuery = "SELECT  *  FROM stories WHERE creation_date  > ? AND cue_id == ?  ORDER BY rating DESC"
+        val query = WSHQueryHelper.stories(sortOrder = SortOrder.HOT, cueId = 1).sql
+        assertEquals(query,expectedSqlQuery)
+    }
+
+    @Test
     fun queryStoriesSortHotAndFilterTest() {
         val expectedSqlQuery = "SELECT  *  FROM stories WHERE text LIKE ? AND creation_date > ?  ORDER BY rating DESC"
         val query = WSHQueryHelper.stories(filterString = "updog", sortOrder = SortOrder.HOT).sql
+        assertEquals(query,expectedSqlQuery)
+    }
+
+    @Test
+    fun queryStoriesSortHotAndFilterAndFilterCue() {
+        val expectedSqlQuery = "SELECT  *  FROM stories WHERE text LIKE ? AND creation_date > ? AND cue_id == ?  ORDER BY rating DESC"
+        val query = WSHQueryHelper.stories(filterString = "updog", sortOrder = SortOrder.HOT, cueId = 1).sql
         assertEquals(query,expectedSqlQuery)
     }
 }

@@ -14,8 +14,8 @@
             android:id="@+id/action_cuesFragment_to_newCueFragment"
             app:destination="@id/newCueFragment" />
         <action
-            android:id="@+id/action_cuesFragment_to_newStoryFragment"
-            app:destination="@id/newStoryFragment" />
+            android:id="@+id/action_cuesFragment_to_cueFragment"
+            app:destination="@id/cueFragment" />
     </fragment>
     <fragment
         android:id="@+id/newCueFragment"
@@ -60,6 +60,20 @@
         <argument
             android:name="story_id"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/cueFragment"
+        android:name="com.example.android.writeitsayithearit.ui.cues.CueFragment"
+        android:label="CueFragment" >
+        <argument
+            android:name="cue_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_storiesFragment_to_storyFragment"
+            app:destination="@id/storyFragment" />
+        <action
+            android:id="@+id/action_cueFragment_to_newStoryFragment"
+            app:destination="@id/newStoryFragment" />
     </fragment>
 
 </navigation>

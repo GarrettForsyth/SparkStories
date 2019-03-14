@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 
 import com.example.android.writeitsayithearit.R
@@ -21,7 +22,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @OpenForTesting
-class StoriesFragment : Fragment(), Injectable {
+class StoriesFragment @Inject constructor(): Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory

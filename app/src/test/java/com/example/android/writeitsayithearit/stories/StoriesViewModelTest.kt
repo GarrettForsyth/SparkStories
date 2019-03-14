@@ -45,41 +45,78 @@ class StoriesViewModelTest {
     fun getStories() {
         // mock response
         val stories = createTestStoryList(5)
-        every { storyRepository.stories("", SortOrder.NEW) } returns stories.asLiveData()
+        every { storyRepository.stories("", SortOrder.NEW, -1) } returns stories.asLiveData()
 
         // set filter to be ""
         storiesViewModel.filterQuery = ""
-        verify { storyRepository.stories("", SortOrder.NEW) }
+        verify { storyRepository.stories("", SortOrder.NEW, -1) }
 
         val observedStories = storiesViewModel.stories.getValueBlocking()
         stories.forEachIndexed { index, story ->
             assertEquals(stories[index], observedStories[index])
         }
     }
+
+    @Test
+    fun filterCue() {
+        storiesViewModel.filterCue(1)
+        verify(exactly = 1) { storyRepository.stories("", SortOrder.NEW, 1) }
+    }
+
     @Test
     fun filterQuery() {
         val filterString = "dogs"
         storiesViewModel.filterQuery = filterString
 
-        verify(exactly = 1) { storyRepository.stories(filterString, SortOrder.NEW) }
+        verify(exactly = 1) { storyRepository.stories(filterString, SortOrder.NEW, -1) }
+    }
+
+    @Test
+    fun filterQueryAndCue() {
+        val filterString = "dogs"
+        storiesViewModel.filterQuery = filterString
+        storiesViewModel.filterCue(1)
+
+        verify(exactly = 1) { storyRepository.stories(filterString, SortOrder.NEW, 1) }
     }
 
     @Test
     fun sortByNew() {
         storiesViewModel.sortOrder(SortOrder.NEW)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.NEW) }
+        verify(exactly = 1) { storyRepository.stories("", SortOrder.NEW, -1) }
+    }
+
+    @Test
+    fun sortByNewAndCue() {
+        storiesViewModel.sortOrder(SortOrder.NEW)
+        storiesViewModel.filterCue(1)
+        verify(exactly = 1) { storyRepository.stories("", SortOrder.NEW, 1) }
     }
 
     @Test
     fun sortByTop() {
         storiesViewModel.sortOrder(SortOrder.TOP)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.TOP) }
+        verify(exactly = 1) { storyRepository.stories("", SortOrder.TOP, -1) }
+    }
+
+    @Test
+    fun sortByTopAndCue() {
+        storiesViewModel.sortOrder(SortOrder.TOP)
+        storiesViewModel.filterCue(1)
+        verify(exactly = 1) { storyRepository.stories("", SortOrder.TOP, 1) }
     }
 
     @Test
     fun sortByHot() {
         storiesViewModel.sortOrder(SortOrder.HOT)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.HOT) }
+        verify(exactly = 1) { storyRepository.stories("", SortOrder.HOT, -1) }
+    }
+
+    @Test
+    fun sortByHotAndCue() {
+        storiesViewModel.sortOrder(SortOrder.HOT)
+        storiesViewModel.filterCue(1)
+        verify(exactly = 1) { storyRepository.stories("", SortOrder.HOT, 1) }
     }
 
     @Test
@@ -87,7 +124,16 @@ class StoriesViewModelTest {
         val filterString = "dogs"
         storiesViewModel.filterQuery = filterString
         storiesViewModel.sortOrder(SortOrder.HOT)
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.HOT) }
+        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.HOT, -1) }
+    }
+
+    @Test
+    fun filterQueryAndSortByHotAndCue() {
+        val filterString = "dogs"
+        storiesViewModel.filterQuery = filterString
+        storiesViewModel.sortOrder(SortOrder.HOT)
+        storiesViewModel.filterCue(1)
+        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.HOT, 1) }
     }
 
     @Test
@@ -95,7 +141,16 @@ class StoriesViewModelTest {
         val filterString = "dogs"
         storiesViewModel.sortOrder(SortOrder.NEW)
         storiesViewModel.filterQuery = filterString
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.NEW) }
+        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.NEW, -1) }
+    }
+
+    @Test
+    fun filterQueryAndSortByNewAndCue() {
+        val filterString = "dogs"
+        storiesViewModel.sortOrder(SortOrder.NEW)
+        storiesViewModel.filterQuery = filterString
+        storiesViewModel.filterCue(1)
+        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.NEW, 1) }
     }
 
     @Test
@@ -103,7 +158,16 @@ class StoriesViewModelTest {
         val filterString = "dogs"
         storiesViewModel.filterQuery = filterString
         storiesViewModel.sortOrder(SortOrder.TOP)
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.TOP) }
+        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.TOP, -1) }
+    }
+
+    @Test
+    fun filterQueryAndSortByTopAndCue() {
+        val filterString = "dogs"
+        storiesViewModel.filterQuery = filterString
+        storiesViewModel.sortOrder(SortOrder.TOP)
+        storiesViewModel.filterCue(1)
+        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.TOP, 1) }
     }
 
     @Test

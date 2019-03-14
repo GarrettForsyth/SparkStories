@@ -17,8 +17,8 @@ class StoryRepository @Inject constructor(
         private val wshQueryHelper: WSHQueryHelper
 ) {
 
-    fun stories(filterText: String, sortOrder: SortOrder): LiveData<List<Story>> {
-        return storyDao.stories(wshQueryHelper.stories(filterText, sortOrder))
+    fun stories(filterText: String, sortOrder: SortOrder, cueId: Int): LiveData<List<Story>> {
+        return storyDao.stories(wshQueryHelper.stories(filterText, sortOrder, cueId))
     }
 
     fun story(id: Int) = storyDao.story(id)

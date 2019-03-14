@@ -28,8 +28,6 @@ import javax.inject.Inject
 @OpenForTesting
 class CuesFragment : Fragment(), Injectable {
 
-
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -77,7 +75,7 @@ class CuesFragment : Fragment(), Injectable {
         cuesViewModel.cueClicked.observe(this, EventObserver { cueId ->
             navController().navigate(
                 CuesFragmentDirections
-                    .actionCuesFragmentToNewStoryFragment(cueId)
+                    .actionCuesFragmentToCueFragment(cueId)
             )
         })
     }

@@ -116,12 +116,12 @@ class CuesFragmentTest {
     }
 
     @Test
-    fun navigateToNewStoryFragmentWhenClickCueEventReceived() {
+    fun navigateToCueFragmentWhenClickCueEventReceived() {
         scenario.onFragment {
             it.cueClicked.value = Event(0)
             verify {
                 it.navController.navigate(
-                    CuesFragmentDirections.actionCuesFragmentToNewStoryFragment(
+                    CuesFragmentDirections.actionCuesFragmentToCueFragment(
                         0
                     )
                 )

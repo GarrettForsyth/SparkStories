@@ -32,25 +32,25 @@ class StoryRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.stories("", SortOrder.NEW) } returns mockedQuery
 
-        storyRepository.stories("", SortOrder.NEW)
+        storyRepository.stories("", SortOrder.NEW, -1)
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
     @Test
     fun loadStoriesLocallyFilterByText() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.stories("Dogs", SortOrder.NEW) } returns mockedQuery
+        every { wshQueryHelper.stories("Dogs", SortOrder.NEW, -1) } returns mockedQuery
 
-        storyRepository.stories("Dogs",SortOrder.NEW)
+        storyRepository.stories("Dogs",SortOrder.NEW, -1)
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
     @Test
     fun loadStoriesLocallyOrderByNew() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.stories("", SortOrder.NEW) } returns mockedQuery
+        every { wshQueryHelper.stories("", SortOrder.NEW, -1) } returns mockedQuery
 
-        storyRepository.stories("", SortOrder.NEW)
+        storyRepository.stories("", SortOrder.NEW, -1)
         verify(exactly = 1) { dao.stories(mockedQuery) }
 
     }
@@ -60,7 +60,7 @@ class StoryRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.stories("", SortOrder.TOP) } returns mockedQuery
 
-        storyRepository.stories("", SortOrder.TOP)
+        storyRepository.stories("", SortOrder.TOP, -1)
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
@@ -69,7 +69,7 @@ class StoryRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.stories("", SortOrder.HOT) } returns mockedQuery
 
-        storyRepository.stories("", SortOrder.HOT)
+        storyRepository.stories("", SortOrder.HOT, -1)
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
