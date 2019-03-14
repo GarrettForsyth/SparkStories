@@ -2,6 +2,7 @@ package com.example.android.writeitsayithearit.model.cue
 
 import android.text.format.DateFormat
 import androidx.annotation.NonNull
+import androidx.recyclerview.widget.DiffUtil
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -9,6 +10,7 @@ import androidx.room.PrimaryKey
 import com.example.android.writeitsayithearit.model.Datable
 import com.example.android.writeitsayithearit.model.author.Author
 import com.example.android.writeitsayithearit.model.author.AuthorContract
+import timber.log.Timber
 import java.util.*
 
 @Entity(tableName = CueContract.TABLE_NAME)
@@ -34,6 +36,12 @@ data class Cue(
     var id: Int = 0
 ): Datable {
 
+    companion object { val cueDiffCallback = object :DiffUtil.ItemCallback<Cue>(){
+            override fun areItemsTheSame(oldItem: Cue, newItem: Cue) = (oldItem.id == newItem.id)
+            override fun areContentsTheSame(oldItem: Cue, newItem: Cue) = (oldItem == newItem)
+        }
+    }
+
     override fun formattedDateTime(): String {
         //TODO: format date based on locale
         return DateFormat.format("hh:mm    dd/MM/yy", creationDate).toString()
@@ -55,13 +63,13 @@ data class Cue(
         0
     )
 
+    //TODO add hash
     override fun equals(other: Any?): Boolean {
         return (other is Cue)
                 && this.text.equals(other.text)
                 && this.author.equals(other.author)
                 && this.rating == other.rating
     }
-
 
 }
 

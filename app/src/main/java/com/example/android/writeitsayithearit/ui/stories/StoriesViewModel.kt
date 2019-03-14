@@ -1,6 +1,7 @@
 package com.example.android.writeitsayithearit.ui.stories
 
 import androidx.lifecycle.*
+import androidx.paging.PagedList
 import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.SortOrder
@@ -76,7 +77,7 @@ class StoriesViewModel @Inject constructor(
         filterText: String,
         sortOrder: SortOrder,
         cueId: Int
-    ): LiveData<List<Story>> {
+    ): LiveData<PagedList<Story>> {
         return storyRepository.stories(filterText, sortOrder, cueId)
     }
 

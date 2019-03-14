@@ -43,18 +43,9 @@ class CuesViewModelTest {
 
     @Test
     fun getCues() {
-        // mock response
-        val cues = createTestCueList(5)
-        every { cueRepository.cues("", SortOrder.NEW) } returns cues.asLiveData()
-
         // set filter to be ""
         cuesViewModel.filterQuery = ""
         verify { cueRepository.cues("", SortOrder.NEW) }
-
-        val observedCues = cuesViewModel.cues.getValueBlocking()
-        cues.forEachIndexed { index, cue ->
-            assertEquals(cues[index], observedCues[index])
-        }
     }
 
     @Test

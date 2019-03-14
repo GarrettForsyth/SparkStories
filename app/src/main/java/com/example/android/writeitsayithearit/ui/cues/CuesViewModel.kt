@@ -1,6 +1,7 @@
 package com.example.android.writeitsayithearit.ui.cues
 
 import androidx.lifecycle.*
+import androidx.paging.PagedList
 import com.example.android.writeitsayithearit.repos.CueRepository
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.cue.Cue
@@ -66,7 +67,7 @@ class CuesViewModel @Inject constructor(private val cueRepository: CueRepository
         _newCueFabClick.value = Event(true)
     }
 
-    private fun cues(filterText: String, sortOrder: SortOrder): LiveData<List<Cue>> {
+    private fun cues(filterText: String, sortOrder: SortOrder): LiveData<PagedList<Cue>> {
         return cueRepository.cues(filterText, sortOrder)
     }
 

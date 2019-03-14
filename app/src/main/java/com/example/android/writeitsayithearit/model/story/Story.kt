@@ -2,6 +2,7 @@ package com.example.android.writeitsayithearit.model.story
 
 import android.text.format.DateFormat
 import androidx.annotation.NonNull
+import androidx.recyclerview.widget.DiffUtil
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -9,6 +10,7 @@ import androidx.room.PrimaryKey
 import com.example.android.writeitsayithearit.model.Datable
 import com.example.android.writeitsayithearit.model.author.Author
 import com.example.android.writeitsayithearit.model.author.AuthorContract
+import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.cue.CueContract
 import java.util.*
 
@@ -51,6 +53,12 @@ data class Story(
     @ColumnInfo(name = StoryContract.COLUMN_ID)
     var id: Int = 0
 ): Datable {
+
+    companion object { val storyDiffCallback = object : DiffUtil.ItemCallback<Story>(){
+        override fun areItemsTheSame(oldItem: Story, newItem: Story) = (oldItem.id == newItem.id)
+        override fun areContentsTheSame(oldItem: Story, newItem: Story) = (oldItem == newItem)
+        }
+    }
 
     override fun formattedDateTime(): String {
         //TODO: format date based on locale

@@ -17,7 +17,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
-import com.example.android.writeitsayithearit.ui.stories.StoryViewHolder
+import com.example.android.writeitsayithearit.databinding.StoryListItemBinding
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragment
 import com.example.android.writeitsayithearit.ui.stories.StoriesFragmentDirections
 import com.example.android.writeitsayithearit.ui.util.events.Event
@@ -25,6 +25,8 @@ import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.model.story.Story
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.TestUtils.createTestStoryList
+import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
+import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -173,7 +175,7 @@ class StoriesFragmentTest {
         expectedOrder.forEachIndexed { listPosition, expectedIndex ->
             val expectedStory = stories[expectedIndex]
             onView(withId(R.id.stories_list))
-                .perform(RecyclerViewActions.scrollToPosition<StoryViewHolder>(listPosition))
+                .perform(RecyclerViewActions.scrollToPosition<DataBoundViewHolder<StoryListItemBinding>>(listPosition))
             onView(withId(R.id.stories_list))
                 .check(matches(hasDescendant(withText(expectedStory.text))))
         }
@@ -192,6 +194,7 @@ class StoriesFragmentTest {
             return (super.instantiate(classLoader, className, args) as TestStoriesFragment).apply {
                 this.storiesViewModel = mockk(relaxed = true)
                 this.viewModelFactory = ViewModelUtil.createFor(this.storiesViewModel)
+                this.appExecutors = InstantAppExecutors()
 
                 every { storiesViewModel.stories } returns liveResponseStories
                 every { storiesViewModel.hasResultsStatus } returns hasResults

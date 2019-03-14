@@ -1,6 +1,8 @@
 package com.example.android.writeitsayithearit.data
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.paging.PagedList
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.android.writeitsayithearit.model.story.Story
@@ -21,6 +23,6 @@ abstract class StoryDao {
     abstract fun story(id: Int): LiveData<Story>
 
     @RawQuery(observedEntities = [ Story::class ])
-    abstract fun stories(query: SupportSQLiteQuery): LiveData<List<Story>>
+    abstract fun stories(query: SupportSQLiteQuery): DataSource.Factory<Int, Story>
 
 }

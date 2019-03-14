@@ -2,6 +2,10 @@ package com.example.android.writeitsayithearit.cues
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -21,6 +25,7 @@ import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
+import com.example.android.writeitsayithearit.util.dataSourceFactoryToPagedList
 import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -97,7 +102,8 @@ class CueDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadCueList() {
-        val readCues = cueDao.cues(WSHQueryHelper.cues()).getValueBlocking()
+        val readCues = dataSourceFactoryToPagedList(
+            cueDao.cues(WSHQueryHelper.cues()), cues.size)
         for (cue in cues) {
             assert(readCues.contains(cue))
         }
@@ -107,7 +113,8 @@ class CueDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCueListWithFilter() {
         val query = WSHQueryHelper.cues(CUE_FILTER_TEXT)
-        val readCues = cueDao.cues(query).getValueBlocking()
+        val readCues = dataSourceFactoryToPagedList(
+            cueDao.cues(query), cues.size)
         assert(readCues.size == 6)
     }
 
@@ -115,7 +122,7 @@ class CueDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCueListWithSortOrderNew() {
         val query = WSHQueryHelper.cues("", SortOrder.NEW)
-        val readCues = cueDao.cues(query).getValueBlocking()
+        val readCues = dataSourceFactoryToPagedList(cueDao.cues(query), cues.size)
 
         val expectedCueOrder = SORT_NEW_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
@@ -125,7 +132,7 @@ class CueDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCueListWithTop() {
         val query = WSHQueryHelper.cues("", SortOrder.TOP)
-        val readCues = cueDao.cues(query).getValueBlocking()
+        val readCues = dataSourceFactoryToPagedList(cueDao.cues(query), cues.size)
 
         val expectedCueOrder = SORT_TOP_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
@@ -135,7 +142,7 @@ class CueDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCueListWithHot() {
         val query = WSHQueryHelper.cues("", SortOrder.HOT)
-        val readCues = cueDao.cues(query).getValueBlocking()
+        val readCues = dataSourceFactoryToPagedList(cueDao.cues(query), cues.size)
 
         val expectedCueOrder = SORT_HOT_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
@@ -145,7 +152,7 @@ class CueDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCueListWithHotWithFilter() {
         val query = WSHQueryHelper.cues(CUE_FILTER_TEXT, SortOrder.HOT)
-        val readCues = cueDao.cues(query).getValueBlocking()
+        val readCues = dataSourceFactoryToPagedList(cueDao.cues(query), cues.size)
 
         val expectedCueOrder = CUE_FILTER_SORT_HOT_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
@@ -155,7 +162,7 @@ class CueDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCueListWithTopWithFilter() {
         val query = WSHQueryHelper.cues(CUE_FILTER_TEXT, SortOrder.TOP)
-        val readCues = cueDao.cues(query).getValueBlocking()
+        val readCues = dataSourceFactoryToPagedList(cueDao.cues(query), cues.size)
 
         val expectedCueOrder = CUE_FILTER_SORT_TOP_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
@@ -165,7 +172,7 @@ class CueDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCueListWithNewWithFilter() {
         val query = WSHQueryHelper.cues(CUE_FILTER_TEXT, SortOrder.NEW)
-        val readCues = cueDao.cues(query).getValueBlocking()
+        val readCues = dataSourceFactoryToPagedList(cueDao.cues(query), cues.size)
 
         val expectedCueOrder = CUE_FILTER_SORT_NEW_INDICES
         assertCorrectOrder(expectedCueOrder, readCues)
@@ -176,5 +183,6 @@ class CueDaoTest {
             assert(cues[expectedOrder[i]].equals(actualOrder[i]))
         }
     }
+
 
 }

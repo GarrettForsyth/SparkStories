@@ -154,6 +154,9 @@ dependencies {
     // room
     implementation deps.room.runtime
 
+    // paging
+    implementation deps.paging.runtime_ktx
+
     // annotation processors
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.dagger.android_support_compiler

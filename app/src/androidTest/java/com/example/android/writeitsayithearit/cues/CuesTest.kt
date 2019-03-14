@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
+import com.example.android.writeitsayithearit.databinding.CueListItemBinding
 import com.example.android.writeitsayithearit.test.CustomMatchers.hasItemAtPosition
 import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_AUTHOR
 import com.example.android.writeitsayithearit.test.TestUtils.CUE_FILTER_AUTHOR_NEW_INDICES
@@ -25,7 +26,8 @@ import com.example.android.writeitsayithearit.test.TestUtils.SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
-import com.example.android.writeitsayithearit.ui.cues.CueViewHolder
+import com.example.android.writeitsayithearit.ui.common.DataBoundListAdapter
+import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
 import com.example.android.writeitsayithearit.util.CountingAppExecutorsRule
 import com.example.android.writeitsayithearit.util.DataBindingIdlingResourceRule
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
@@ -157,7 +159,7 @@ class CuesTest {
         expectedOrder.forEachIndexed { listPosition, expectedIndex ->
             val expectedCue = dbSeed.SEED_CUES[expectedIndex]
             onView(withId(R.id.cues_list))
-                .perform(RecyclerViewActions.scrollToPosition<CueViewHolder>(listPosition))
+                .perform(RecyclerViewActions.scrollToPosition<DataBoundViewHolder<CueListItemBinding>>(listPosition))
 
             onView(withId(R.id.cues_list))
                 .check(

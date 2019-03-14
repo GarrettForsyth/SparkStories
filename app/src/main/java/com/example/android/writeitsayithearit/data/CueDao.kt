@@ -1,6 +1,7 @@
 package com.example.android.writeitsayithearit.data
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.android.writeitsayithearit.model.cue.Cue
@@ -21,7 +22,7 @@ abstract class CueDao {
     abstract fun cue(id: Int): LiveData<Cue>
 
     @RawQuery(observedEntities = [ Cue::class ])
-    abstract fun cues(query: SupportSQLiteQuery): LiveData<List<Cue>>
+    abstract fun cues(query: SupportSQLiteQuery): DataSource.Factory<Int, Cue>
 
 
 }

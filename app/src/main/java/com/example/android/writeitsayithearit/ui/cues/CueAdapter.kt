@@ -2,40 +2,39 @@ package com.example.android.writeitsayithearit.ui.cues
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.writeitsayithearit.AppExecutors
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.CueListItemBinding
 import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.ui.common.DataBoundListAdapter
+import timber.log.Timber
 
-class CueAdapter(private val viewModel: CuesViewModel) : RecyclerView.Adapter<CueViewHolder>() {
-
-    private var cues: List<Cue>?  = null
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CueViewHolder {
-
-
+class CueAdapter(
+    private val viewModel: CuesViewModel,
+    appExecutors: AppExecutors
+) : DataBoundListAdapter<Cue, CueListItemBinding>(
+    appExecutors = appExecutors,
+    diffCallback = Cue.cueDiffCallback
+) {
+    override fun createBinding(parent: ViewGroup): CueListItemBinding {
+        Timber.d("mytest on create binding is called")
         val binding : CueListItemBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.cue_list_item,
-                parent,
-                false
+            LayoutInflater.from(parent.context),
+            R.layout.cue_list_item,
+            parent,
+            false
         )
-
-
         binding.viewmodel = viewModel
-        return CueViewHolder(binding)
+        return binding
     }
 
-    override fun onBindViewHolder(holder: CueViewHolder, position: Int) {
-        val cue = cues!!.get(position)
-        holder.bind(cue)
-    }
-
-    override fun getItemCount() = cues?.size ?: 0
-
-    fun setList(cues: List<Cue>) {
-        this.cues = cues
+    override fun bind(binding: CueListItemBinding, item: Cue) {
+        Timber.d("mytest calling bind with $item")
+        binding.cue = item
+        binding.viewmodel = viewModel
     }
 }

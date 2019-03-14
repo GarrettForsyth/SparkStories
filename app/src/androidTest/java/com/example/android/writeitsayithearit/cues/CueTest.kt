@@ -12,10 +12,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
+import com.example.android.writeitsayithearit.databinding.StoryListItemBinding
 import com.example.android.writeitsayithearit.test.CustomMatchers.hasItemAtPosition
 import com.example.android.writeitsayithearit.test.TestUtils.STORIES_FROM_FIRST_CUE_INDICES
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
-import com.example.android.writeitsayithearit.ui.stories.StoryViewHolder
+import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
 import com.example.android.writeitsayithearit.util.CountingAppExecutorsRule
 import com.example.android.writeitsayithearit.util.DataBindingIdlingResourceRule
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
@@ -118,7 +119,7 @@ class CueTest {
         expectedOrder.forEachIndexed { listPosition, expectedIndex ->
             val expectedStory = dbSeed.SEED_STORIES[expectedIndex]
             onView(withId(R.id.stories_list))
-                .perform(RecyclerViewActions.scrollToPosition<StoryViewHolder>(listPosition))
+                .perform(RecyclerViewActions.scrollToPosition<DataBoundViewHolder<StoryListItemBinding>>(listPosition))
             onView(withId(R.id.stories_list))
                 .check(
                     matches(

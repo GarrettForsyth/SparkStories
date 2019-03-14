@@ -21,6 +21,7 @@ import com.example.android.writeitsayithearit.ui.cues.CueFragment
 import com.example.android.writeitsayithearit.ui.cues.CueFragmentDirections
 import com.example.android.writeitsayithearit.ui.cues.CuesFragmentDirections
 import com.example.android.writeitsayithearit.ui.util.events.Event
+import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import io.mockk.every
 import io.mockk.mockk
@@ -92,6 +93,7 @@ class CueFragmentTest {
 
                 this.storiesFragment.storiesViewModel = mockk(relaxed = true)
                 this.storiesFragment.viewModelFactory = ViewModelUtil.createFor(this.storiesFragment.storiesViewModel)
+                this.storiesFragment.appExecutors = InstantAppExecutors()
 
                 every { cueViewModel.cue } returns this.cue
                 every { cueViewModel.newStoryButtonClick } returns newStoryButtonClick

@@ -6,17 +6,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.example.android.writeitsayithearit.AppExecutors
 
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentCuesBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -31,9 +34,13 @@ class CuesFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    @Inject
+    lateinit var appExecutors: AppExecutors
+
     lateinit var cuesViewModel: CuesViewModel
 
     private lateinit var binding: FragmentCuesBinding
+    private lateinit var cueAdapter: CueAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,8 +56,10 @@ class CuesFragment : Fragment(), Injectable {
         cuesViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CuesViewModel::class.java)
 
+        cueAdapter = CueAdapter(cuesViewModel, appExecutors)
+
         binding.viewmodel = cuesViewModel
-        binding.listAdapter = CueAdapter(cuesViewModel)
+        binding.listAdapter = cueAdapter
         binding.hasResults = false
         binding.executePendingBindings()
 
@@ -90,9 +99,7 @@ class CuesFragment : Fragment(), Injectable {
     private fun observeCues() {
         cuesViewModel.cues.observe(this, Observer { cues ->
             if (cues != null) {
-                binding.listAdapter?.setList(cues)
-                binding.listAdapter?.notifyDataSetChanged()
-                binding.executePendingBindings()
+                cueAdapter.submitList(cues)
                 cuesViewModel.setHasResults(!cues.isEmpty())
             } else {
                 cuesViewModel.setHasResults(false)

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.example.android.writeitsayithearit.AppExecutors
 
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.FragmentStoriesBinding
@@ -22,14 +23,19 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @OpenForTesting
-class StoriesFragment @Inject constructor(): Fragment(), Injectable {
+class StoriesFragment @Inject constructor() : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    @Inject
+    lateinit var appExecutors: AppExecutors
+
     lateinit var storiesViewModel: StoriesViewModel
 
     lateinit var binding: FragmentStoriesBinding
+
+    lateinit var storyAdapter: StoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +51,10 @@ class StoriesFragment @Inject constructor(): Fragment(), Injectable {
         storiesViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(StoriesViewModel::class.java)
 
+        storyAdapter = StoryAdapter(storiesViewModel, appExecutors)
+
         binding.viewmodel = storiesViewModel
-        binding.listAdapter = StoryAdapter(storiesViewModel)
+        binding.listAdapter = storyAdapter
         binding.hasResults = false
         binding.executePendingBindings()
 
@@ -76,9 +84,7 @@ class StoriesFragment @Inject constructor(): Fragment(), Injectable {
     private fun observeStories() {
         storiesViewModel.stories.observe(this, Observer { stories ->
             if (stories != null) {
-                binding.listAdapter?.setList(stories)
-                binding.listAdapter?.notifyDataSetChanged()
-                binding.executePendingBindings()
+                storyAdapter.submitList(stories)
                 storiesViewModel.setHasResults(!stories.isEmpty())
             } else {
                 storiesViewModel.setHasResults(false)

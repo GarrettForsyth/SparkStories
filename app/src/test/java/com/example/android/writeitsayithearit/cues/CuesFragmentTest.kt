@@ -17,14 +17,16 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
+import com.example.android.writeitsayithearit.databinding.CueListItemBinding
 import com.example.android.writeitsayithearit.ui.cues.CuesFragment
-import com.example.android.writeitsayithearit.ui.cues.CueViewHolder
 import com.example.android.writeitsayithearit.ui.cues.CuesFragmentDirections
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCueList
+import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
+import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -195,7 +197,7 @@ class CuesFragmentTest {
         expectedOrder.forEachIndexed { listPosition, expectedIndex ->
             val expectedCue = cues[expectedIndex]
             onView(withId(R.id.cues_list))
-                .perform(RecyclerViewActions.scrollToPosition<CueViewHolder>(listPosition))
+                .perform(RecyclerViewActions.scrollToPosition<DataBoundViewHolder<CueListItemBinding>>(listPosition))
             onView(withId(R.id.cues_list))
                 .check(matches(hasDescendant(withText(expectedCue.text))))
         }
@@ -214,6 +216,7 @@ class CuesFragmentTest {
             return (super.instantiate(classLoader, className, args) as TestCuesFragment).apply {
                 this.cuesViewModel = mockk(relaxed = true)
                 this.viewModelFactory = ViewModelUtil.createFor(this.cuesViewModel)
+                this.appExecutors = InstantAppExecutors()
 
                 every { cuesViewModel.cues } returns liveResponseCues
                 every { cuesViewModel.hasResultsStatus } returns hasResults
