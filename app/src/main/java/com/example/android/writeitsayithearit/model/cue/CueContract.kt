@@ -1,7 +1,7 @@
 package com.example.android.writeitsayithearit.model.cue
 
 /**
- * Class that defines the column and table names for the Cue model.
+ * Object that defines the column and table names for the Cue model.
  */
 object CueContract {
     const val TABLE_NAME = "cues"

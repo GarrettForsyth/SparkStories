@@ -20,6 +20,7 @@ import com.example.android.writeitsayithearit.model.story.Story
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
 import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
 import com.example.android.writeitsayithearit.ui.stories.StoryFragment
+import com.example.android.writeitsayithearit.ui.stories.StoryFragmentDirections
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.ViewModelUtil
 import io.mockk.every
@@ -82,6 +83,26 @@ class StoryFragmentTest {
     }
 
     @Test
+    fun onViewCommentsButtonPressed() {
+        scenario.onFragment {
+            it.story_comments_button.performClick()
+            verify { it.storyViewModel.onViewCommentsClick() }
+        }
+    }
+
+    @Test
+    fun navigateToCommentsFragment() {
+        scenario.onFragment {
+            it.story.value = STORY
+            it.viewCommentsEvent.value = Event(true)
+            verify {
+                it.navController.navigate(
+                    StoryFragmentDirections.actionStoryFragmentToCommentsFragment(STORY.id))
+            }
+        }
+    }
+
+    @Test
     fun showMenu() {
         scenario.onFragment {
             it.topMenuShown.value = Event(true)
@@ -111,6 +132,7 @@ class StoryFragmentTest {
                 every { storyViewModel.cue } returns this.cue
                 every { storyViewModel.topMenuStatus } returns this.topMenuShown
                 every { storyViewModel.cueDialog } returns this.cueDialog
+                every { storyViewModel.viewCommentsEvent } returns this.viewCommentsEvent
             }
         }
     }
@@ -121,6 +143,7 @@ class StoryFragmentTest {
         val story = MutableLiveData<Story>()
         val cue = MutableLiveData<Cue>()
         val topMenuShown = MutableLiveData<Event<Boolean>>()
+        val viewCommentsEvent = MutableLiveData<Event<Boolean>>()
         val cueDialog = MutableLiveData<Event<Boolean>>()
     }
 }

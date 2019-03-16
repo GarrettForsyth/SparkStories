@@ -2,7 +2,9 @@ package com.example.android.writeitsayithearit.test.data
 
 import android.app.Application
 import android.content.Context
-import com.example.android.writeitsayithearit.model.author.Author import com.example.android.writeitsayithearit.model.cue.Cue
+import com.example.android.writeitsayithearit.model.author.Author
+import com.example.android.writeitsayithearit.model.comment.Comment
+import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
 import org.json.JSONArray
 import org.json.JSONObject
@@ -39,21 +41,24 @@ class DatabaseSeed @Inject constructor(application: Application) {
     val SEED_AUTHORS:List<Author>
     val SEED_CUES:List<Cue>
     val SEED_STORIES:List<Story>
+    val SEED_COMMENTS:List<Comment>
 
     init {
         SEED_CUES = loadCues("fake_cues.json", application)
         SEED_AUTHORS = loadAuthors("fake_authors.json", application)
         SEED_STORIES  = loadStories("fake_stories.json", application)
+        SEED_COMMENTS = loadComments("fake_comments.json", application)
     }
 
     private fun loadAuthors(fileName: String, context: Context): List<Author> {
         val content = readJSONFromAssets(fileName, context)
         val authors :MutableList<Author> = mutableListOf()
         try {
-            val json = JSONObject(content.toString())
+            val json = JSONObject(content)
             val jsonAuthors: JSONArray = json.getJSONArray("authors")
             for(i in 0 until jsonAuthors.length()) {
                 val jsonAuthor = jsonAuthors.getJSONObject(i)
+
                 val name = jsonAuthor.getString("name")
                 val author = Author(name)
                 authors.add(author)
@@ -108,6 +113,40 @@ class DatabaseSeed @Inject constructor(application: Application) {
             e.printStackTrace()
         }
         return stories
+    }
+
+    private fun loadComments(fileName: String, context: Context): List<Comment> {
+        val content = readJSONFromAssets(fileName, context)
+        val comments :MutableList<Comment> = mutableListOf()
+        try {
+            val json = JSONObject(content.toString())
+            val jsonComments: JSONArray = json.getJSONArray("comments")
+            for(i in 0 until jsonComments.length()) {
+                val jsonComment = jsonComments.getJSONObject(i)
+                val id = jsonComment.getInt("id")
+                val storyId = jsonComment.getInt("story_id")
+                val parentId = jsonComment.getInt("parent_id")
+                val text = jsonComment.getString("text")
+                val author = jsonComment.getString("author")
+                val rating = jsonComment.getInt("rating")
+                val creationDate = creationDate(i)
+
+                val comment = Comment(
+                    id = id,
+                    storyId = storyId,
+                    parentId = parentId,
+                    text = text,
+                    author = author,
+                    rating = rating,
+                    creationDate = creationDate
+                )
+                comments.add(comment)
+            }
+        }catch(e: Exception) {
+            Timber.e("Error initializing JSON Object from authors.")
+            e.printStackTrace()
+        }
+        return comments
     }
 
     private fun readJSONFromAssets(fileName: String, context: Context): String {

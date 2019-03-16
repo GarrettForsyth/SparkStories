@@ -117,6 +117,22 @@
                     app:srcCompat="@drawable/ic_action_cues_black_24dp"
                     android:onClick="@{() -> viewmodel.onShowCueClick()}" />
 
+                <ImageButton
+                    android:id="@+id/story_comments_button"
+                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    android:stateListAnimator="@animator/top_menu_button_state"
+                    android:backgroundTint="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_small"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/like_story_button"
+                    app:layout_constraintLeft_toRightOf="@id/like_story_button"
+                    app:srcCompat="@drawable/ic_comment_black_24dp"
+                    android:onClick="@{() -> viewmodel.onViewCommentsClick()}" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>

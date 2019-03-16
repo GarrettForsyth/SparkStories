@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.model.author.Author
+import com.example.android.writeitsayithearit.model.comment.Comment
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
 import org.json.JSONArray
@@ -32,35 +33,37 @@ object TestUtils {
     /**
      * The expected orderings for each sort order.
      */
-    val SORT_NEW_INDICES = listOf(0,1,2,3,4,5,6,7,8,9, 10)
-    val SORT_TOP_INDICES = listOf(10, 9,8,7,6,5,4,3,2,1,0)
-    val SORT_HOT_INDICES = listOf(5,4,3,2,1,0)
+    val SORT_NEW_INDICES = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val SORT_TOP_INDICES = listOf(10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+    val SORT_HOT_INDICES = listOf(5, 4, 3, 2, 1, 0)
 
     /**
      * The expected cue orderings for each sort order with a filter query
      */
     val CUE_FILTER_TEXT = "ip"
-    val CUE_FILTER_SORT_HOT_INDICES = listOf(4,0)
-    val CUE_FILTER_SORT_NEW_INDICES = listOf(0,4,6,7,8,10)
-    val CUE_FILTER_SORT_TOP_INDICES = listOf(10,8,7,6,4,0)
+    val CUE_FILTER_SORT_HOT_INDICES = listOf(4, 0)
+    val CUE_FILTER_SORT_NEW_INDICES = listOf(0, 4, 6, 7, 8, 10)
+    val CUE_FILTER_SORT_TOP_INDICES = listOf(10, 8, 7, 6, 4, 0)
 
     val CUE_FILTER_AUTHOR = "Rose"
-    val CUE_FILTER_AUTHOR_NEW_INDICES = listOf(8,9)
+    val CUE_FILTER_AUTHOR_NEW_INDICES = listOf(8, 9)
 
     /**
      * The expected story orderings for each sort order with a filter query
      */
     val STORY_FILTER_TEXT = "vivamus a"
     val STORY_FILTER_SORT_HOT_INDICES = listOf(1)
-    val STORY_FILTER_SORT_NEW_INDICES = listOf(1,6,7)
-    val STORY_FILTER_SORT_TOP_INDICES = listOf(7,6,1)
+    val STORY_FILTER_SORT_NEW_INDICES = listOf(1, 6, 7)
+    val STORY_FILTER_SORT_TOP_INDICES = listOf(7, 6, 1)
 
     val STORY_FILTER_AUTHOR = "Cremin"
-    val STORY_FILTER_AUTHOR_NEW_INDICES = listOf(6,7)
+    val STORY_FILTER_AUTHOR_NEW_INDICES = listOf(6, 7)
 
     val FILTER_STRING_NO_MATCHES = "zzz"
 
-    val STORIES_FROM_FIRST_CUE_INDICES = listOf(0,1)
+    val STORIES_FROM_FIRST_CUE_INDICES = listOf(0, 1)
+
+    val FIRST_STORY_COMMENT_ORDER = listOf(0, 5, 6, 7, 1, 2, 8)
 
     fun createTestCue() = Cue(
         text = "Test cue text. Very interesting stuff.",
@@ -91,6 +94,35 @@ object TestUtils {
         creationDate = 0,
         rating = 0
     )
+
+    fun createTestComment() = Comment(
+        id = 0,
+        storyId = 1,
+        parentId = -1,
+        text = "This is a test comment!",
+        author = "Test Comment Author",
+        creationDate = 0,
+        rating = 0
+    )
+
+    fun createTestCommentList(n: Int): List<Comment> {
+        val comments: MutableList<Comment> = mutableListOf()
+        for (i in 0 until n) {
+            comments.add(
+                Comment(
+                    id = 0,
+                    storyId = 1,
+                    parentId = -1,
+                    text = "This is test comment $i!",
+                    author = "Test Comment Author $i",
+                    creationDate = 0,
+                    rating = 0
+                )
+            )
+        }
+        return comments
+    }
+
 
     fun createTestStoryList(n: Int): List<Story> {
         val stories: MutableList<Story> = mutableListOf()

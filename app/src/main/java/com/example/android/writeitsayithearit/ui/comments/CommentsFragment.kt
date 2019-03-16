@@ -1,4 +1,4 @@
-package com.example.android.writeitsayithearit.ui.stories
+package com.example.android.writeitsayithearit.ui.comments
 
 
 import android.os.Bundle
@@ -10,20 +10,25 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.android.writeitsayithearit.AppExecutors
 
 import com.example.android.writeitsayithearit.R
+import com.example.android.writeitsayithearit.databinding.FragmentCommentsBinding
 import com.example.android.writeitsayithearit.databinding.FragmentStoriesBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
+import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
+import com.example.android.writeitsayithearit.ui.stories.StoryAdapter
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
-import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * A simple [Fragment] subclass.
+ */
 @OpenForTesting
-class StoriesFragment @Inject constructor(): Fragment(), Injectable {
+class CommentsFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -31,11 +36,11 @@ class StoriesFragment @Inject constructor(): Fragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
-    lateinit var storiesViewModel: StoriesViewModel
+    lateinit var commentsViewModel: CommentsViewModel
 
-    lateinit var binding: FragmentStoriesBinding
+    lateinit var binding: FragmentCommentsBinding
 
-    lateinit var storyAdapter: StoryAdapter
+    lateinit var commentAdapter: CommentAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,58 +48,52 @@ class StoriesFragment @Inject constructor(): Fragment(), Injectable {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_stories,
+            R.layout.fragment_comments,
             container,
             false
         )
 
-        storiesViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(StoriesViewModel::class.java)
+        commentsViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(CommentsViewModel::class.java)
 
-        storyAdapter = StoryAdapter(storiesViewModel, appExecutors)
+        commentAdapter = CommentAdapter(commentsViewModel, appExecutors)
 
-        binding.viewmodel = storiesViewModel
-        binding.listAdapter = storyAdapter
+        binding.viewmodel = commentsViewModel
+        binding.listAdapter = commentAdapter
         binding.hasResults = false
         binding.executePendingBindings()
 
-        observeStories()
+        setStoryId()
+        observeComments()
         observeResultStatus()
-        observeStoryClick()
 
         return binding.root
     }
 
-    private fun observeStoryClick() {
-        storiesViewModel.storyClicked.observe(this, EventObserver { storyId ->
-            navController().navigate(
-                StoriesFragmentDirections
-                    .actionStoriesFragmentToStoryFragment(storyId)
-            )
-        })
+    private fun setStoryId() {
+        val args = CommentsFragmentArgs.fromBundle(arguments!!)
+        commentsViewModel.storyId(args.storyId)
     }
 
-    private fun observeResultStatus() {
-        storiesViewModel.hasResultsStatus.observe(this, EventObserver { hasResults ->
-            binding.hasResults = hasResults
-            binding.executePendingBindings()
-        })
-    }
-
-    private fun observeStories() {
-        storiesViewModel.stories.observe(this, Observer { stories ->
-            if (stories != null) {
-                storyAdapter.submitList(stories)
-                storiesViewModel.setHasResults(!stories.isEmpty())
+    private fun observeComments() {
+        commentsViewModel.comments.observe(this, Observer { comments ->
+            if (comments != null) {
+                commentAdapter.submitList(comments)
+                commentsViewModel.setHasResults(!comments.isEmpty())
             } else {
-                storiesViewModel.setHasResults(false)
+                commentsViewModel.setHasResults(false)
             }
         })
     }
 
+    private fun observeResultStatus() {
+        commentsViewModel.hasResultsStatus.observe(this, EventObserver { hasResults ->
+            binding.hasResults = hasResults
+            binding.executePendingBindings()
+        })
+    }
     /**
      * Created to override during tests.
      */
     fun navController() = findNavController()
-
 }

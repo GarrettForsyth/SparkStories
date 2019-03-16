@@ -128,6 +128,7 @@ class StoryTest {
         onView(withText(expectedRating))
             .check(matches(isDisplayed()))
     }
+
 // TODO: find out why this doesn't passed (stopped passing once nested in ScrollView)
 //    @Test
 //    fun zoom() {

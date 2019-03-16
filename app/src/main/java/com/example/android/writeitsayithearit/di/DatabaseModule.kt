@@ -36,6 +36,7 @@ class DatabaseModule {
                             database.authorDao().insert(dbSeed.SEED_AUTHORS)
                             database.cueDao().insert(dbSeed.SEED_CUES)
                             database.storyDao().insert(dbSeed.SEED_STORIES)
+                            database.commentDao().insert(dbSeed.SEED_COMMENTS)
                         }
                     }
                 })

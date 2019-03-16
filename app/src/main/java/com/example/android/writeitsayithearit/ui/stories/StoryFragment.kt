@@ -61,8 +61,20 @@ class StoryFragment : Fragment(), Injectable {
         observeCue()
         observeMenuStatus()
         observeCueDialog()
+        observeViewCommentsEvent()
+
 
         return binding.root
+    }
+
+    private fun observeViewCommentsEvent() {
+        storyViewModel.viewCommentsEvent.observe(this, EventObserver<Boolean> {
+            binding.story?.let {
+                navController().navigate(
+                    StoryFragmentDirections.actionStoryFragmentToCommentsFragment(it.id)
+                )
+            }
+        })
     }
 
     private fun observeCueDialog() {

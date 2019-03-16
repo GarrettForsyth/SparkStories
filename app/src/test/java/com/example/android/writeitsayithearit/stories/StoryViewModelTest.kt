@@ -41,6 +41,7 @@ class StoryViewModelTest {
         mockObserverFor(storyViewModel.cue)
         mockObserverFor(storyViewModel.topMenuStatus)
         mockObserverFor(storyViewModel.cueDialog)
+        mockObserverFor(storyViewModel.viewCommentsEvent)
     }
 
     @Test()
@@ -93,6 +94,12 @@ class StoryViewModelTest {
         storyViewModel.onLikeStoryClick()
         val updatedStory = story.copy().apply { rating++ }
         verify { storyRepository.update(updatedStory) }
+    }
+
+    @Test
+    fun onViewCommentsClick() {
+        storyViewModel.onViewCommentsClick()
+        assertTrue(storyViewModel.viewCommentsEvent.getValueBlocking().peekContent())
     }
 
 }

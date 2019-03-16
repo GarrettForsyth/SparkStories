@@ -37,6 +37,11 @@ class StoryViewModel @Inject constructor(
     val cueDialog: LiveData<Event<Boolean>>
         get() = _cueDialog
 
+    private val _viewCommentsEvent = MutableLiveData<Event<Boolean>>()
+    val viewCommentsEvent: LiveData<Event<Boolean>>
+        get() = _viewCommentsEvent
+
+
     init {
         _topMenuStatus.value = Event(true)
     }
@@ -68,6 +73,10 @@ class StoryViewModel @Inject constructor(
 
     fun onShowCueClick() {
         _cueDialog.value = Event(true)
+    }
+
+    fun onViewCommentsClick() {
+        _viewCommentsEvent.value = Event(true)
     }
 
 }

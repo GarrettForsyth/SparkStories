@@ -3,6 +3,7 @@ package com.example.android.writeitsayithearit.data
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.android.writeitsayithearit.model.author.Author
+import com.example.android.writeitsayithearit.model.comment.Comment
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
 
@@ -10,9 +11,10 @@ import com.example.android.writeitsayithearit.model.story.Story
         entities = [
             Cue::class,
             Story::class,
-            Author::class
+            Author::class,
+            Comment::class
         ],
-        version = 8,
+        version = 9,
         exportSchema = false
 )
 abstract class WriteItSayItHearItDatabase : RoomDatabase() {
@@ -22,4 +24,6 @@ abstract class WriteItSayItHearItDatabase : RoomDatabase() {
     abstract fun storyDao(): StoryDao
 
     abstract fun authorDao(): AuthorDao
+
+    abstract fun commentDao(): CommentDao
 }

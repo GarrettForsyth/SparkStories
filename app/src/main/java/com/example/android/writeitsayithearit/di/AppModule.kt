@@ -4,10 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.android.writeitsayithearit.api.WriteItSayItHearItService
-import com.example.android.writeitsayithearit.data.AuthorDao
-import com.example.android.writeitsayithearit.data.CueDao
-import com.example.android.writeitsayithearit.data.StoryDao
-import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
+import com.example.android.writeitsayithearit.data.*
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import com.example.android.writeitsayithearit.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
@@ -53,6 +50,12 @@ class AppModule {
     @Provides
     fun provideAuthorDao(db: WriteItSayItHearItDatabase): AuthorDao {
         return db.authorDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCommentDao(db: WriteItSayItHearItDatabase): CommentDao {
+        return db.commentDao()
     }
 
     @Singleton
