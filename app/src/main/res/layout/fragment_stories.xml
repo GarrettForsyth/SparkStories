@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="com.example.android.writeitsayithearit.binding.Converter" />
 
         <variable
@@ -18,6 +18,7 @@
         <variable
             name="listAdapter"
             type="com.example.android.writeitsayithearit.ui.stories.StoryAdapter" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,68 +29,66 @@
         tools:context=".ui.stories.StoriesFragment">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:theme="@style/Theme.WriteItSayItHearIt.FilterTextInputLayout"
             android:id="@+id/filter_stories_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/Theme.WriteItSayItHearIt.FilterTextInputLayout"
             app:layout_constraintBottom_toTopOf="@id/stories_list"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintEnd_toStartOf="@id/sort_order_spinner"
-            app:layout_constraintRight_toLeftOf="@id/sort_order_spinner">
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/sort_order_spinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:theme="@style/Theme.WriteItSayItHearIt.FilterEditText"
-                android:text="@={viewmodel.filterQuery}"
                 android:id="@+id/filter_stories_edit_text"
-                android:imeOptions="actionDone"
-                android:hint="@string/filter_stories"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:hint="@string/filter_stories"
+                android:imeOptions="actionDone"
+                android:text="@={viewmodel.queryParameters.filterString}"
+                android:theme="@style/Theme.WriteItSayItHearIt.FilterEditText" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/sort_order_spinner"
-            app:entries="@{@stringArray/sort_order}"
-            app:onItemSelected="@{(selection) -> viewmodel.sortOrder(Converter.toSortOrder(selection))}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:entries="@{@stringArray/sort_order}"
             app:layout_constraintBottom_toTopOf="@id/stories_list"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/filter_stories_layout"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@id/filter_stories_layout"
-            app:layout_constraintLeft_toRightOf="@id/filter_stories_layout">
-        </androidx.appcompat.widget.AppCompatSpinner>
+            app:layout_constraintTop_toTopOf="parent"
+            app:onItemSelected="@{(selection) -> viewmodel.queryParameters.setSortOrder(Converter.toSortOrder(selection)) }"/>
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stories_list"
-            android:adapter="@{listAdapter}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/filter_stories_layout"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:adapter="@{listAdapter}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filter_stories_layout"
             tools:listItem="@layout/story_list_item" />
 
         <TextView
-                style="@style/Theme.WriteItSayItHearIt.NoResultsFoundStyle"
-                android:id="@+id/no_results"
-                android:text="@string/no_results"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/no_results"
+            style="@style/Theme.WriteItSayItHearIt.NoResultsFoundStyle"
             visibleGone="@{!hasResults}"
-        />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_results"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

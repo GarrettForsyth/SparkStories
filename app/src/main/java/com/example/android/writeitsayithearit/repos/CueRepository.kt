@@ -9,6 +9,7 @@ import com.example.android.writeitsayithearit.data.CueDao
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.SortOrder
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import javax.inject.Inject
 
 class CueRepository @Inject constructor(
@@ -18,8 +19,11 @@ class CueRepository @Inject constructor(
         private val wshQueryHelper: WSHQueryHelper
 ) {
 
-    fun cues(filterText: String, sortOrder: SortOrder): LiveData<PagedList<Cue>> {
-        val factory = cueDao.cues(wshQueryHelper.cues(filterText, sortOrder))
+    fun cues(queryParameters: QueryParameters): LiveData<PagedList<Cue>> {
+        val factory = cueDao.cues(wshQueryHelper.cues(
+            queryParameters.filterString,
+            queryParameters.sortOrder
+        ))
         return LivePagedListBuilder<Int, Cue>(factory, getCuePagedListConfig()).build()
     }
 

@@ -6,43 +6,24 @@ import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.model.story.Story
+import com.example.android.writeitsayithearit.ui.util.ObservedMutableLiveData
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import javax.inject.Inject
 
 class StoriesViewModel @Inject constructor(
     private val storyRepository: StoryRepository
 ) : ViewModel() {
 
-    var filterQuery
-        get() = _filterQuery.value ?: ""
-        set(value) {
-            _filterQuery.value = value
-        }
+    private val _queryParameters = ObservedMutableLiveData<QueryParameters>()
+    val queryParameters = QueryParameters(-1, "", SortOrder.NEW)
 
-    private val _stories = MediatorLiveData<List<Story>>()
-    val stories: LiveData<List<Story>> = _stories
-
-    private val _sortOrder = MutableLiveData<SortOrder>()
-    private val _sortedStories = Transformations.switchMap(_sortOrder) { sortOrder ->
-        stories(_filterQuery.value ?: "",
-            _sortOrder.value!!,
-            _filterCue.value ?: -1
-        )
+    private val _stories = Transformations.switchMap(_queryParameters) { parameters ->
+        stories(parameters)
     }
+    val stories: LiveData<PagedList<Story>> = _stories
 
-    private val _filterQuery = MutableLiveData<String>()
-    private val _filteredStories = Transformations.switchMap(_filterQuery) { query ->
-        stories(query,
-            _sortOrder.value ?: SortOrder.NEW,
-            _filterCue.value ?: -1
-        )
-    }
-
-    private val _filterCue = MutableLiveData<Int>()
-    private val _filteredStoriesByCue = Transformations.switchMap(_filterCue) { cueId ->
-        stories(_filterQuery.value ?: "",
-            _sortOrder.value ?: SortOrder.NEW,
-            cueId
-        )
+    init {
+        _queryParameters.postValue(queryParameters)
     }
 
     private val _hasResultsStatus = MutableLiveData<Event<Boolean>>()
@@ -53,14 +34,6 @@ class StoriesViewModel @Inject constructor(
     val storyClicked: LiveData<Event<Int>>
         get() = _storyClicked
 
-
-    init {
-        _stories.addSource(_filteredStories) { _stories.value = _filteredStories.value!! }
-        _stories.addSource(_sortedStories) { _stories.value = _sortedStories.value!! }
-        _stories.addSource(_filteredStoriesByCue) { _stories.value = _filteredStoriesByCue.value!! }
-        _hasResultsStatus.value = Event(false)
-    }
-
     fun setHasResults(hasResults: Boolean) {
         _hasResultsStatus.value = Event(hasResults)
     }
@@ -69,16 +42,8 @@ class StoriesViewModel @Inject constructor(
         _storyClicked.value = Event(cueId)
     }
 
-    fun sortOrder(sortOrder: SortOrder) = _sortOrder.postValue(sortOrder)
-
-    fun filterCue(cueId: Int) = _filterCue.postValue(cueId)
-
-    private fun stories(
-        filterText: String,
-        sortOrder: SortOrder,
-        cueId: Int
-    ): LiveData<PagedList<Story>> {
-        return storyRepository.stories(filterText, sortOrder, cueId)
+    private fun stories(parameters: QueryParameters): LiveData<PagedList<Story>> {
+        return storyRepository.stories(parameters)
     }
 
 }

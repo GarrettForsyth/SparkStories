@@ -21,7 +21,6 @@ class CueAdapter(
     diffCallback = Cue.cueDiffCallback
 ) {
     override fun createBinding(parent: ViewGroup): CueListItemBinding {
-        Timber.d("mytest on create binding is called")
         val binding : CueListItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.cue_list_item,
@@ -33,7 +32,6 @@ class CueAdapter(
     }
 
     override fun bind(binding: CueListItemBinding, item: Cue) {
-        Timber.d("mytest calling bind with $item")
         binding.cue = item
         binding.viewmodel = viewModel
     }

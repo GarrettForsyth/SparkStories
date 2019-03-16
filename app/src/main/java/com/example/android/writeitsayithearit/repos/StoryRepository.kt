@@ -5,12 +5,10 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.android.writeitsayithearit.AppExecutors
 import com.example.android.writeitsayithearit.api.WriteItSayItHearItService
-import com.example.android.writeitsayithearit.data.AuthorDao
 import com.example.android.writeitsayithearit.data.StoryDao
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
-import com.example.android.writeitsayithearit.model.SortOrder
-import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.story.Story
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import javax.inject.Inject
 
 class StoryRepository @Inject constructor(
@@ -20,8 +18,12 @@ class StoryRepository @Inject constructor(
         private val wshQueryHelper: WSHQueryHelper
 ) {
 
-    fun stories(filterText: String, sortOrder: SortOrder, cueId: Int): LiveData<PagedList<Story>> {
-        val factory =  storyDao.stories(wshQueryHelper.stories(filterText, sortOrder, cueId))
+    fun stories(queryParameters: QueryParameters): LiveData<PagedList<Story>> {
+        val factory =  storyDao.stories(wshQueryHelper.stories(
+            queryParameters.filterString,
+            queryParameters.sortOrder,
+            queryParameters.filterCueId
+        ))
         return LivePagedListBuilder<Int, Story>(factory, getStoryPagedListConfig()).build()
     }
 

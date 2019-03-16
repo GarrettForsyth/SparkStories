@@ -41,7 +41,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/filter_cues_edit_text"
-                android:text="@={viewmodel.filterQuery}"
+                android:text="@={viewmodel.queryParameters.filterString}"
                 android:imeOptions="actionDone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/sort_order_spinner"
             app:entries="@{@stringArray/sort_order}"
-            app:onItemSelected="@{(selection) -> viewmodel.sortOrder(Converter.toSortOrder(selection))}"
+            app:onItemSelected="@{(selection) -> viewmodel.queryParameters.setSortOrder(Converter.toSortOrder(selection)) }"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/cues_list"

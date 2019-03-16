@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario.launchInContainer
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
+import androidx.paging.PagedList
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -27,6 +28,7 @@ import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.TestUtils.createTestStoryList
 import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
+import com.example.android.writeitsayithearit.util.mockPagedList
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -61,7 +63,7 @@ class StoriesFragmentTest {
     fun storiesAreInsideStoryList() {
         scenario.onFragment {
             val stories = createTestStoryList(5)
-            it.liveResponseStories.postValue(stories)
+            it.liveResponseStories.postValue(mockPagedList(stories))
             val indices = (0 until stories.size).toList()
             verifyInsideRecyclerView(indices, stories)
             verify(exactly = 1) { it.storiesViewModel.setHasResults(true) }
@@ -78,8 +80,8 @@ class StoriesFragmentTest {
     @Test
     fun setsZeroResultsOnEmptyList() {
         scenario.onFragment {
-            it.liveResponseStories.value = (emptyList())
-            verify(exactly = 1) { it.storiesViewModel.setHasResults(false) }
+            it.liveResponseStories.value = mockPagedList(emptyList())
+            verify { it.storiesViewModel.setHasResults(false) }
         }
     }
 
@@ -111,7 +113,7 @@ class StoriesFragmentTest {
     fun clickStoryEventSent() {
         scenario.onFragment {
             val stories = createTestStoryList(5)
-            it.liveResponseStories.value = stories
+            it.liveResponseStories.value = mockPagedList(stories)
             it.stories_list.children.first().callOnClick()
             verify(exactly = 1) { it.storiesViewModel.onClickStory(0) }
         }
@@ -136,10 +138,10 @@ class StoriesFragmentTest {
             .perform(typeText(filterString))
         scenario.onFragment {
             verify {
-                it.storiesViewModel.filterQuery = "d"
-                it.storiesViewModel.filterQuery = "do"
-                it.storiesViewModel.filterQuery = "dog"
-                it.storiesViewModel.filterQuery = "dogs"
+                it.storiesViewModel.queryParameters.filterString = "d"
+                it.storiesViewModel.queryParameters.filterString = "do"
+                it.storiesViewModel.queryParameters.filterString = "dog"
+                it.storiesViewModel.queryParameters.filterString = "dogs"
             }
         }
     }
@@ -148,7 +150,7 @@ class StoriesFragmentTest {
     fun selectingNewSortOrderQueriesViewModel() {
         scenario.onFragment {
             it.sort_order_spinner.setSelection(0)
-            verify { it.storiesViewModel.sortOrder(SortOrder.NEW) }
+            verify { it.storiesViewModel.queryParameters.sortOrder = SortOrder.NEW }
         }
     }
 
@@ -156,7 +158,7 @@ class StoriesFragmentTest {
     fun selectingTopSortOrderQueriesViewModel() {
         scenario.onFragment {
             it.sort_order_spinner.setSelection(1)
-            verify { it.storiesViewModel.sortOrder(SortOrder.TOP) }
+            verify { it.storiesViewModel.queryParameters.sortOrder = SortOrder.TOP }
         }
     }
 
@@ -164,7 +166,7 @@ class StoriesFragmentTest {
     fun selectingHotSortOrderQueriesViewModel() {
         scenario.onFragment {
             it.sort_order_spinner.setSelection(2)
-            verify { it.storiesViewModel.sortOrder(SortOrder.HOT) }
+            verify { it.storiesViewModel.queryParameters.sortOrder = SortOrder.HOT }
         }
     }
 
@@ -212,7 +214,7 @@ class StoriesFragmentTest {
      */
     class TestStoriesFragment : StoriesFragment() {
         val navController: NavController = mockk(relaxed = true)
-        val liveResponseStories = MutableLiveData<List<Story>>()
+        val liveResponseStories = MutableLiveData<PagedList<Story>>()
         val hasResults = MutableLiveData<Event<Boolean>>()
         val storyClicked = MutableLiveData<Event<Int>>()
         override fun navController() = navController

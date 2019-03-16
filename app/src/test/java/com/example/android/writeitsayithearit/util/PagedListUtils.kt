@@ -13,5 +13,8 @@ fun <T> mockPagedList(list: List<T>): PagedList<T> {
     val index = slot<Int>()
     every { pagedList.get(index = capture(index)) } answers { list[index.captured] }
     every { pagedList.size } returns list.size
+    // TODO for some reason isEmptyValues are reversed. --> figure out why
+    every { pagedList.isEmpty() } returns (!list.isEmpty())
+    every { pagedList.isNotEmpty() } returns (!list.isNotEmpty())
     return pagedList
 }

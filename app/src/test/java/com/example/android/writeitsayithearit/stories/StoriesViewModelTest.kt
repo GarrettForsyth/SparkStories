@@ -8,6 +8,7 @@ import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.TestUtils.createTestStoryList
 import com.example.android.writeitsayithearit.test.asLiveData
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
@@ -44,121 +45,156 @@ class StoriesViewModelTest {
     @Test
     fun getStories() {
         // set filter to be ""
-        storiesViewModel.filterQuery = ""
-        verify { storyRepository.stories("", SortOrder.NEW, -1) }
+        storiesViewModel.queryParameters.filterString = ""
+        val expectedParameters = QueryParameters(-1, "", SortOrder.NEW)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterCue() {
-        storiesViewModel.filterCue(1)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.NEW, 1) }
+        storiesViewModel.queryParameters.filterCueId = 1
+        val expectedParameters = QueryParameters(1, "", SortOrder.NEW)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterQuery() {
         val filterString = "dogs"
-        storiesViewModel.filterQuery = filterString
+        storiesViewModel.queryParameters.filterString = filterString
 
-        verify(exactly = 1) { storyRepository.stories(filterString, SortOrder.NEW, -1) }
+        val expectedParameters = QueryParameters(-1, filterString, SortOrder.NEW)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndCue() {
         val filterString = "dogs"
-        storiesViewModel.filterQuery = filterString
-        storiesViewModel.filterCue(1)
-
-        verify(exactly = 1) { storyRepository.stories(filterString, SortOrder.NEW, 1) }
+        storiesViewModel.queryParameters.apply {
+            this.filterString = filterString
+            filterCueId = 1
+        }
+        val expectedParameters = QueryParameters(1, filterString, SortOrder.NEW)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun sortByNew() {
-        storiesViewModel.sortOrder(SortOrder.NEW)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.NEW, -1) }
+        storiesViewModel.queryParameters.sortOrder = SortOrder.NEW
+        val expectedParameters = QueryParameters(-1, "", SortOrder.NEW)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun sortByNewAndCue() {
-        storiesViewModel.sortOrder(SortOrder.NEW)
-        storiesViewModel.filterCue(1)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.NEW, 1) }
+        storiesViewModel.queryParameters.apply {
+            filterCueId = 1
+            sortOrder = SortOrder.NEW
+        }
+        val expectedParameters = QueryParameters(1, "", SortOrder.NEW)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun sortByTop() {
-        storiesViewModel.sortOrder(SortOrder.TOP)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.TOP, -1) }
+        storiesViewModel.queryParameters.sortOrder = SortOrder.TOP
+        val expectedParameters = QueryParameters(-1, "", SortOrder.TOP)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun sortByTopAndCue() {
-        storiesViewModel.sortOrder(SortOrder.TOP)
-        storiesViewModel.filterCue(1)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.TOP, 1) }
+        storiesViewModel.queryParameters.apply {
+            filterCueId = 1
+            sortOrder = SortOrder.TOP
+        }
+        val expectedParameters = QueryParameters(1, "", SortOrder.TOP)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun sortByHot() {
-        storiesViewModel.sortOrder(SortOrder.HOT)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.HOT, -1) }
+        storiesViewModel.queryParameters.sortOrder = SortOrder.HOT
+        val expectedParameters = QueryParameters(-1, "", SortOrder.HOT)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun sortByHotAndCue() {
-        storiesViewModel.sortOrder(SortOrder.HOT)
-        storiesViewModel.filterCue(1)
-        verify(exactly = 1) { storyRepository.stories("", SortOrder.HOT, 1) }
+        storiesViewModel.queryParameters.apply {
+            sortOrder = SortOrder.HOT
+            filterCueId = 1
+        }
+        val expectedParameters = QueryParameters(1, "", SortOrder.HOT)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByHot() {
         val filterString = "dogs"
-        storiesViewModel.filterQuery = filterString
-        storiesViewModel.sortOrder(SortOrder.HOT)
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.HOT, -1) }
+        storiesViewModel.queryParameters.apply {
+            this.filterString = filterString
+            sortOrder = SortOrder.HOT
+        }
+        val expectedParameters = QueryParameters(-1, "dogs", SortOrder.HOT)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByHotAndCue() {
         val filterString = "dogs"
-        storiesViewModel.filterQuery = filterString
-        storiesViewModel.sortOrder(SortOrder.HOT)
-        storiesViewModel.filterCue(1)
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.HOT, 1) }
+        storiesViewModel.queryParameters.apply {
+            this.filterString = filterString
+            filterCueId = 1
+            sortOrder = SortOrder.HOT
+        }
+        val expectedParameters = QueryParameters(1, "dogs", SortOrder.HOT)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByNew() {
         val filterString = "dogs"
-        storiesViewModel.sortOrder(SortOrder.NEW)
-        storiesViewModel.filterQuery = filterString
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.NEW, -1) }
+        storiesViewModel.queryParameters.apply {
+            sortOrder = SortOrder.NEW
+            this.filterString = filterString
+        }
+        val expectedParameters = QueryParameters(-1, "dogs", SortOrder.NEW)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByNewAndCue() {
         val filterString = "dogs"
-        storiesViewModel.sortOrder(SortOrder.NEW)
-        storiesViewModel.filterQuery = filterString
-        storiesViewModel.filterCue(1)
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.NEW, 1) }
+        storiesViewModel.queryParameters.apply {
+            sortOrder = SortOrder.NEW
+            this.filterString = filterString
+            filterCueId = 1
+        }
+        val expectedParameters = QueryParameters(1, "dogs", SortOrder.NEW)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByTop() {
         val filterString = "dogs"
-        storiesViewModel.filterQuery = filterString
-        storiesViewModel.sortOrder(SortOrder.TOP)
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.TOP, -1) }
+        storiesViewModel.queryParameters.apply {
+            this.filterString = filterString
+            sortOrder = SortOrder.TOP
+        }
+        val expectedParameters = QueryParameters(-1, "dogs", SortOrder.TOP)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByTopAndCue() {
         val filterString = "dogs"
-        storiesViewModel.filterQuery = filterString
-        storiesViewModel.sortOrder(SortOrder.TOP)
-        storiesViewModel.filterCue(1)
-        verify(exactly = 1) { storyRepository.stories("dogs", SortOrder.TOP, 1) }
+        storiesViewModel.queryParameters.apply {
+            this.filterString = filterString
+            sortOrder = SortOrder.TOP
+            filterCueId = 1
+        }
+        val expectedParameters = QueryParameters(1, "dogs", SortOrder.TOP)
+        verify { storyRepository.stories(expectedParameters) }
     }
 
     @Test

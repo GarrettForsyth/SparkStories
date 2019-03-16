@@ -10,6 +10,7 @@ import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -32,7 +33,7 @@ class CueRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.cues("", SortOrder.NEW) } returns mockedQuery
 
-        cueRepository.cues("", SortOrder.NEW)
+        cueRepository.cues(QueryParameters( -1, "", SortOrder.NEW))
         verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 
@@ -41,7 +42,7 @@ class CueRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.cues("Dogs", SortOrder.NEW) } returns mockedQuery
 
-        cueRepository.cues("Dogs",SortOrder.NEW)
+        cueRepository.cues(QueryParameters( -1, "Dogs", SortOrder.NEW))
         verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 
@@ -50,7 +51,7 @@ class CueRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.cues("", SortOrder.NEW) } returns mockedQuery
 
-        cueRepository.cues("", SortOrder.NEW)
+        cueRepository.cues(QueryParameters( -1, "", SortOrder.NEW))
         verify(exactly = 1) { dao.cues(mockedQuery) }
 
     }
@@ -60,7 +61,7 @@ class CueRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.cues("", SortOrder.TOP) } returns mockedQuery
 
-        cueRepository.cues("", SortOrder.TOP)
+        cueRepository.cues(QueryParameters( -1, "", SortOrder.TOP))
         verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 
@@ -69,7 +70,7 @@ class CueRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.cues("", SortOrder.HOT) } returns mockedQuery
 
-        cueRepository.cues("", SortOrder.HOT)
+        cueRepository.cues(QueryParameters( -1, "", SortOrder.HOT))
         verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 

@@ -8,6 +8,7 @@ import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCueList
 import com.example.android.writeitsayithearit.test.asLiveData
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
@@ -43,59 +44,71 @@ class CuesViewModelTest {
 
     @Test
     fun getCues() {
-        // set filter to be ""
-        cuesViewModel.filterQuery = ""
-        verify { cueRepository.cues("", SortOrder.NEW) }
+        cuesViewModel.queryParameters.filterString = ""
+        val expectedParameters = QueryParameters(-1, "", SortOrder.NEW)
+        verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun filterQuery() {
         val filterString = "dogs"
-        cuesViewModel.filterQuery = filterString
-
-        verify(exactly = 1) { cueRepository.cues(filterString, SortOrder.NEW) }
+        cuesViewModel.queryParameters.filterString = filterString
+        val expectedParameters = QueryParameters(-1, filterString, SortOrder.NEW)
+        verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun sortByNew() {
-        cuesViewModel.sortOrder(SortOrder.NEW)
-        verify(exactly = 1) { cueRepository.cues("", SortOrder.NEW) }
+        cuesViewModel.queryParameters.sortOrder = SortOrder.NEW
+        val expectedParameters = QueryParameters(-1, "", SortOrder.NEW)
+        verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun sortByTop() {
-        cuesViewModel.sortOrder(SortOrder.TOP)
-        verify(exactly = 1) { cueRepository.cues("", SortOrder.TOP) }
+        cuesViewModel.queryParameters.sortOrder = SortOrder.TOP
+        val expectedParameters = QueryParameters(-1, "", SortOrder.TOP)
+        verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun sortByHot() {
-        cuesViewModel.sortOrder(SortOrder.HOT)
-        verify(exactly = 1) { cueRepository.cues("", SortOrder.HOT) }
+        cuesViewModel.queryParameters.sortOrder = SortOrder.HOT
+        val expectedParameters = QueryParameters(-1, "", SortOrder.HOT)
+        verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByHot() {
         val filterString = "dogs"
-        cuesViewModel.filterQuery = filterString
-        cuesViewModel.sortOrder(SortOrder.HOT)
-        verify(exactly = 1) { cueRepository.cues("dogs", SortOrder.HOT) }
+        cuesViewModel.queryParameters.apply {
+            this.filterString = filterString
+            sortOrder = SortOrder.HOT
+        }
+        val expectedParameters = QueryParameters(-1, filterString, SortOrder.HOT)
+        verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByNew() {
         val filterString = "dogs"
-        cuesViewModel.sortOrder(SortOrder.NEW)
-        cuesViewModel.filterQuery = filterString
-        verify(exactly = 1) { cueRepository.cues("dogs", SortOrder.NEW) }
+        cuesViewModel.queryParameters.apply {
+            this.filterString = filterString
+            sortOrder = SortOrder.NEW
+        }
+        val expectedParameters = QueryParameters(-1, filterString, SortOrder.NEW)
+        verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun filterQueryAndSortByTop() {
         val filterString = "dogs"
-        cuesViewModel.filterQuery = filterString
-        cuesViewModel.sortOrder(SortOrder.TOP)
-        verify(exactly = 1) { cueRepository.cues("dogs", SortOrder.TOP) }
+        cuesViewModel.queryParameters.apply {
+            this.filterString = filterString
+            sortOrder = SortOrder.TOP
+        }
+        val expectedParameters = QueryParameters(-1, filterString, SortOrder.TOP)
+        verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test

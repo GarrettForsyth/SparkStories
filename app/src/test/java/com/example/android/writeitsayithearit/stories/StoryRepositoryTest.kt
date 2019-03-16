@@ -10,6 +10,7 @@ import com.example.android.writeitsayithearit.test.TestUtils
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -32,7 +33,7 @@ class StoryRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.stories("", SortOrder.NEW) } returns mockedQuery
 
-        storyRepository.stories("", SortOrder.NEW, -1)
+        storyRepository.stories(QueryParameters(-1, "", SortOrder.NEW))
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
@@ -41,7 +42,7 @@ class StoryRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.stories("Dogs", SortOrder.NEW, -1) } returns mockedQuery
 
-        storyRepository.stories("Dogs",SortOrder.NEW, -1)
+        storyRepository.stories(QueryParameters(-1, "Dogs", SortOrder.NEW))
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
@@ -50,7 +51,7 @@ class StoryRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.stories("", SortOrder.NEW, -1) } returns mockedQuery
 
-        storyRepository.stories("", SortOrder.NEW, -1)
+        storyRepository.stories(QueryParameters(-1, "", SortOrder.NEW))
         verify(exactly = 1) { dao.stories(mockedQuery) }
 
     }
@@ -60,7 +61,7 @@ class StoryRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.stories("", SortOrder.TOP) } returns mockedQuery
 
-        storyRepository.stories("", SortOrder.TOP, -1)
+        storyRepository.stories(QueryParameters(-1, "", SortOrder.TOP))
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
@@ -69,7 +70,7 @@ class StoryRepositoryTest {
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.stories("", SortOrder.HOT) } returns mockedQuery
 
-        storyRepository.stories("", SortOrder.HOT, -1)
+        storyRepository.stories(QueryParameters(-1, "", SortOrder.HOT))
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 

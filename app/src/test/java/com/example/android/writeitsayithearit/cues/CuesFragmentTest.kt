@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario.launchInContainer
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
+import androidx.paging.PagedList
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -27,6 +28,7 @@ import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCueList
 import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
+import com.example.android.writeitsayithearit.util.mockPagedList
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -62,7 +64,7 @@ class CuesFragmentTest {
     fun cuesAreInsideCueList() {
         scenario.onFragment {
             val cues = createTestCueList(5)
-            it.liveResponseCues.postValue(cues)
+            it.liveResponseCues.postValue(mockPagedList(cues))
             val expectedOrder = (0 until cues.size).toList()
             verifyInsideRecyclerView(expectedOrder, cues)
             verify(exactly = 1) { it.cuesViewModel.setHasResults(true) }
@@ -79,7 +81,7 @@ class CuesFragmentTest {
     @Test
     fun setsZeroResultsOnEmptyList() {
         scenario.onFragment {
-            it.liveResponseCues.value = (emptyList())
+            it.liveResponseCues.value = (mockPagedList(emptyList()))
             verify(exactly = 1) { it.cuesViewModel.setHasResults(false) }
         }
     }
@@ -111,7 +113,7 @@ class CuesFragmentTest {
     @Test
     fun clickCueEventSent() {
         scenario.onFragment {
-            it.liveResponseCues.value = createTestCueList(5)
+            it.liveResponseCues.value = mockPagedList(createTestCueList(5))
             it.cues_list.children.first().callOnClick()
             verify(exactly = 1) { it.cuesViewModel.onClickCue(0) }
         }
@@ -158,10 +160,10 @@ class CuesFragmentTest {
             .perform(typeText(filterString))
         scenario.onFragment {
             verify {
-                it.cuesViewModel.filterQuery = "d"
-                it.cuesViewModel.filterQuery = "do"
-                it.cuesViewModel.filterQuery = "dog"
-                it.cuesViewModel.filterQuery = "dogs"
+                it.cuesViewModel.queryParameters.filterString = "d"
+                it.cuesViewModel.queryParameters.filterString = "do"
+                it.cuesViewModel.queryParameters.filterString = "dog"
+                it.cuesViewModel.queryParameters.filterString = "dogs"
             }
         }
     }
@@ -170,7 +172,7 @@ class CuesFragmentTest {
     fun selectingNewSortOrderQueriesViewModel() {
         scenario.onFragment {
             it.sort_order_spinner.setSelection(0)
-            verify { it.cuesViewModel.sortOrder(SortOrder.NEW) }
+            verify { it.cuesViewModel.queryParameters.sortOrder = SortOrder.NEW }
         }
     }
 
@@ -178,7 +180,7 @@ class CuesFragmentTest {
     fun selectingTopSortOrderQueriesViewModel() {
         scenario.onFragment {
             it.sort_order_spinner.setSelection(1)
-            verify { it.cuesViewModel.sortOrder(SortOrder.TOP) }
+            verify { it.cuesViewModel.queryParameters.sortOrder = SortOrder.TOP }
         }
     }
 
@@ -186,7 +188,7 @@ class CuesFragmentTest {
     fun selectingHotSortOrderQueriesViewModel() {
         scenario.onFragment {
             it.sort_order_spinner.setSelection(2)
-            verify { it.cuesViewModel.sortOrder(SortOrder.HOT) }
+            verify { it.cuesViewModel.queryParameters.sortOrder = SortOrder.HOT }
         }
     }
 
@@ -235,7 +237,7 @@ class CuesFragmentTest {
      */
     class TestCuesFragment : CuesFragment() {
         val navController: NavController = mockk(relaxed = true)
-        val liveResponseCues = MutableLiveData<List<Cue>>()
+        val liveResponseCues = MutableLiveData<PagedList<Cue>>()
         val hasResults = MutableLiveData<Event<Boolean>>()
         val cueClicked = MutableLiveData<Event<Int>>()
         val newCueButtonClick = MutableLiveData<Event<Boolean>>()

@@ -85,8 +85,9 @@ class StoriesFragment @Inject constructor(): Fragment(), Injectable {
         storiesViewModel.stories.observe(this, Observer { stories ->
             if (stories != null) {
                 storyAdapter.submitList(stories)
-                storiesViewModel.setHasResults(!stories.isEmpty())
-            } else {
+                storiesViewModel.setHasResults(stories.isNotEmpty())
+            }else {
+                storyAdapter.submitList(emptyList())
                 storiesViewModel.setHasResults(false)
             }
         })

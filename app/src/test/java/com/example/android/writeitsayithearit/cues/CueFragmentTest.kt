@@ -26,6 +26,7 @@ import com.example.android.writeitsayithearit.util.ViewModelUtil
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -79,6 +80,14 @@ class CueFragmentTest {
             it.cue.postValue(CUE)
             onView(withId(R.id.cue_text))
                 .check(matches(withText(CUE.text)))
+        }
+    }
+
+    @Test
+    fun filterCue() {
+        scenario.onFragment {
+            it.cue.postValue(CUE)
+            assertEquals(it.storiesFragment.storiesViewModel.queryParameters.filterCueId, CUE.id)
         }
     }
 
