@@ -14,19 +14,21 @@ import com.example.android.writeitsayithearit.model.cue.Cue
 import com.example.android.writeitsayithearit.model.cue.CueContract
 import java.util.*
 
+
 @Entity(
-    tableName = StoryContract.TABLE_NAME
-    // TODO: Inserting a story throws an error indicating
-    // that the author (foreign key)
-    // isn't in the database. Similar setup
-    // for cues works fine. Investigate later.
-    // Does it even make sense to have this constraint in local
-    // storage?
-//    foreignKeys = [ForeignKey(
-//        entity = Author::class,
-//        parentColumns = [AuthorContract.COLUMN_NAME],
-//        childColumns = [StoryContract.COLUMN_AUTHOR]
-//    )]
+    tableName = StoryContract.TABLE_NAME,
+    foreignKeys = [
+        ForeignKey(
+            entity = Author::class,
+            parentColumns = [AuthorContract.COLUMN_NAME],
+            childColumns = [StoryContract.COLUMN_AUTHOR]
+        ),
+        ForeignKey(
+            entity = Cue::class,
+            parentColumns = [CueContract.COLUMN_ID],
+            childColumns = [StoryContract.COLUMN_CUE_ID]
+        )
+    ]
 )
 data class Story(
     @NonNull

@@ -7,12 +7,13 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.data.CommentDao
-import com.example.android.writeitsayithearit.data.StoryDao
 import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
+import com.example.android.writeitsayithearit.model.comment.Comment
+import com.example.android.writeitsayithearit.test.TestUtils.CHILD_COMMENT_ORDER
 import com.example.android.writeitsayithearit.test.TestUtils.createTestComment
-import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import com.example.android.writeitsayithearit.test.getValueBlocking
+import com.example.android.writeitsayithearit.util.dataSourceFactoryToPagedList
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -31,6 +32,7 @@ class CommentDaoTest {
 
     private val dbSeed = DatabaseSeed(ApplicationProvider.getApplicationContext())
     private val authors = dbSeed.SEED_AUTHORS
+    private val cues = dbSeed.SEED_CUES
     private val stories = dbSeed.SEED_STORIES
     private val comments = dbSeed.SEED_COMMENTS
 
@@ -49,6 +51,7 @@ class CommentDaoTest {
 
         // seed with starting data
         db.authorDao().insert(authors)
+        db.cueDao().insert(cues)
         db.storyDao().insert(stories)
         db.commentDao().insert(comments)
     }
@@ -71,6 +74,22 @@ class CommentDaoTest {
 
         val readComment = commentDao.comment(id).getValueBlocking()
         assertTrue(readComment.text.equals(comment.text))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun getChildComment() {
+        val actualChildComments = dataSourceFactoryToPagedList(
+            commentDao.childComments(6), comments.size)
+        println("$actualChildComments")
+        val expectedChildComments = CHILD_COMMENT_ORDER
+        assertCorrectOrder(expectedChildComments, actualChildComments)
+    }
+
+    private fun assertCorrectOrder(expectedOrder: List<Int>, actualOrder: List<Comment>) {
+        for (i in 0 until expectedOrder.size) {
+            assert(comments[expectedOrder[i]].equals(actualOrder[i]))
+        }
     }
 }
 

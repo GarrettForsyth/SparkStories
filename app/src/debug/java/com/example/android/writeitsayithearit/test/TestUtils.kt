@@ -24,13 +24,6 @@ import javax.inject.Inject
 object TestUtils {
 
     /**
-     * These values are set when the database is seeded.
-     */
-//    var SEED_AUTHORS: List<Author> = mutableListOf()
-//    var SEED_CUES: List<Cue> = mutableListOf()
-//    var SEED_STORIES: List<Story> = mutableListOf()
-
-    /**
      * The expected orderings for each sort order.
      */
     val SORT_NEW_INDICES = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -63,7 +56,8 @@ object TestUtils {
 
     val STORIES_FROM_FIRST_CUE_INDICES = listOf(0, 1)
 
-    val FIRST_STORY_COMMENT_ORDER = listOf(0, 5, 6, 7, 1, 2, 8)
+    val FIRST_STORY_COMMENT_ORDER = listOf(0, 1, 2)
+    val CHILD_COMMENT_ORDER = listOf(6, 9, 10) // for id = 6
 
     fun createTestCue() = Cue(
         text = "Test cue text. Very interesting stuff.",
@@ -99,6 +93,7 @@ object TestUtils {
         id = 0,
         storyId = 1,
         parentId = -1,
+        depth = 0,
         text = "This is a test comment!",
         author = "Test Comment Author",
         creationDate = 0,
@@ -113,6 +108,7 @@ object TestUtils {
                     id = 0,
                     storyId = 1,
                     parentId = -1,
+                    depth = 0,
                     text = "This is test comment $i!",
                     author = "Test Comment Author $i",
                     creationDate = 0,

@@ -20,8 +20,11 @@ abstract class CommentDao {
     @Query("SELECT * from comments WHERE id = :id")
     abstract fun comment(id: Int): LiveData<Comment>
 
-    @Query("SELECT * from comments WHERE story_id = :storyId")
-    abstract fun comments(storyId: Int): DataSource.Factory<Int, Comment>
+    @Query("SELECT * from comments WHERE story_id = :storyId AND depth = :depth")
+    abstract fun comments(storyId: Int, depth: Int): DataSource.Factory<Int, Comment>
+
+    @Query("SELECT * from comments WHERE parent_id = :id")
+    abstract fun childComments(id: Int): DataSource.Factory<Int, Comment>
 
 }
 

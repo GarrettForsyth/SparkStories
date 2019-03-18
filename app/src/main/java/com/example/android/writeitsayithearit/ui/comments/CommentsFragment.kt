@@ -56,7 +56,7 @@ class CommentsFragment : Fragment(), Injectable {
         commentsViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CommentsViewModel::class.java)
 
-        commentAdapter = CommentAdapter(commentsViewModel, appExecutors)
+        commentAdapter = CommentAdapter(this, commentsViewModel, appExecutors)
 
         binding.viewmodel = commentsViewModel
         binding.listAdapter = commentAdapter
@@ -72,7 +72,7 @@ class CommentsFragment : Fragment(), Injectable {
 
     private fun setStoryId() {
         val args = CommentsFragmentArgs.fromBundle(arguments!!)
-        commentsViewModel.storyId(args.storyId)
+        commentsViewModel.queryParameters.filterId = args.storyId
     }
 
     private fun observeComments() {

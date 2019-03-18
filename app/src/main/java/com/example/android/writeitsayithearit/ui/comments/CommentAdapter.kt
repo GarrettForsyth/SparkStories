@@ -1,23 +1,28 @@
 package com.example.android.writeitsayithearit.ui.comments
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.example.android.writeitsayithearit.AppExecutors
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.CommentListItemBinding
 import com.example.android.writeitsayithearit.model.comment.Comment
 import com.example.android.writeitsayithearit.ui.common.DataBoundListAdapter
+import timber.log.Timber
 
 class CommentAdapter(
+    private val owner: LifecycleOwner,
     private val viewModel: CommentsViewModel,
-    appExecutors: AppExecutors
+    private val appExecutors: AppExecutors
 ) : DataBoundListAdapter<Comment, com.example.android.writeitsayithearit.databinding.CommentListItemBinding>(
     appExecutors = appExecutors,
     diffCallback = Comment.commentDiffCallback
 ) {
     override fun createBinding(parent: ViewGroup): CommentListItemBinding {
-        val binding :CommentListItemBinding = DataBindingUtil.inflate(
+        val binding: CommentListItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.comment_list_item,
             parent,
@@ -30,5 +35,16 @@ class CommentAdapter(
     override fun bind(binding: CommentListItemBinding, item: Comment) {
         binding.comment = item
         binding.viewmodel = viewModel
+
+
+        Timber.d("mytest onbind with $item")
+
+        val adapter = CommentAdapter(owner, viewModel, appExecutors)
+        binding.listAdapter = adapter
+        viewModel.childComments(item.id).observe(owner, Observer { childComments ->
+            childComments?.let {
+                adapter.submitList(childComments)
+            }
+        })
     }
 }

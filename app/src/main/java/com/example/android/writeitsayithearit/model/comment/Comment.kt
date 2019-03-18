@@ -2,14 +2,28 @@ package com.example.android.writeitsayithearit.model.comment
 
 import android.text.format.DateFormat
 import androidx.annotation.NonNull
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.DiffUtil
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.example.android.writeitsayithearit.model.Datable
+import com.example.android.writeitsayithearit.model.author.Author
+import com.example.android.writeitsayithearit.model.author.AuthorContract
+import com.example.android.writeitsayithearit.model.story.Story
+import com.example.android.writeitsayithearit.model.story.StoryContract
 import java.util.*
 
-@Entity(tableName = CommentContract.TABLE_NAME)
+@Entity(
+    tableName = CommentContract.TABLE_NAME,
+    foreignKeys = [
+        ForeignKey(
+            entity = Author::class,
+            parentColumns = [AuthorContract.COLUMN_NAME],
+            childColumns = [CommentContract.COLUMN_AUTHOR]
+        )
+    ]
+)
 data class Comment(
     @NonNull
     @ColumnInfo(name = CommentContract.COLUMN_TEXT)
@@ -28,6 +42,10 @@ data class Comment(
     var parentId: Int,
 
     @NonNull
+    @ColumnInfo(name = CommentContract.COLUMN_DEPTH)
+    var depth: Int,
+
+    @NonNull
     @ColumnInfo(name = CommentContract.COLUMN_CREATION_DATE)
     var creationDate: Long,
 
@@ -38,11 +56,12 @@ data class Comment(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = CommentContract.COLUMN_ID)
     var id: Int = 0
-): Datable {
+) : Datable {
 
-    companion object { val commentDiffCallback = object : DiffUtil.ItemCallback<Comment>(){
-        override fun areItemsTheSame(oldItem: Comment, newItem: Comment) = (oldItem.id == newItem.id)
-        override fun areContentsTheSame(oldItem: Comment, newItem: Comment ) = (oldItem == newItem)
+    companion object {
+        val commentDiffCallback = object : DiffUtil.ItemCallback<Comment>() {
+            override fun areItemsTheSame(oldItem: Comment, newItem: Comment) = (oldItem.id == newItem.id)
+            override fun areContentsTheSame(oldItem: Comment, newItem: Comment) = (oldItem == newItem)
         }
     }
 
@@ -59,11 +78,12 @@ data class Comment(
         return DateFormat.format("dd/MM/yy", creationDate).toString()
     }
 
-    constructor(text: String, author: String, storyId: Int  = 1, parentId: Int = -1) : this(
+    constructor(text: String, author: String, depth: Int = 0, storyId: Int = 1, parentId: Int = -1) : this(
         text,
         author,
         storyId,
         parentId,
+        depth,
         Calendar.getInstance().timeInMillis,
         0,
         0
@@ -76,6 +96,7 @@ data class Comment(
                 && this.author.equals(other.author)
                 && this.storyId.equals(other.storyId)
                 && this.parentId.equals(other.parentId)
+                && this.depth.equals(other.depth)
                 && this.rating == other.rating
     }
 

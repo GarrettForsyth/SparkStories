@@ -41,6 +41,7 @@ class StoryDaoTest {
 
     private val dbSeed = DatabaseSeed(ApplicationProvider.getApplicationContext())
     private val authors = dbSeed.SEED_AUTHORS
+    private val cues = dbSeed.SEED_CUES
     private val stories = dbSeed.SEED_STORIES
 
     private lateinit var storyDao: StoryDao
@@ -58,6 +59,7 @@ class StoryDaoTest {
 
         // seed with starting data
         db.authorDao().insert(authors)
+        db.cueDao().insert(cues)
         storyDao.insert(stories)
     }
 

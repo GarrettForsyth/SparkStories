@@ -10,6 +10,7 @@ object CommentContract {
     const val COLUMN_AUTHOR = "author"
     const val COLUMN_STORY_ID = "story_id"
     const val COLUMN_PARENT_ID = "parent_id"
+    const val COLUMN_DEPTH = "depth"
     const val COLUMN_CREATION_DATE = "creation_date"
     const val COLUMN_RATING = "rating"
 }

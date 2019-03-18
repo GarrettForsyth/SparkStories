@@ -6,11 +6,8 @@ import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
 import com.example.android.writeitsayithearit.model.SortOrder
-import com.example.android.writeitsayithearit.test.TestUtils.createTestStoryList
-import com.example.android.writeitsayithearit.test.asLiveData
 import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.*
@@ -52,7 +49,7 @@ class StoriesViewModelTest {
 
     @Test
     fun filterCue() {
-        storiesViewModel.queryParameters.filterCueId = 1
+        storiesViewModel.queryParameters.filterId = 1
         val expectedParameters = QueryParameters(1, "", SortOrder.NEW)
         verify { storyRepository.stories(expectedParameters) }
     }
@@ -71,7 +68,7 @@ class StoriesViewModelTest {
         val filterString = "dogs"
         storiesViewModel.queryParameters.apply {
             this.filterString = filterString
-            filterCueId = 1
+            filterId = 1
         }
         val expectedParameters = QueryParameters(1, filterString, SortOrder.NEW)
         verify { storyRepository.stories(expectedParameters) }
@@ -87,7 +84,7 @@ class StoriesViewModelTest {
     @Test
     fun sortByNewAndCue() {
         storiesViewModel.queryParameters.apply {
-            filterCueId = 1
+            filterId = 1
             sortOrder = SortOrder.NEW
         }
         val expectedParameters = QueryParameters(1, "", SortOrder.NEW)
@@ -104,7 +101,7 @@ class StoriesViewModelTest {
     @Test
     fun sortByTopAndCue() {
         storiesViewModel.queryParameters.apply {
-            filterCueId = 1
+            filterId = 1
             sortOrder = SortOrder.TOP
         }
         val expectedParameters = QueryParameters(1, "", SortOrder.TOP)
@@ -122,7 +119,7 @@ class StoriesViewModelTest {
     fun sortByHotAndCue() {
         storiesViewModel.queryParameters.apply {
             sortOrder = SortOrder.HOT
-            filterCueId = 1
+            filterId = 1
         }
         val expectedParameters = QueryParameters(1, "", SortOrder.HOT)
         verify { storyRepository.stories(expectedParameters) }
@@ -144,7 +141,7 @@ class StoriesViewModelTest {
         val filterString = "dogs"
         storiesViewModel.queryParameters.apply {
             this.filterString = filterString
-            filterCueId = 1
+            filterId = 1
             sortOrder = SortOrder.HOT
         }
         val expectedParameters = QueryParameters(1, "dogs", SortOrder.HOT)
@@ -168,7 +165,7 @@ class StoriesViewModelTest {
         storiesViewModel.queryParameters.apply {
             sortOrder = SortOrder.NEW
             this.filterString = filterString
-            filterCueId = 1
+            filterId = 1
         }
         val expectedParameters = QueryParameters(1, "dogs", SortOrder.NEW)
         verify { storyRepository.stories(expectedParameters) }
@@ -191,7 +188,7 @@ class StoriesViewModelTest {
         storiesViewModel.queryParameters.apply {
             this.filterString = filterString
             sortOrder = SortOrder.TOP
-            filterCueId = 1
+            filterId = 1
         }
         val expectedParameters = QueryParameters(1, "dogs", SortOrder.TOP)
         verify { storyRepository.stories(expectedParameters) }

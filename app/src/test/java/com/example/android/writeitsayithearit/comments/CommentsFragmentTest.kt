@@ -31,6 +31,7 @@ import com.example.android.writeitsayithearit.util.mockPagedList
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -62,7 +63,7 @@ class CommentsFragmentTest {
     @Test
     fun storyIdIsSet() {
         scenario.onFragment {
-            verify(exactly = 1) { it.commentsViewModel.storyId(STORY.id) }
+            assertEquals(it.commentsViewModel.queryParameters.filterId, STORY.id)
         }
     }
 

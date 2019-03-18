@@ -15,7 +15,7 @@
       "parent_id": -1,
       "depth": 0,
       "text": "Amazing! Would read again!",
-      "author": "Imdelda Cremin",
+      "author": "Imelda Cremin",
       "rating": 4
     },
     {
@@ -79,6 +79,24 @@
       "depth": 1,
       "text": "YOU could have been better..",
       "author": "Scarlett Rose",
+      "rating": 9
+    },
+    {
+      "id": 10,
+      "story_id": 1,
+      "parent_id": 6,
+      "depth": 1,
+      "text": "Good comment!",
+      "author": "Scarlett Rose",
+      "rating": 9
+    },
+    {
+      "id": 11,
+      "story_id": 1,
+      "parent_id": 6,
+      "depth": 1,
+      "text": "Another good comment!",
+      "author": "Reilly Beahan",
       "rating": 9
     }
   ]

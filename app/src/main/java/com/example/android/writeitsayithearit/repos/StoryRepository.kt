@@ -22,7 +22,7 @@ class StoryRepository @Inject constructor(
         val factory =  storyDao.stories(wshQueryHelper.stories(
             queryParameters.filterString,
             queryParameters.sortOrder,
-            queryParameters.filterCueId
+            queryParameters.filterId
         ))
         return LivePagedListBuilder<Int, Story>(factory, getStoryPagedListConfig()).build()
     }

@@ -126,6 +126,7 @@ class DatabaseSeed @Inject constructor(application: Application) {
                 val id = jsonComment.getInt("id")
                 val storyId = jsonComment.getInt("story_id")
                 val parentId = jsonComment.getInt("parent_id")
+                val depth = jsonComment.getInt("depth")
                 val text = jsonComment.getString("text")
                 val author = jsonComment.getString("author")
                 val rating = jsonComment.getInt("rating")
@@ -135,6 +136,7 @@ class DatabaseSeed @Inject constructor(application: Application) {
                     id = id,
                     storyId = storyId,
                     parentId = parentId,
+                    depth = depth,
                     text = text,
                     author = author,
                     rating = rating,

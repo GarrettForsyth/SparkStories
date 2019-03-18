@@ -19,7 +19,6 @@ import com.example.android.writeitsayithearit.stories.StoriesFragmentTest
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
 import com.example.android.writeitsayithearit.ui.cues.CueFragment
 import com.example.android.writeitsayithearit.ui.cues.CueFragmentDirections
-import com.example.android.writeitsayithearit.ui.cues.CuesFragmentDirections
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import com.example.android.writeitsayithearit.util.ViewModelUtil
@@ -87,7 +86,7 @@ class CueFragmentTest {
     fun filterCue() {
         scenario.onFragment {
             it.cue.postValue(CUE)
-            assertEquals(it.storiesFragment.storiesViewModel.queryParameters.filterCueId, CUE.id)
+            assertEquals(it.storiesFragment.storiesViewModel.queryParameters.filterId, CUE.id)
         }
     }
 

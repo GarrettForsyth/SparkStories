@@ -128,8 +128,8 @@
                     android:layout_marginLeft="@dimen/margin_small"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/like_story_button"
-                    app:layout_constraintLeft_toRightOf="@id/like_story_button"
+                    app:layout_constraintStart_toEndOf="@id/view_cue_button"
+                    app:layout_constraintLeft_toRightOf="@id/view_cue_button"
                     app:srcCompat="@drawable/ic_comment_black_24dp"
                     android:onClick="@{() -> viewmodel.onViewCommentsClick()}" />
 

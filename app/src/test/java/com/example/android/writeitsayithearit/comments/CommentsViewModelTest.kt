@@ -7,6 +7,7 @@ import com.example.android.writeitsayithearit.repos.CommentRepository
 import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.ui.comments.CommentsViewModel
 import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
 import io.mockk.mockk
 import io.mockk.verify
@@ -34,13 +35,19 @@ class CommentsViewModelTest {
 
         mockObserverFor(commentsViewModel.comments)
         mockObserverFor(commentsViewModel.hasResultsStatus)
-        mockObserverFor(commentsViewModel.storyId)
     }
 
     @Test
     fun getComments() {
-        commentsViewModel.storyId(1)
-        verify { commentRepository.comments(storyId = 1) }
+        commentsViewModel.queryParameters.filterId = 1
+        val expectedQueryParameters = QueryParameters(1, "", SortOrder.NEW)
+        verify { commentRepository.comments(expectedQueryParameters) }
+    }
+
+    @Test
+    fun getChildComments() {
+        commentsViewModel.childComments(1)
+        verify { commentRepository.childComments(1) }
     }
 }
 

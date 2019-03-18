@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.comments
 
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -14,10 +15,13 @@ import com.example.android.writeitsayithearit.MainActivity
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.CommentListItemBinding
 import com.example.android.writeitsayithearit.databinding.StoryListItemBinding
+import com.example.android.writeitsayithearit.test.CustomMatchers.first
 import com.example.android.writeitsayithearit.test.CustomMatchers.hasItemAtPosition
+import com.example.android.writeitsayithearit.test.TestUtils.CHILD_COMMENT_ORDER
 import com.example.android.writeitsayithearit.test.TestUtils.FIRST_STORY_COMMENT_ORDER
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
+import com.example.android.writeitsayithearit.test.withRecyclerView
 import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
 import com.example.android.writeitsayithearit.util.CountingAppExecutorsRule
 import com.example.android.writeitsayithearit.util.DataBindingIdlingResourceRule
@@ -28,6 +32,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import timber.log.Timber
 
 /**
  * As a writer
@@ -68,7 +73,38 @@ class CommentsTest {
 
     @Test
     fun startingCommentsAreDisplayed() {
-        verifyExpectedOrder(FIRST_STORY_COMMENT_ORDER)
+        verifyExpectedOrder(FIRST_STORY_COMMENT_ORDER, R.id.comments_list)
+    }
+
+    @Test
+    fun startingChildCommentsAreDisplayed() {
+        val comments = dbSeed.SEED_COMMENTS
+        for (listPosition in 0 until CHILD_COMMENT_ORDER.size) {
+            val expectedComment = comments[CHILD_COMMENT_ORDER[listPosition]]
+            val childComments = onView(
+                allOf(
+                    isDescendantOfA(withRecyclerView(R.id.comments_list).atPosition(0)),
+                    first(withId(R.id.child_comments_list))
+                )
+            )
+            // TODO figure out espresso scrolling in nested recyclerviews
+//            childComments.perform(
+//                RecyclerViewActions.scrollToPosition<DataBoundViewHolder<CommentListItemBinding>>(
+//                    listPosition
+//                )
+//            )
+
+            childComments
+                .check(
+                    matches(
+                        allOf(
+                            hasDescendant(withText(startsWith(expectedComment.text.take(30)))),
+                            hasDescendant(withText(expectedComment.rating.toString())),
+                            hasDescendant(withText(expectedComment.author))
+                        )
+                    )
+                )
+        }
     }
 
     /**
@@ -76,17 +112,20 @@ class CommentsTest {
      * story associated with each index is in the correct order and
      * displayed in the list of stories.
      */
-    private fun verifyExpectedOrder(expectedOrder: List<Int>) {
+    private fun verifyExpectedOrder(expectedOrder: List<Int>, containerId: Int) {
         Espresso.closeSoftKeyboard()
         expectedOrder.forEachIndexed { listPosition, expectedIndex ->
             val expectedComment = dbSeed.SEED_COMMENTS[expectedIndex]
-            onView(withId(R.id.comments_list))
+            onView(withId(containerId))
                 .perform(RecyclerViewActions.scrollToPosition<DataBoundViewHolder<CommentListItemBinding>>(listPosition))
-            onView(withId(R.id.comments_list))
+            onView(withId(containerId))
                 .check(
                     matches(
                         allOf(
-                            hasItemAtPosition(hasDescendant(withText(startsWith(expectedComment.text.take(30)))), listPosition),
+                            hasItemAtPosition(
+                                hasDescendant(withText(startsWith(expectedComment.text.take(30)))),
+                                listPosition
+                            ),
                             hasItemAtPosition(hasDescendant(withText(expectedComment.rating.toString())), listPosition),
                             hasItemAtPosition(hasDescendant(withText(expectedComment.author)), listPosition)
                         )
