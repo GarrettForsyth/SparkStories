@@ -38,11 +38,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> viewmodel.onClickNewComment(comment.id)}"
+                app:layout_constraintRight_toLeftOf="@id/like_comment_button"
+                app:layout_constraintEnd_toStartOf="@id/like_comment_button"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/first_row"
+                app:srcCompat="@drawable/ic_action_reply" />
+
+            <ImageButton
+                android:id="@+id/like_comment_button"
+                style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                android:stateListAnimator="@animator/top_menu_button_state"
+                android:backgroundTint="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewmodel.onClickLikeComment(comment)}"
                 app:layout_constraintRight_toLeftOf="@id/comment_rating"
                 app:layout_constraintEnd_toStartOf="@id/comment_rating"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/first_row"
-                app:srcCompat="@drawable/ic_action_reply" />
+                app:srcCompat="@drawable/ic_favorite_black_24dp" />
 
             <TextView
                 android:id="@+id/comment_rating"
@@ -76,6 +90,7 @@
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="comment_rating, comment_datetime" />
+
 
             <TextView
                 android:id="@+id/comment_author"

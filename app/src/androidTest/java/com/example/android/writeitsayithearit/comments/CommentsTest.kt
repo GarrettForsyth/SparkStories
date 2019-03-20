@@ -142,6 +142,16 @@ class CommentsTest {
         ).perform(click())
     }
 
+    @Test
+    fun likeAComment() {
+        val firstComment = dbSeed.SEED_COMMENTS.first()
+        onView(withRecyclerView(R.id.comments_list).atPositionOnView(0, R.id.like_comment_button))
+            .perform(click())
+
+        onView(withRecyclerView(R.id.comments_list).atPositionOnView(0, R.id.comment_rating))
+            .check(matches(withText((firstComment.rating + 1).toString())))
+    }
+
     /**
      * Loops through a list of indices and checks that the starting
      * story associated with each index is in the correct order and

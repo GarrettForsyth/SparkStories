@@ -44,6 +44,11 @@ class CommentsViewModel @Inject constructor(
         _shouldNavigateToNewComment.value = Event(parentId)
     }
 
+    fun onClickLikeComment(comment: Comment) {
+        val updatedComment = comment.copy().apply { rating ++}
+        commentRepository.update(updatedComment)
+    }
+
     fun childComments(id: Int): LiveData<PagedList<Comment>>  {
         return commentRepository.childComments(id)
     }

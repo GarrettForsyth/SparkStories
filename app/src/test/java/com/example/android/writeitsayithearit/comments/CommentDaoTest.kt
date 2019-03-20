@@ -25,6 +25,7 @@ import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import com.example.android.writeitsayithearit.util.dataSourceFactoryToPagedList
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -117,6 +118,19 @@ class CommentDaoTest {
 
         val expectedStoryOrder = COMMENT_SORT_HOT_INDICES
         assertCorrectOrder(expectedStoryOrder, readComments)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun readAndUpdateComment() {
+        val id = 1
+        val readComment = commentDao.comment(id).getValueBlocking()
+        readComment.rating = 100
+
+        commentDao.update(readComment)
+        val updatedComment = commentDao.comment(id).getValueBlocking()
+
+        assertEquals(100, updatedComment.rating)
     }
 
     private fun assertCorrectOrder(expectedOrder: List<Int>, actualOrder: List<Comment>) {

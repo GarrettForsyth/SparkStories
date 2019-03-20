@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.comments
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.test.filters.SmallTest
 import com.example.android.writeitsayithearit.data.CommentDao
@@ -12,6 +13,7 @@ import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -19,6 +21,10 @@ import org.junit.runners.JUnit4
 @SmallTest
 @RunWith(JUnit4::class)
 class CommentRepositoryTest {
+
+    @Rule
+    @JvmField
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val dao: CommentDao = mockk(relaxed = true)
     private val wshQueryHelper: WSHQueryHelper = mockk(relaxed = true)
@@ -86,5 +92,12 @@ class CommentRepositoryTest {
 
         commentRepository.childComments(1)
         verify(exactly = 1) { dao.comments(mockedQuery) }
+    }
+
+    @Test
+    fun updateComment() {
+        val comment = createTestComment()
+        commentRepository.update(comment)
+        verify(exactly = 1) { dao.update(comment) }
     }
 }

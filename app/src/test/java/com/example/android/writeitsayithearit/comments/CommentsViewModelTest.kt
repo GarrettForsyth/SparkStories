@@ -6,6 +6,7 @@ import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.repos.CommentRepository
 import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper.stories
+import com.example.android.writeitsayithearit.test.TestUtils.createTestComment
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.comments.CommentsViewModel
 import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
@@ -79,6 +80,14 @@ class CommentsViewModelTest {
         commentsViewModel.queryParameters.sortOrder = SortOrder.HOT
         val expectedParameters = QueryParameters(_sortOrder = SortOrder.HOT)
         verify { commentRepository.comments(expectedParameters) }
+    }
+
+    @Test
+    fun clickLikeCommentButton() {
+        val comment = createTestComment()
+        commentsViewModel.onClickLikeComment(comment)
+        comment.apply { rating = comment.rating++ }
+        verify { commentRepository.update(comment) }
     }
 }
 

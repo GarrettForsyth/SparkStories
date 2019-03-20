@@ -39,6 +39,10 @@ class CommentRepository @Inject constructor(
         return LivePagedListBuilder<Int, Comment>(factory, getChildCommentPagedListConfig()).build()
     }
 
+    fun update(comment: Comment) {
+        appExecutors.diskIO().execute { commentDao.update(comment) }
+    }
+
     companion object {
         private const val PAGE_SIZE = 45
         private const val PREFETCH_DISTANCE = 90
