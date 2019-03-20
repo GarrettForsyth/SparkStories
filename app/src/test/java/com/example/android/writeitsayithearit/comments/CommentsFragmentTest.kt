@@ -18,12 +18,15 @@ import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.TestApp
 import com.example.android.writeitsayithearit.databinding.CommentListItemBinding
+import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.model.comment.Comment
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCommentList
 import com.example.android.writeitsayithearit.test.TestUtils.createTestCue
 import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
 import com.example.android.writeitsayithearit.ui.comments.CommentsFragment
+import com.example.android.writeitsayithearit.ui.comments.CommentsFragmentDirections
 import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
+import com.example.android.writeitsayithearit.ui.stories.NewStoryFragmentDirections
 import com.example.android.writeitsayithearit.ui.util.events.Event
 import com.example.android.writeitsayithearit.util.InstantAppExecutors
 import com.example.android.writeitsayithearit.util.ViewModelUtil
@@ -31,6 +34,7 @@ import com.example.android.writeitsayithearit.util.mockPagedList
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.android.synthetic.main.fragment_comments.*
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -63,7 +67,7 @@ class CommentsFragmentTest {
     @Test
     fun storyIdIsSet() {
         scenario.onFragment {
-            assertEquals(it.commentsViewModel.queryParameters.filterId, STORY.id)
+            assertEquals(it.commentsViewModel.queryParameters.filterStoryId, STORY.id)
         }
     }
 
@@ -101,6 +105,45 @@ class CommentsFragmentTest {
         }
     }
 
+    @Test
+    fun shouldNavigateToNewComment() {
+        scenario.onFragment {
+            it.shouldNavigateToNewComment.value = Event(-1)
+            verify {
+                it.navController.navigate(
+                    CommentsFragmentDirections.actionCommentsFragmentToNewCommentFragment(
+                        -1,
+                        it.commentsViewModel.queryParameters.filterStoryId
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun selectingNewSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(0)
+            verify { it.commentsViewModel.queryParameters.sortOrder = SortOrder.NEW }
+        }
+    }
+
+    @Test
+    fun selectingTopSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(1)
+            verify { it.commentsViewModel.queryParameters.sortOrder = SortOrder.TOP }
+        }
+    }
+
+    @Test
+    fun selectingHotSortOrderQueriesViewModel() {
+        scenario.onFragment {
+            it.sort_order_spinner.setSelection(2)
+            verify { it.commentsViewModel.queryParameters.sortOrder = SortOrder.HOT }
+        }
+    }
+
     /**
      * Checks if each comment is inside the recyclerView
      */
@@ -128,6 +171,7 @@ class CommentsFragmentTest {
 
                 every { commentsViewModel.comments } returns liveResponseComments
                 every { commentsViewModel.hasResultsStatus } returns hasResults
+                every { commentsViewModel.shouldNavigateToNewComment } returns shouldNavigateToNewComment
             }
         }
     }
@@ -143,6 +187,7 @@ class CommentsFragmentTest {
         val navController: NavController = mockk(relaxed = true)
         val liveResponseComments = MutableLiveData<PagedList<Comment>>()
         val hasResults = MutableLiveData<Event<Boolean>>()
+        val shouldNavigateToNewComment = MutableLiveData<Event<Int>>()
         override fun navController() = navController
     }
 }

@@ -15,7 +15,7 @@ class StoriesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _queryParameters = ObservedMutableLiveData<QueryParameters>()
-    val queryParameters = QueryParameters(-1, "", SortOrder.NEW)
+    val queryParameters = QueryParameters()
 
     private val _stories = Transformations.switchMap(_queryParameters) { parameters ->
         stories(parameters)

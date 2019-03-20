@@ -30,6 +30,20 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_regular">
 
+            <ImageButton
+                android:id="@+id/reply_comment_button"
+                style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                android:stateListAnimator="@animator/top_menu_button_state"
+                android:backgroundTint="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewmodel.onClickNewComment(comment.id)}"
+                app:layout_constraintRight_toLeftOf="@id/comment_rating"
+                app:layout_constraintEnd_toStartOf="@id/comment_rating"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/first_row"
+                app:srcCompat="@drawable/ic_action_reply" />
+
             <TextView
                 android:id="@+id/comment_rating"
                 style="@style/Theme.WriteItSayItHearIt.CardText"

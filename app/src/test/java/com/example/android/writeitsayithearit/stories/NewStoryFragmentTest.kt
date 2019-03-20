@@ -174,8 +174,7 @@ class NewStoryFragmentTest {
     fun inPreviewMode() {
         scenario.onFragment {
             it.inPreviewMode.value = Event(true)
-            it.new_story_edit_text.callOnClick()
-            assert(!it.new_story_edit_text.isFocused)
+            assert(!it.new_story_edit_text.isFocusableInTouchMode)
         }
     }
 
@@ -183,8 +182,7 @@ class NewStoryFragmentTest {
     fun notInPreviewMode() {
         scenario.onFragment {
             it.inPreviewMode.value = Event(false)
-            it.new_story_edit_text.callOnClick()
-            assert(it.new_story_edit_text.isFocusable)
+            assert(it.new_story_edit_text.isFocusableInTouchMode)
         }
     }
 

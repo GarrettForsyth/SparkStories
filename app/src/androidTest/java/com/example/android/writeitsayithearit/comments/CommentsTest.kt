@@ -3,6 +3,7 @@ package com.example.android.writeitsayithearit.comments
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -18,16 +19,21 @@ import com.example.android.writeitsayithearit.databinding.StoryListItemBinding
 import com.example.android.writeitsayithearit.test.CustomMatchers.first
 import com.example.android.writeitsayithearit.test.CustomMatchers.hasItemAtPosition
 import com.example.android.writeitsayithearit.test.TestUtils.CHILD_COMMENT_ORDER
+import com.example.android.writeitsayithearit.test.TestUtils.COMMENT_SORT_HOT_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.COMMENT_SORT_NEW_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.COMMENT_SORT_TOP_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.FIRST_STORY_COMMENT_ORDER
+import com.example.android.writeitsayithearit.test.TestUtils.SORT_HOT_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import com.example.android.writeitsayithearit.test.withRecyclerView
 import com.example.android.writeitsayithearit.ui.common.DataBoundViewHolder
 import com.example.android.writeitsayithearit.util.CountingAppExecutorsRule
 import com.example.android.writeitsayithearit.util.DataBindingIdlingResourceRule
 import com.example.android.writeitsayithearit.util.TaskExecutorWithIdlingResourceRule
-import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.CoreMatchers.startsWith
+import com.google.common.base.CharMatcher.`is`
+import org.hamcrest.CoreMatchers.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -105,6 +111,35 @@ class CommentsTest {
                     )
                 )
         }
+    }
+
+    @Test
+    fun sortStoriesByNew() {
+        selectSpinnerEntry("New")
+        verifyExpectedOrder(COMMENT_SORT_NEW_INDICES, R.id.comments_list)
+    }
+
+    @Test
+    fun sortStoriesByTop() {
+        selectSpinnerEntry("Top")
+        verifyExpectedOrder(COMMENT_SORT_TOP_INDICES, R.id.comments_list)
+    }
+
+    @Test
+    fun sortStoriesByHot() {
+        selectSpinnerEntry("Hot")
+        verifyExpectedOrder(COMMENT_SORT_HOT_INDICES, R.id.comments_list)
+    }
+
+    private fun selectSpinnerEntry(entry: String) {
+        onView(withId(R.id.sort_order_spinner))
+            .perform(click())
+        onData(
+            allOf(
+                `is`(instanceOf(String::class.java)),
+                `is`(entry)
+            )
+        ).perform(click())
     }
 
     /**

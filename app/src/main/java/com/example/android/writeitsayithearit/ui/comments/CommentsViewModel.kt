@@ -17,7 +17,7 @@ class CommentsViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _queryParameters = ObservedMutableLiveData<QueryParameters>()
-    val queryParameters = QueryParameters(-1, "", SortOrder.NEW)
+    val queryParameters = QueryParameters()
 
     private val _comments = Transformations.switchMap(_queryParameters) { parameters ->
         comments(parameters)
@@ -32,8 +32,16 @@ class CommentsViewModel @Inject constructor(
     val hasResultsStatus: LiveData<Event<Boolean>>
         get() = _hasResultsStatus
 
+    private val _shouldNavigateToNewComment = MutableLiveData<Event<Int>>()
+    val shouldNavigateToNewComment: LiveData<Event<Int>>
+        get() = _shouldNavigateToNewComment
+
     fun setHasResults(hasResults: Boolean) {
         _hasResultsStatus.value = Event(hasResults)
+    }
+
+    fun onClickNewComment(parentId: Int) {
+        _shouldNavigateToNewComment.value = Event(parentId)
     }
 
     fun childComments(id: Int): LiveData<PagedList<Comment>>  {

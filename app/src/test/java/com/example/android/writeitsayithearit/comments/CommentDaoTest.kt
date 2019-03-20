@@ -8,11 +8,21 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.writeitsayithearit.data.CommentDao
 import com.example.android.writeitsayithearit.data.WriteItSayItHearItDatabase
+import com.example.android.writeitsayithearit.model.SortOrder
 import com.example.android.writeitsayithearit.model.comment.Comment
+import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper
 import com.example.android.writeitsayithearit.test.TestUtils.CHILD_COMMENT_ORDER
+import com.example.android.writeitsayithearit.test.TestUtils.COMMENT_SORT_HOT_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.COMMENT_SORT_NEW_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.COMMENT_SORT_TOP_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.FIRST_STORY_COMMENT_ORDER
+import com.example.android.writeitsayithearit.test.TestUtils.SORT_HOT_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.SORT_NEW_INDICES
+import com.example.android.writeitsayithearit.test.TestUtils.SORT_TOP_INDICES
 import com.example.android.writeitsayithearit.test.TestUtils.createTestComment
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
 import com.example.android.writeitsayithearit.test.getValueBlocking
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import com.example.android.writeitsayithearit.util.dataSourceFactoryToPagedList
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -78,12 +88,35 @@ class CommentDaoTest {
 
     @Test
     @Throws(IOException::class)
-    fun getChildComment() {
-        val actualChildComments = dataSourceFactoryToPagedList(
-            commentDao.childComments(6), comments.size)
-        println("$actualChildComments")
-        val expectedChildComments = CHILD_COMMENT_ORDER
-        assertCorrectOrder(expectedChildComments, actualChildComments)
+    fun writeAndReadCommentListWithSortOrderNew() {
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.NEW, _filterStoryId = 1)
+        val query = WSHQueryHelper.comments(queryParameters)
+        val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_NEW_INDICES.size)
+
+        val expectedStoryOrder = COMMENT_SORT_NEW_INDICES
+        assertCorrectOrder(expectedStoryOrder, readComments)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun writeAndReadCommentListWithSortOrderTop() {
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.TOP, _filterStoryId = 1)
+        val query = WSHQueryHelper.comments(queryParameters)
+        val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_TOP_INDICES.size)
+
+        val expectedStoryOrder = COMMENT_SORT_TOP_INDICES
+        assertCorrectOrder(expectedStoryOrder, readComments)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun writeAndReadCommentListWithSortOrderHot() {
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.HOT, _filterStoryId = 1)
+        val query = WSHQueryHelper.comments(queryParameters)
+        val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_HOT_INDICES.size)
+
+        val expectedStoryOrder = COMMENT_SORT_HOT_INDICES
+        assertCorrectOrder(expectedStoryOrder, readComments)
     }
 
     private fun assertCorrectOrder(expectedOrder: List<Int>, actualOrder: List<Comment>) {

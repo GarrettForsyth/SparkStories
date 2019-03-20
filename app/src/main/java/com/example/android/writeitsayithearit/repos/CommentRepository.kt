@@ -1,5 +1,6 @@
 package com.example.android.writeitsayithearit.repos
 
+import android.app.DownloadManager
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -16,17 +17,25 @@ import javax.inject.Inject
 
 class CommentRepository @Inject constructor(
     private val appExecutors: AppExecutors,
-    private val commentDao: CommentDao
+    private val commentDao: CommentDao,
+    private val wshQueryHelper: WSHQueryHelper
 ) {
+
+    fun submitComment(comment: Comment) {
+        appExecutors.diskIO().execute { commentDao.insert(comment) }
+    }
+
+    fun comment(commentId: Int): LiveData<Comment> = commentDao.comment(commentId)
 
     fun comments(queryParameters: QueryParameters): LiveData<PagedList<Comment>>{
         val factory =  commentDao.comments(
-            queryParameters.filterId, 0)
+            wshQueryHelper.comments(queryParameters))
         return LivePagedListBuilder<Int, Comment>(factory, getCommentPagedListConfig()).build()
     }
 
     fun childComments(id: Int): LiveData<PagedList<Comment>> {
-        val factory =  commentDao.childComments(id)
+        val queryParameters = QueryParameters(_filterParentCommentId = id)
+        val factory =  commentDao.comments(wshQueryHelper.comments(queryParameters))
         return LivePagedListBuilder<Int, Comment>(factory, getChildCommentPagedListConfig()).build()
     }
 

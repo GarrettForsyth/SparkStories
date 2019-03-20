@@ -86,6 +86,23 @@
         <argument
             android:name="story_id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_commentsFragment_to_newCommentFragment"
+            app:destination="@id/newCommentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newCommentFragment"
+        android:name="com.example.android.writeitsayithearit.ui.comments.NewCommentFragment"
+        android:label="NewCommentFragment" >
+        <argument
+            android:name="parentId"
+            app:argType="integer" />
+        <argument
+            android:name="storyId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_newCommentFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
     </fragment>
 
 </navigation>

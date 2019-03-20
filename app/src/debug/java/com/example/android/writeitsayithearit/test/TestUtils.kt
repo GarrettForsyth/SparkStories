@@ -59,6 +59,10 @@ object TestUtils {
     val FIRST_STORY_COMMENT_ORDER = listOf(0, 1, 2)
     val CHILD_COMMENT_ORDER = listOf(6, 9, 10) // for id = 6
 
+    val COMMENT_SORT_NEW_INDICES = listOf(0,1,2,11)
+    val COMMENT_SORT_TOP_INDICES = listOf(0,11,1,2)
+    val COMMENT_SORT_HOT_INDICES = listOf(0,1,2)
+
     fun createTestCue() = Cue(
         text = "Test cue text. Very interesting stuff.",
         author = "Test Cue Author",

@@ -13,7 +13,7 @@ import javax.inject.Inject
 class CuesViewModel @Inject constructor(private val cueRepository: CueRepository) : ViewModel() {
 
     private val _queryParameters = ObservedMutableLiveData<QueryParameters>()
-    val queryParameters = QueryParameters(-1, "", SortOrder.NEW)
+    val queryParameters = QueryParameters()
 
     private val _cues = Transformations.switchMap(_queryParameters) { parameters ->
         cues(parameters)

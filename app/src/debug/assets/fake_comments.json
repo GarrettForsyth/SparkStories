@@ -7,7 +7,7 @@
       "depth": 0,
       "text": "This is a great story!",
       "author": "Prayag Rawat",
-      "rating": 10
+      "rating": 11
     },
     {
       "id": 2,
@@ -96,6 +96,15 @@
       "parent_id": 6,
       "depth": 1,
       "text": "Another good comment!",
+      "author": "Reilly Beahan",
+      "rating": 9
+    },
+    {
+      "id": 12,
+      "story_id": 1,
+      "parent_id": -1,
+      "depth": 1,
+      "text": "This comment added to test sort by hot!",
       "author": "Reilly Beahan",
       "rating": 9
     }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="comment"
+            type="com.example.android.writeitsayithearit.model.comment.Comment" />
+
+        <variable
+            name="parentComment"
+            type="com.example.android.writeitsayithearit.model.comment.Comment" />
+
+        <variable
+            name="hasParentComment"
+            type="Boolean" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.android.writeitsayithearit.ui.comments.NewCommentViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/new_comment_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.cues.NewCommentFragment">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/new_comment_top_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:paddingStart="@dimen/padding_regular"
+                android:paddingLeft="@dimen/padding_regular"
+                android:paddingEnd="@dimen/padding_regular"
+                android:paddingRight="@dimen/padding_regular">
+
+
+                <ImageButton
+                    android:id="@+id/view_parent_comment_button"
+                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    app:visibleGone="@{hasParentComment}"
+                    android:stateListAnimator="@animator/top_menu_button_state"
+                    android:backgroundTint="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_small"
+                    android:onClick="@{() -> viewmodel.onClickShowParentComment()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_action_cues_black_24dp" />
+
+                <ImageButton
+                    android:id="@+id/toggle_preview_button"
+                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    android:stateListAnimator="@animator/top_menu_activated_button_state"
+                    android:backgroundTint="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginLeft="@dimen/margin_small"
+                    android:onClick="@{() -> viewmodel.onTogglePreviewMode()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/view_parent_comment_button"
+                    app:layout_constraintStart_toEndOf="@id/view_parent_comment_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_pageview_black_24dp" />
+
+                <ImageButton
+                    android:id="@+id/submit_comment_button"
+                    style="@style/Theme.WriteItSayItHearIt.TopMenuItem"
+                    android:stateListAnimator="@animator/top_menu_button_state"
+                    android:backgroundTint="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_marginRight="@dimen/margin_small"
+                    android:onClick="@{() -> viewmodel.onClickSubmit()}"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_done_black_24dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/top_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="new_comment_top_menu" />
+
+
+        <ScrollView
+            android:id="@+id/new_comment_text_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_barrier">
+
+            <com.example.android.writeitsayithearit.views.ScaleTextInputEditText
+                style="@style/Theme.WriteItSayItHearIt.CardText"
+                android:id="@+id/new_comment_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:padding="@dimen/padding_small"
+                android:background="@null"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:text="@={viewmodel.commentTextField.text}"
+                app:onDoubleClickListener="@{viewmodel.toggleTopMenuDoubleClickListener()}" />
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

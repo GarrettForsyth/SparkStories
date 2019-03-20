@@ -21,6 +21,7 @@ import com.example.android.writeitsayithearit.test.TestUtils.STORY_FILTER_SORT_T
 import com.example.android.writeitsayithearit.test.TestUtils.STORY_FILTER_TEXT
 import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
 import com.example.android.writeitsayithearit.test.data.DatabaseSeed
+import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import com.example.android.writeitsayithearit.util.dataSourceFactoryToPagedList
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
@@ -98,7 +99,7 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryList() {
-        val query = WSHQueryHelper.stories()
+        val query = WSHQueryHelper.stories(QueryParameters())
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         for (stories in stories) {
@@ -109,7 +110,8 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithFilter() {
-        val query = WSHQueryHelper.stories(STORY_FILTER_TEXT)
+        val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT)
+        val query = WSHQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
         assert(readStories.size == 3)
     }
@@ -117,7 +119,8 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithSortOrderNew() {
-        val query = WSHQueryHelper.stories("", SortOrder.NEW)
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.NEW)
+        val query = WSHQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = SORT_NEW_INDICES
@@ -127,7 +130,8 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithTop() {
-        val query = WSHQueryHelper.stories("", SortOrder.TOP)
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.TOP)
+        val query = WSHQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = SORT_TOP_INDICES
@@ -137,9 +141,10 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithHot() {
-        val query = WSHQueryHelper.stories("", SortOrder.HOT)
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.HOT)
+        val query = WSHQueryHelper.stories(queryParameters)
+        println(query.sql)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
-
         val expectedStoryOrder = SORT_HOT_INDICES
         assertCorrectOrder(expectedStoryOrder, readStories)
     }
@@ -147,7 +152,8 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithHotWithFilter() {
-        val query = WSHQueryHelper.stories(STORY_FILTER_TEXT, SortOrder.HOT)
+        val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT, _sortOrder = SortOrder.HOT)
+        val query = WSHQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = STORY_FILTER_SORT_HOT_INDICES
@@ -157,7 +163,8 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithTopWithFilter() {
-        val query = WSHQueryHelper.stories(STORY_FILTER_TEXT, SortOrder.TOP)
+        val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT, _sortOrder = SortOrder.TOP)
+        val query = WSHQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = STORY_FILTER_SORT_TOP_INDICES
@@ -167,7 +174,9 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryListWithNewWithFilter() {
-        val query = WSHQueryHelper.stories(STORY_FILTER_TEXT, SortOrder.NEW)
+        val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT, _sortOrder = SortOrder.NEW)
+        val query = WSHQueryHelper.stories(queryParameters)
+        println(query.sql)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = STORY_FILTER_SORT_NEW_INDICES
@@ -175,6 +184,8 @@ class StoryDaoTest {
     }
 
     private fun assertCorrectOrder(expectedOrder: List<Int>, actualOrder: List<Story>) {
+        println(expectedOrder)
+        println(actualOrder.map { story -> story.id -1 })
         for (i in 0 until expectedOrder.size) {
             assert(stories[expectedOrder[i]].equals(actualOrder[i]))
         }

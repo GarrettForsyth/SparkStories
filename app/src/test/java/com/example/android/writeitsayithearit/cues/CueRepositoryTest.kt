@@ -31,27 +31,28 @@ class CueRepositoryTest {
     @Test
     fun loadCuesLocally() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.cues("", SortOrder.NEW) } returns mockedQuery
+        every { wshQueryHelper.cues(QueryParameters()) } returns mockedQuery
 
-        cueRepository.cues(QueryParameters( -1, "", SortOrder.NEW))
+        cueRepository.cues(QueryParameters())
         verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 
     @Test
     fun loadCuesLocallyFilterByText() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.cues("Dogs", SortOrder.NEW) } returns mockedQuery
+        val queryParameters = QueryParameters(_filterString = "Dogs")
+        every { wshQueryHelper.cues(queryParameters) } returns mockedQuery
 
-        cueRepository.cues(QueryParameters( -1, "Dogs", SortOrder.NEW))
+        cueRepository.cues(queryParameters)
         verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 
     @Test
     fun loadCuesLocallyOrderByNew() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.cues("", SortOrder.NEW) } returns mockedQuery
+        every { wshQueryHelper.cues(QueryParameters())} returns mockedQuery
 
-        cueRepository.cues(QueryParameters( -1, "", SortOrder.NEW))
+        cueRepository.cues(QueryParameters())
         verify(exactly = 1) { dao.cues(mockedQuery) }
 
     }
@@ -59,18 +60,20 @@ class CueRepositoryTest {
     @Test
     fun loadCuesLocallyOrderByTop() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.cues("", SortOrder.TOP) } returns mockedQuery
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.TOP)
+        every { wshQueryHelper.cues(queryParameters) } returns mockedQuery
 
-        cueRepository.cues(QueryParameters( -1, "", SortOrder.TOP))
+        cueRepository.cues(queryParameters)
         verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 
     @Test
     fun loadCuesLocallyOrderByHot() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.cues("", SortOrder.HOT) } returns mockedQuery
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.HOT)
+        every { wshQueryHelper.cues(queryParameters) } returns mockedQuery
 
-        cueRepository.cues(QueryParameters( -1, "", SortOrder.HOT))
+        cueRepository.cues(queryParameters)
         verify(exactly = 1) { dao.cues(mockedQuery) }
     }
 

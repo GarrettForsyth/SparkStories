@@ -19,6 +19,7 @@ import com.example.android.writeitsayithearit.databinding.FragmentCommentsBindin
 import com.example.android.writeitsayithearit.databinding.FragmentStoriesBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
+import com.example.android.writeitsayithearit.ui.cues.CueFragmentDirections
 import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
 import com.example.android.writeitsayithearit.ui.stories.StoryAdapter
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
@@ -66,13 +67,24 @@ class CommentsFragment : Fragment(), Injectable {
         setStoryId()
         observeComments()
         observeResultStatus()
+        observeShouldNavigateToNewComment()
 
         return binding.root
     }
 
+    private fun observeShouldNavigateToNewComment() {
+        commentsViewModel.shouldNavigateToNewComment.observe(this, EventObserver { parentId ->
+            navController().navigate(
+                CommentsFragmentDirections.actionCommentsFragmentToNewCommentFragment(
+                    parentId, commentsViewModel.queryParameters.filterStoryId
+                )
+            )
+        })
+    }
+
     private fun setStoryId() {
         val args = CommentsFragmentArgs.fromBundle(arguments!!)
-        commentsViewModel.queryParameters.filterId = args.storyId
+        commentsViewModel.queryParameters.filterStoryId = args.storyId
     }
 
     private fun observeComments() {
@@ -92,6 +104,7 @@ class CommentsFragment : Fragment(), Injectable {
             binding.executePendingBindings()
         })
     }
+
     /**
      * Created to override during tests.
      */

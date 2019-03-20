@@ -86,7 +86,7 @@ class CueFragmentTest {
     fun filterCue() {
         scenario.onFragment {
             it.cue.postValue(CUE)
-            assertEquals(it.storiesFragment.storiesViewModel.queryParameters.filterId, CUE.id)
+            assertEquals(it.storiesFragment.storiesViewModel.queryParameters.filterCueId, CUE.id)
         }
     }
 

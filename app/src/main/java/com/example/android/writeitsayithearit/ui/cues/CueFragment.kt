@@ -65,7 +65,7 @@ class CueFragment : Fragment(), Injectable {
             cue?.let {
                 binding.cue = cue
                 binding.executePendingBindings()
-                storiesFragment.storiesViewModel.queryParameters.filterId = cue.id
+                storiesFragment.storiesViewModel.queryParameters.filterCueId = cue.id
             }
         })
     }

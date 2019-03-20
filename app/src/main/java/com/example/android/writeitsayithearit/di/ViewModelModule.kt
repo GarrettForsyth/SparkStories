@@ -3,6 +3,7 @@ package com.example.android.writeitsayithearit.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.writeitsayithearit.ui.comments.CommentsViewModel
+import com.example.android.writeitsayithearit.ui.comments.NewCommentViewModel
 import com.example.android.writeitsayithearit.ui.cues.CueViewModel
 import com.example.android.writeitsayithearit.ui.cues.CuesViewModel
 import com.example.android.writeitsayithearit.ui.cues.NewCueViewModel
@@ -51,6 +52,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CommentsViewModel::class)
     abstract fun bindCommentsViewModel(commentsViewModel: CommentsViewModel) : ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NewCommentViewModel::class)
+    abstract fun bindNewCommentViewModel(newCommentViewModel: NewCommentViewModel) : ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: WriteItSayItHearItViewModelFactory) : ViewModelProvider.Factory

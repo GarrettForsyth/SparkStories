@@ -45,7 +45,7 @@ class CuesViewModelTest {
     @Test
     fun getCues() {
         cuesViewModel.queryParameters.filterString = ""
-        val expectedParameters = QueryParameters(-1, "", SortOrder.NEW)
+        val expectedParameters = QueryParameters()
         verify { cueRepository.cues(expectedParameters) }
     }
 
@@ -53,28 +53,28 @@ class CuesViewModelTest {
     fun filterQuery() {
         val filterString = "dogs"
         cuesViewModel.queryParameters.filterString = filterString
-        val expectedParameters = QueryParameters(-1, filterString, SortOrder.NEW)
+        val expectedParameters = QueryParameters(_filterString =  filterString)
         verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun sortByNew() {
         cuesViewModel.queryParameters.sortOrder = SortOrder.NEW
-        val expectedParameters = QueryParameters(-1, "", SortOrder.NEW)
+        val expectedParameters = QueryParameters(_sortOrder =  SortOrder.NEW)
         verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun sortByTop() {
         cuesViewModel.queryParameters.sortOrder = SortOrder.TOP
-        val expectedParameters = QueryParameters(-1, "", SortOrder.TOP)
+        val expectedParameters = QueryParameters(_sortOrder = SortOrder.TOP)
         verify { cueRepository.cues(expectedParameters) }
     }
 
     @Test
     fun sortByHot() {
         cuesViewModel.queryParameters.sortOrder = SortOrder.HOT
-        val expectedParameters = QueryParameters(-1, "", SortOrder.HOT)
+        val expectedParameters = QueryParameters(_sortOrder = SortOrder.HOT)
         verify { cueRepository.cues(expectedParameters) }
     }
 
@@ -85,7 +85,7 @@ class CuesViewModelTest {
             this.filterString = filterString
             sortOrder = SortOrder.HOT
         }
-        val expectedParameters = QueryParameters(-1, filterString, SortOrder.HOT)
+        val expectedParameters = QueryParameters(_filterString = filterString, _sortOrder =  SortOrder.HOT)
         verify { cueRepository.cues(expectedParameters) }
     }
 
@@ -96,7 +96,7 @@ class CuesViewModelTest {
             this.filterString = filterString
             sortOrder = SortOrder.NEW
         }
-        val expectedParameters = QueryParameters(-1, filterString, SortOrder.NEW)
+        val expectedParameters = QueryParameters(_filterString = filterString, _sortOrder = SortOrder.NEW)
         verify { cueRepository.cues(expectedParameters) }
     }
 
@@ -107,7 +107,7 @@ class CuesViewModelTest {
             this.filterString = filterString
             sortOrder = SortOrder.TOP
         }
-        val expectedParameters = QueryParameters(-1, filterString, SortOrder.TOP)
+        val expectedParameters = QueryParameters(_filterString = filterString, _sortOrder = SortOrder.TOP)
         verify { cueRepository.cues(expectedParameters) }
     }
 

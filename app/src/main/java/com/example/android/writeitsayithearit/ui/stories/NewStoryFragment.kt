@@ -29,6 +29,8 @@ import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import com.example.android.writeitsayithearit.R
 import com.example.android.writeitsayithearit.databinding.CueListItemBinding
+import com.example.android.writeitsayithearit.ui.util.events.disableEditText
+import com.example.android.writeitsayithearit.ui.util.events.enableEditText
 
 
 @OpenForTesting
@@ -102,7 +104,7 @@ class NewStoryFragment : Fragment(), Injectable {
     private fun observePreviewModeStatus() {
         newStoryViewModel.inPreviewMode.observe(this, EventObserver { inPreviewMode ->
             if (inPreviewMode) {
-                disableEditText(binding.newStoryEditText)
+                disableEditText(activity!!, binding.newStoryEditText)
                 binding.togglePreviewButton.isActivated = true
             } else {
                 enableEditText(binding.newStoryEditText)
@@ -111,36 +113,6 @@ class NewStoryFragment : Fragment(), Injectable {
         })
     }
 
-    private fun enableEditText(editText: EditText) {
-        editText.apply {
-            isCursorVisible = true
-            isFocusableInTouchMode = true
-        }
-    }
-
-    /**
-     * TODO:
-     * There is a bug here where the user can still input using a keyboard even
-     * when the edit text is disabled. Hiding the keyboard should stop users on
-     * a phone from having trouble, but users using a keyboard input will be able to
-     * continue typing into the edit text even though it is disabled.
-     *
-     * Detaching and reattaching the key listener fixes this problem, but for some reason
-     * it prevents the edit text from ever gaining focus again
-     */
-    private fun disableEditText(editText: EditText) {
-        editText.apply {
-            isFocusableInTouchMode = false
-            isCursorVisible = false
-            hideKeyboard()
-            clearFocus()
-        }
-    }
-
-    private fun hideKeyboard() {
-        val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-        imm!!.hideSoftInputFromWindow(binding.newStoryEditText.windowToken, 0)
-    }
 
     private fun observeMenuStatus() {
         val rootView = binding.newStoryConstraintLayout

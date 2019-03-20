@@ -21,8 +21,7 @@ class CueRepository @Inject constructor(
 
     fun cues(queryParameters: QueryParameters): LiveData<PagedList<Cue>> {
         val factory = cueDao.cues(wshQueryHelper.cues(
-            queryParameters.filterString,
-            queryParameters.sortOrder
+            queryParameters
         ))
         return LivePagedListBuilder<Int, Cue>(factory, getCuePagedListConfig()).build()
     }

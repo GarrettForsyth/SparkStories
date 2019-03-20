@@ -31,27 +31,28 @@ class StoryRepositoryTest {
     @Test
     fun loadStoriesLocally() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.stories("", SortOrder.NEW) } returns mockedQuery
+        every { wshQueryHelper.stories(QueryParameters()) } returns mockedQuery
 
-        storyRepository.stories(QueryParameters(-1, "", SortOrder.NEW))
+        storyRepository.stories(QueryParameters())
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
     @Test
     fun loadStoriesLocallyFilterByText() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.stories("Dogs", SortOrder.NEW, -1) } returns mockedQuery
+        val queryParameters = QueryParameters(_filterString = "Dogs")
+        every { wshQueryHelper.stories(queryParameters) } returns mockedQuery
 
-        storyRepository.stories(QueryParameters(-1, "Dogs", SortOrder.NEW))
+        storyRepository.stories(queryParameters)
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
     @Test
     fun loadStoriesLocallyOrderByNew() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.stories("", SortOrder.NEW, -1) } returns mockedQuery
+        every { wshQueryHelper.stories(QueryParameters()) } returns mockedQuery
 
-        storyRepository.stories(QueryParameters(-1, "", SortOrder.NEW))
+        storyRepository.stories(QueryParameters())
         verify(exactly = 1) { dao.stories(mockedQuery) }
 
     }
@@ -59,18 +60,20 @@ class StoryRepositoryTest {
     @Test
     fun loadStoriesLocallyOrderByTop() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.stories("", SortOrder.TOP) } returns mockedQuery
+        every { wshQueryHelper.stories(QueryParameters(_sortOrder = SortOrder.TOP)) } returns mockedQuery
 
-        storyRepository.stories(QueryParameters(-1, "", SortOrder.TOP))
+        storyRepository.stories(QueryParameters(_sortOrder = SortOrder.TOP))
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 
     @Test
     fun loadStoriesLocallyOrderByHot() {
         val mockedQuery: SupportSQLiteQuery = mockk()
-        every { wshQueryHelper.stories("", SortOrder.HOT) } returns mockedQuery
 
-        storyRepository.stories(QueryParameters(-1, "", SortOrder.HOT))
+        every { wshQueryHelper.stories(QueryParameters(_sortOrder = SortOrder.HOT)) } returns mockedQuery
+
+        storyRepository.stories(QueryParameters(_sortOrder = SortOrder.HOT))
+
         verify(exactly = 1) { dao.stories(mockedQuery) }
     }
 

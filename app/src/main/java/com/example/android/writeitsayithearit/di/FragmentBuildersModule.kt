@@ -1,6 +1,7 @@
 package com.example.android.writeitsayithearit.di
 
 import com.example.android.writeitsayithearit.ui.comments.CommentsFragment
+import com.example.android.writeitsayithearit.ui.comments.NewCommentFragment
 import com.example.android.writeitsayithearit.ui.cues.CueFragment
 import com.example.android.writeitsayithearit.ui.cues.CuesFragment
 import com.example.android.writeitsayithearit.ui.cues.NewCueFragment
@@ -36,5 +37,8 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeCommentsFragment() : CommentsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeNewCommentFragment() : NewCommentFragment
 
 }
