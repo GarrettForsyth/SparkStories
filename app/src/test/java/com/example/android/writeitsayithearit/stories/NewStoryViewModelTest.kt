@@ -51,8 +51,9 @@ class NewStoryViewModelTest {
             newStoryViewModel.characterCountColour
         )
 
+        mockObserverFor(newStoryViewModel.topMenuStatus)
+
         mockObserverFor(
-            newStoryViewModel.topMenuStatus,
             newStoryViewModel.inPreviewMode,
             newStoryViewModel.newStoryInfoDialog,
             newStoryViewModel.confirmSubmissionDialog,
@@ -79,13 +80,13 @@ class NewStoryViewModelTest {
     @Test
     fun toggleMenu() {
         // initial state should be true
-        assertTrue(newStoryViewModel.topMenuStatus.getValueBlocking().peekContent())
+        assertTrue(newStoryViewModel.topMenuStatus.getValueBlocking())
 
         newStoryViewModel.onToggleMenu()
-        assertFalse(newStoryViewModel.topMenuStatus.getValueBlocking().peekContent())
+        assertFalse(newStoryViewModel.topMenuStatus.getValueBlocking())
 
         newStoryViewModel.onToggleMenu()
-        assertTrue(newStoryViewModel.topMenuStatus.getValueBlocking().peekContent())
+        assertTrue(newStoryViewModel.topMenuStatus.getValueBlocking())
     }
 
     @Test
@@ -107,7 +108,7 @@ class NewStoryViewModelTest {
 
         // mock the response given from the edit text
         val editable: Editable = mockk()
-        every { editable.toString() } returns "aaa"
+        every { newStoryViewModel.storyTextField.text } returns "aaa"
         // mock the response of what colour the text should be
         every { newStoryViewModel.storyTextField.characterCountColour } returns R.color.character_count_invalid
 

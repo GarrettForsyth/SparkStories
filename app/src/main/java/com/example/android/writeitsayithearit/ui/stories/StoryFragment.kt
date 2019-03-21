@@ -23,6 +23,7 @@ import com.example.android.writeitsayithearit.databinding.FragmentStoryBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
+import timber.log.Timber
 import javax.inject.Inject
 
 @OpenForTesting
@@ -40,6 +41,7 @@ class StoryFragment : Fragment(), Injectable {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Timber.d("mytest onCreateView StoryFragment called!")
         binding = DataBindingUtil.inflate(
             inflater,
             com.example.android.writeitsayithearit.R.layout.fragment_story,
@@ -111,7 +113,7 @@ class StoryFragment : Fragment(), Injectable {
         val menu = binding.storyTopMenu
         val text = binding.storyTextScrollView
 
-        storyViewModel.topMenuStatus.observe(this, EventObserver { isShown ->
+        storyViewModel.topMenuStatus.observe(this, Observer { isShown ->
             if (isShown) { //slide the menu, and toggle button, and story text up
                 TransitionManager.beginDelayedTransition(rootView)
                 rootView.removeView(menu)

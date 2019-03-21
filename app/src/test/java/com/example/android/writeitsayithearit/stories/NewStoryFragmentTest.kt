@@ -157,7 +157,7 @@ class NewStoryFragmentTest {
     @Test
     fun showMenu() {
         scenario.onFragment {
-            it.topMenuShown.value = Event(true)
+            it.topMenuShown.value = true
             assert(it.new_story_top_menu.isShown)
         }
     }
@@ -165,7 +165,7 @@ class NewStoryFragmentTest {
     @Test
     fun hideMenu() {
         scenario.onFragment {
-            it.topMenuShown.value = Event(false)
+            it.topMenuShown.value = false
             assertNull(it.new_story_top_menu)
         }
     }
@@ -230,7 +230,7 @@ class NewStoryFragmentTest {
                 this.newStoryViewModel = mockk(relaxed = true)
                 this.viewModelFactory = ViewModelUtil.createFor(this.newStoryViewModel)
 
-                this.topMenuShown.value = Event(true)
+                this.topMenuShown.value = true
 
                 every { newStoryViewModel.cue } returns this.cue
                 every { newStoryViewModel.invalidStorySnackBar } returns this.invalidStorySnackBar
@@ -261,7 +261,7 @@ class NewStoryFragmentTest {
         val newStoryInfoDialog = MutableLiveData<Event<Boolean>>()
         val confirmSubmissionDialog = MutableLiveData<Event<Boolean>>()
         val shouldNavigateToStories = MutableLiveData<Event<Boolean>>()
-        val topMenuShown = MutableLiveData<Event<Boolean>>()
+        val topMenuShown = MutableLiveData<Boolean>()
         val inPreviewMode = MutableLiveData<Event<Boolean>>()
         val characterCount = MutableLiveData<Int>()
         val characterCountColour = MutableLiveData<Int>()

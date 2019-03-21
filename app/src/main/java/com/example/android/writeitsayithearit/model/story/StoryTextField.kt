@@ -1,13 +1,31 @@
 package com.example.android.writeitsayithearit.model.story
 
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
+import com.example.android.writeitsayithearit.BR
 import com.example.android.writeitsayithearit.R
+import com.example.android.writeitsayithearit.model.util.removeMultipleBlankCharacters
+import timber.log.Timber
 
 /**
  * This object represents the user input for a Story's text field.
  *
  * It is responsible for maintaining its validation state.
  */
-class StoryTextField(var text: String = "") {
+class StoryTextField(
+    var _text: String = ""
+): BaseObservable() {
+
+    var text: String
+        @Bindable get() {
+            return _text
+        }
+    set(value) {
+        if (_text != value) {
+            _text = removeMultipleBlankCharacters(value)
+            notifyPropertyChanged(BR.viewmodel)
+        }
+    }
 
     fun isValid() = text.trim().length in minCharacters..maxCharacters
 

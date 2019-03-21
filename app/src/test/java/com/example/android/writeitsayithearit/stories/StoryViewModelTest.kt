@@ -76,13 +76,13 @@ class StoryViewModelTest {
     @Test
     fun toggleMenu() {
         // initial state should be true
-        assertTrue(storyViewModel.topMenuStatus.getValueBlocking().peekContent())
+        assertTrue(storyViewModel.topMenuStatus.getValueBlocking())
 
         storyViewModel.onToggleMenu()
-        assertFalse(storyViewModel.topMenuStatus.getValueBlocking().peekContent())
+        assertFalse(storyViewModel.topMenuStatus.getValueBlocking())
 
         storyViewModel.onToggleMenu()
-        assertTrue(storyViewModel.topMenuStatus.getValueBlocking().peekContent())
+        assertTrue(storyViewModel.topMenuStatus.getValueBlocking())
     }
 
     @Test

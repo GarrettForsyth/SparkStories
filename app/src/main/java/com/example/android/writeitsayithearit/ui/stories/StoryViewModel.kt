@@ -29,8 +29,8 @@ class StoryViewModel @Inject constructor(
     val cue: LiveData<Cue>
         get() =  _cue
 
-    private val _topMenuStatus = MutableLiveData<Event<Boolean>>()
-    val topMenuStatus: LiveData<Event<Boolean>>
+    private val _topMenuStatus = MutableLiveData<Boolean>()
+    val topMenuStatus: LiveData<Boolean>
         get() =  _topMenuStatus
 
     private val _cueDialog = MutableLiveData<Event<Boolean>>()
@@ -43,7 +43,7 @@ class StoryViewModel @Inject constructor(
 
 
     init {
-        _topMenuStatus.value = Event(true)
+        _topMenuStatus.value = true
     }
 
 
@@ -52,10 +52,12 @@ class StoryViewModel @Inject constructor(
     }
 
     fun toggleTopMenuDoubleClickListener(): GestureDetector.SimpleOnGestureListener {
+        Timber.d("mytest creating doubleclick listener")
         return object : GestureDetector.SimpleOnGestureListener() {
             override fun onDown(e: MotionEvent?) = true
 
             override fun onDoubleTap(e: MotionEvent?): Boolean {
+                Timber.d("mytest double clicked!")
                 onToggleMenu()
                 return super.onDoubleTap(e)
             }
@@ -63,7 +65,7 @@ class StoryViewModel @Inject constructor(
     }
 
     fun onToggleMenu() {
-        _topMenuStatus.value = Event(!_topMenuStatus.value!!.peekContent())
+        _topMenuStatus.value = !_topMenuStatus.value!!
     }
 
     fun onLikeStoryClick() {

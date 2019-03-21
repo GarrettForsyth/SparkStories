@@ -119,7 +119,7 @@ class NewStoryFragment : Fragment(), Injectable {
         val menu = binding.newStoryTopMenu
         val text = binding.newStoryTextScrollView
 
-        newStoryViewModel.topMenuStatus.observe(this, EventObserver { isShown ->
+        newStoryViewModel.topMenuStatus.observe(this, Observer { isShown ->
             if (isShown) {
                 TransitionManager.beginDelayedTransition(rootView)
                 rootView.removeView(menu)

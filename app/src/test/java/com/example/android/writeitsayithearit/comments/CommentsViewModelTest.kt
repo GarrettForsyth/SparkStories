@@ -7,11 +7,14 @@ import com.example.android.writeitsayithearit.repos.CommentRepository
 import com.example.android.writeitsayithearit.repos.StoryRepository
 import com.example.android.writeitsayithearit.repos.utils.WSHQueryHelper.stories
 import com.example.android.writeitsayithearit.test.TestUtils.createTestComment
+import com.example.android.writeitsayithearit.test.TestUtils.createTestStory
+import com.example.android.writeitsayithearit.test.asLiveData
 import com.example.android.writeitsayithearit.test.getValueBlocking
 import com.example.android.writeitsayithearit.ui.comments.CommentsViewModel
 import com.example.android.writeitsayithearit.ui.stories.StoriesViewModel
 import com.example.android.writeitsayithearit.ui.util.QueryParameters
 import com.example.android.writeitsayithearit.util.MockUtils.mockObserverFor
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import junit.framework.Assert.assertNotNull
@@ -85,9 +88,10 @@ class CommentsViewModelTest {
     @Test
     fun clickLikeCommentButton() {
         val comment = createTestComment()
+
         commentsViewModel.onClickLikeComment(comment)
-        comment.apply { rating = comment.rating++ }
-        verify { commentRepository.update(comment) }
+        val expectedComment = comment.copy().apply { rating++ }
+        verify { commentRepository.update(expectedComment) }
     }
 }
 

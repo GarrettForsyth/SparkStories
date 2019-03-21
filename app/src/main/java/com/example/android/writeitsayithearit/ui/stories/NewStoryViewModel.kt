@@ -62,8 +62,8 @@ class NewStoryViewModel @Inject constructor(
     val cue: LiveData<Cue>
         get() = _cue
 
-    private val _topMenuStatus = MutableLiveData<Event<Boolean>>()
-    val topMenuStatus: LiveData<Event<Boolean>>
+    private val _topMenuStatus = MutableLiveData<Boolean>()
+    val topMenuStatus: LiveData<Boolean>
         get() = _topMenuStatus
 
     private val _inPreviewMode = MutableLiveData<Event<Boolean>>()
@@ -75,7 +75,7 @@ class NewStoryViewModel @Inject constructor(
         get() = _cueDialog
 
     init {
-        _topMenuStatus.value = Event(true)
+        _topMenuStatus.value = true
         _inPreviewMode.value = Event(false)
     }
 
@@ -84,7 +84,7 @@ class NewStoryViewModel @Inject constructor(
     fun storyTextChangeListener(): TextWatcher {
         return object : TextWatcherAdapter() {
             override fun afterTextChanged(text: Editable?) {
-                val currentCharacterCount = text.toString().trim().length
+                val currentCharacterCount = storyTextField.text.length
                 _characterCount.value = (currentCharacterCount)
                 _characterCountColour.value = storyTextField.characterCountColour
             }
@@ -92,7 +92,7 @@ class NewStoryViewModel @Inject constructor(
     }
 
     fun onToggleMenu() {
-        _topMenuStatus.value = Event(!_topMenuStatus.value!!.peekContent())
+        _topMenuStatus.value = !_topMenuStatus.value!!
     }
 
     fun onTogglePreviewMode() {

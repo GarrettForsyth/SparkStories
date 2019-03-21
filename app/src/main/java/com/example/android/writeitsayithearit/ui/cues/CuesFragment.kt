@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android.writeitsayithearit.AppExecutors
 
 import com.example.android.writeitsayithearit.R
@@ -19,6 +20,7 @@ import com.example.android.writeitsayithearit.databinding.FragmentCuesBinding
 import com.example.android.writeitsayithearit.di.Injectable
 import com.example.android.writeitsayithearit.test.OpenForTesting
 import com.example.android.writeitsayithearit.ui.util.events.EventObserver
+import kotlinx.android.synthetic.main.fragment_cues.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -61,6 +63,8 @@ class CuesFragment : Fragment(), Injectable {
         binding.viewmodel = cuesViewModel
         binding.listAdapter = cueAdapter
         binding.hasResults = false
+
+
         binding.executePendingBindings()
 
         observeCues()
@@ -99,6 +103,24 @@ class CuesFragment : Fragment(), Injectable {
     private fun observeCues() {
         cuesViewModel.cues.observe(this, Observer { cues ->
             if (cues != null) {
+                /**
+                 * TODO: null is submitted before the list to achieve the behaviour
+                 * of having the list start from the top.
+                 *
+                 * Without this line, the list will follow the topmost visible viewholder
+                 * which leads to unintuitive effects (e.g. changing sort order from
+                 * new --> top will follow the topmost vh somewhere in the middle of the list.)
+                 *
+                 * Telling the RecyclerView or LinearLayoutManager to scroll to the top
+                 * after a data change doesn't do anything. I think this is because the
+                 * list hasn't had a chance to fully update/become visible yet.
+                 *
+                 * A better solution might be to somehow watch until the view become visible
+                 * and THEN scroll to the top of the list. This way, the benefits from DiffUtils
+                 * are used (where as here, they aren't). This might be a premature optimization,
+                 * but keep an eye on this.
+                 */
+                cueAdapter.submitList(null)
                 cueAdapter.submitList(cues)
                 cuesViewModel.setHasResults(!cues.isEmpty())
             } else {
