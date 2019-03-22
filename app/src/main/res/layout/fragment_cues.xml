@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.example.android.writeitsayithearit.binding.Converter" />
+        <import type="com.example.android.sparkstories.binding.Converter" />
 
         <variable
             name="hasResults"
@@ -12,11 +12,11 @@
 
         <variable
             name="viewmodel"
-            type="com.example.android.writeitsayithearit.ui.cues.CuesViewModel" />
+            type="com.example.android.sparkstories.ui.cues.CuesViewModel" />
 
         <variable
             name="listAdapter"
-            type="com.example.android.writeitsayithearit.ui.cues.CueAdapter" />
+            type="com.example.android.sparkstories.ui.cues.CueAdapter" />
 
     </data>
 

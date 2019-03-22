@@ -7,11 +7,11 @@
 
         <variable
             name="comment"
-            type="com.example.android.writeitsayithearit.model.comment.Comment" />
+            type="com.example.android.sparkstories.model.comment.Comment" />
 
         <variable
             name="parentComment"
-            type="com.example.android.writeitsayithearit.model.comment.Comment" />
+            type="com.example.android.sparkstories.model.comment.Comment" />
 
         <variable
             name="hasParentComment"
@@ -19,7 +19,7 @@
 
         <variable
             name="viewmodel"
-            type="com.example.android.writeitsayithearit.ui.comments.NewCommentViewModel" />
+            type="com.example.android.sparkstories.ui.comments.NewCommentViewModel" />
 
     </data>
 
@@ -118,7 +118,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top_barrier">
 
-            <com.example.android.writeitsayithearit.views.ScaleTextInputEditText
+            <com.example.android.sparkstories.views.ScaleTextInputEditText
                 style="@style/Theme.WriteItSayItHearIt.CardText"
                 android:id="@+id/new_comment_edit_text"
                 android:layout_width="match_parent"

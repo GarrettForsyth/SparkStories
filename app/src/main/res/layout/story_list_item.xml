@@ -6,11 +6,11 @@
     <data>
         <variable
             name="story"
-            type="com.example.android.writeitsayithearit.model.story.Story" />
+            type="com.example.android.sparkstories.model.story.Story" />
 
         <variable
             name="viewmodel"
-            type="com.example.android.writeitsayithearit.ui.stories.StoriesViewModel" />
+            type="com.example.android.sparkstories.ui.stories.StoriesViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView

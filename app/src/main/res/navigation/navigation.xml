@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/cuesFragment"
-        android:name="com.example.android.writeitsayithearit.ui.cues.CuesFragment"
+        android:name="com.example.android.sparkstories.ui.cues.CuesFragment"
         android:label="fragment_cues"
         tools:layout="@layout/fragment_cues" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/newCueFragment"
-        android:name="com.example.android.writeitsayithearit.ui.cues.NewCueFragment"
+        android:name="com.example.android.sparkstories.ui.cues.NewCueFragment"
         android:label="fragment_new_cue"
         tools:layout="@layout/fragment_new_cue" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/newStoryFragment"
-        android:name="com.example.android.writeitsayithearit.ui.stories.NewStoryFragment"
+        android:name="com.example.android.sparkstories.ui.stories.NewStoryFragment"
         android:label="fragment_new_story"
         tools:layout="@layout/fragment_new_story" >
         <argument
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/storiesFragment"
-        android:name="com.example.android.writeitsayithearit.ui.stories.StoriesFragment"
+        android:name="com.example.android.sparkstories.ui.stories.StoriesFragment"
         android:label="fragment_stories"
         tools:layout="@layout/fragment_stories" >
         <action
@@ -49,12 +49,12 @@
     </fragment>
     <fragment
         android:id="@+id/narrationsFragment"
-        android:name="com.example.android.writeitsayithearit.ui.narrations.NarrationsFragment"
+        android:name="com.example.android.sparkstories.ui.narrations.NarrationsFragment"
         android:label="fragment_narrations"
         tools:layout="@layout/fragment_narrations" />
     <fragment
         android:id="@+id/storyFragment"
-        android:name="com.example.android.writeitsayithearit.ui.stories.StoryFragment"
+        android:name="com.example.android.sparkstories.ui.stories.StoryFragment"
         android:label="fragment_story"
         tools:layout="@layout/fragment_story" >
         <argument
@@ -66,7 +66,7 @@
     </fragment>
     <fragment
         android:id="@+id/cueFragment"
-        android:name="com.example.android.writeitsayithearit.ui.cues.CueFragment"
+        android:name="com.example.android.sparkstories.ui.cues.CueFragment"
         android:label="CueFragment" >
         <argument
             android:name="cue_id"
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/commentsFragment"
-        android:name="com.example.android.writeitsayithearit.ui.comments.CommentsFragment"
+        android:name="com.example.android.sparkstories.ui.comments.CommentsFragment"
         android:label="fragment_comments"
         tools:layout="@layout/fragment_comments" >
         <argument
@@ -92,7 +92,7 @@
     </fragment>
     <fragment
         android:id="@+id/newCommentFragment"
-        android:name="com.example.android.writeitsayithearit.ui.comments.NewCommentFragment"
+        android:name="com.example.android.sparkstories.ui.comments.NewCommentFragment"
         android:label="NewCommentFragment" >
         <argument
             android:name="parentId"

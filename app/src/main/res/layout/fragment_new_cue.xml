@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="com.example.android.writeitsayithearit.ui.cues.NewCueViewModel" />
+            type="com.example.android.sparkstories.ui.cues.NewCueViewModel" />
 
         <variable
             name="newCueEditTextHasFocus"
@@ -76,7 +76,7 @@
 
 
 
-                    <com.example.android.writeitsayithearit.views.ScaleTextInputEditText
+                    <com.example.android.sparkstories.views.ScaleTextInputEditText
                         android:id="@+id/new_cue_edit_text"
                         style="@style/Theme.WriteItSayItHearIt.CardText"
                         android:layout_width="match_parent"

@@ -18,12 +18,12 @@ apply plugin: 'org.sonarqube'
 android {
     compileSdkVersion build_versions.target_sdk
     defaultConfig {
-        applicationId "com.example.android.writeitsayithearit"
+        applicationId "com.example.android.sparkstories"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.example.android.writeitsayithearit.WriteItSayItHearItRunner"
+        testInstrumentationRunner "com.example.android.sparkstories.SparkStoriesRunner"
         multiDexEnabled true
 
         vectorDrawables.useSupportLibrary = true
@@ -56,7 +56,7 @@ android {
 
 allOpen {
     // allows classes to be extended in debug build
-    annotation 'com.example.android.writeitsayithearit.test.OpenClass'
+    annotation 'com.example.android.sparkstories.test.OpenClass'
 }
 
 jacoco {
@@ -105,7 +105,7 @@ task fullCoverageReport(type: JacocoReport) {
 
 sonarqube {
     properties {
-        property "sonar.projectName", "WriteItSayItHearIt"
+        property "sonar.projectName", "Spark STories"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java, src/androidTest/java"
         property "sonar.java.coveragePlugin", "jacoco"

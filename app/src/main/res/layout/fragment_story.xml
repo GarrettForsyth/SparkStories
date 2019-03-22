@@ -6,15 +6,15 @@
     <data>
         <variable
             name="story"
-            type="com.example.android.writeitsayithearit.model.story.Story" />
+            type="com.example.android.sparkstories.model.story.Story" />
 
         <variable
             name="cue"
-            type="com.example.android.writeitsayithearit.model.cue.Cue" />
+            type="com.example.android.sparkstories.model.cue.Cue" />
 
         <variable
             name="viewmodel"
-            type="com.example.android.writeitsayithearit.ui.stories.StoryViewModel" />
+            type="com.example.android.sparkstories.ui.stories.StoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -152,7 +152,7 @@
             app:layout_constraintTop_toBottomOf="@id/top_barrier"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <com.example.android.writeitsayithearit.views.ScaleTextView
+            <com.example.android.sparkstories.views.ScaleTextView
                 android:id="@+id/story_text_view"
                 app:onDoubleClickListener="@{viewmodel.toggleTopMenuDoubleClickListener()}"
                 android:textColor="@color/secondaryTextColor"

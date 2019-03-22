@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Write It Say It Hear It</string>
+    <string name="app_name">Spark Stories</string>
 
     <string name="new_cue_info_text">Create a new cue to add to the community cue pool! \n\n Cues are meant to get the brain juices flowing! They offer a starting point for writers. \n\n They should be short and concise!</string>
     <string name="new_story_info_text">Create a new story to add to the community! \n\n Stories shouldn\'t be too long. Try to keep them short and focused. The idea is to practice a little everyday!  \n\n Stories will be available to be narrated by the community!</string>

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.android.writeitsayithearit">
+    package="com.example.android.sparkstories">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application tools:ignore="GoogleAppIndexingWarning">

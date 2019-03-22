@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.example.android.writeitsayithearit.binding.Converter" />
+        <import type="com.example.android.sparkstories.binding.Converter" />
 
         <variable
             name="hasResults"
@@ -13,11 +13,11 @@
 
         <variable
             name="viewmodel"
-            type="com.example.android.writeitsayithearit.ui.stories.StoriesViewModel" />
+            type="com.example.android.sparkstories.ui.stories.StoriesViewModel" />
 
         <variable
             name="listAdapter"
-            type="com.example.android.writeitsayithearit.ui.stories.StoryAdapter" />
+            type="com.example.android.sparkstories.ui.stories.StoryAdapter" />
 
     </data>
 

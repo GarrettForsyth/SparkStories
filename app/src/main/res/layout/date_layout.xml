@@ -8,7 +8,7 @@
 
         <variable
             name="datable"
-            type="com.example.android.writeitsayithearit.model.Datable" />
+            type="com.example.android.sparkstories.model.Datable" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout

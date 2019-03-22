@@ -8,11 +8,11 @@
 
         <variable
             name="cue"
-            type="com.example.android.writeitsayithearit.model.cue.Cue" />
+            type="com.example.android.sparkstories.model.cue.Cue" />
 
         <variable
             name="viewmodel"
-            type="com.example.android.writeitsayithearit.ui.cues.CueViewModel" />
+            type="com.example.android.sparkstories.ui.cues.CueViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

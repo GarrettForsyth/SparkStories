@@ -7,15 +7,15 @@
 
         <variable
             name="comment"
-            type="com.example.android.writeitsayithearit.model.comment.Comment" />
+            type="com.example.android.sparkstories.model.comment.Comment" />
 
         <variable
             name="viewmodel"
-            type="com.example.android.writeitsayithearit.ui.comments.CommentsViewModel" />
+            type="com.example.android.sparkstories.ui.comments.CommentsViewModel" />
 
         <variable
             name="listAdapter"
-            type="com.example.android.writeitsayithearit.ui.comments.CommentAdapter" />
+            type="com.example.android.sparkstories.ui.comments.CommentAdapter" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -128,7 +128,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layoutManager="com.example.android.writeitsayithearit.views.NestedScrollingLinearLayoutManager"
+                app:layoutManager="com.example.android.sparkstories.views.NestedScrollingLinearLayoutManager"
                 tools:listItem="@layout/story_list_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
