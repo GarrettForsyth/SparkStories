@@ -1,5 +1,10 @@
 package com.example.android.sparkstories.cues
 
+import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.app.Instrumentation
+import android.content.Intent
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onData
@@ -7,6 +12,10 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.anyIntent
+import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -26,12 +35,13 @@ import com.example.android.sparkstories.test.TestUtils.SORT_HOT_INDICES
 import com.example.android.sparkstories.test.TestUtils.SORT_NEW_INDICES
 import com.example.android.sparkstories.test.TestUtils.SORT_TOP_INDICES
 import com.example.android.sparkstories.test.data.DatabaseSeed
-import com.example.android.sparkstories.ui.common.DataBoundListAdapter
 import com.example.android.sparkstories.ui.common.DataBoundViewHolder
 import com.example.android.sparkstories.util.CountingAppExecutorsRule
 import com.example.android.sparkstories.util.DataBindingIdlingResourceRule
 import com.example.android.sparkstories.util.TaskExecutorWithIdlingResourceRule
+import io.mockk.mockk
 import org.hamcrest.CoreMatchers.*
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,6 +59,7 @@ class CuesTest {
     @Rule
     @JvmField
     val scenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
+
 
     @Rule
     @JvmField

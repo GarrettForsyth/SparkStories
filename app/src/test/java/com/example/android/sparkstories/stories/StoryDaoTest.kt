@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.example.android.sparkstories.data.StoryDao
-import com.example.android.sparkstories.data.WriteItSayItHearItDatabase
+import com.example.android.sparkstories.data.local.StoryDao
+import com.example.android.sparkstories.data.local.WriteItSayItHearItDatabase
 import com.example.android.sparkstories.repos.utils.WSHQueryHelper
 import com.example.android.sparkstories.test.getValueBlocking
 import com.example.android.sparkstories.model.SortOrder

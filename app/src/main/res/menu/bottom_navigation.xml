@@ -16,5 +16,9 @@
         android:icon="@drawable/ic_narrations_black_24dp"
         android:title="@string/narrations" />
 
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/settings" />
 
 </menu>

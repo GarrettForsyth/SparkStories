@@ -3,10 +3,9 @@ package com.example.android.sparkstories.stories
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.test.filters.SmallTest
 import com.example.android.sparkstories.api.WriteItSayItHearItService
-import com.example.android.sparkstories.data.StoryDao
+import com.example.android.sparkstories.data.local.StoryDao
 import com.example.android.sparkstories.repos.StoryRepository
 import com.example.android.sparkstories.repos.utils.WSHQueryHelper
-import com.example.android.sparkstories.test.TestUtils
 import com.example.android.sparkstories.util.InstantAppExecutors
 import com.example.android.sparkstories.model.SortOrder
 import com.example.android.sparkstories.test.TestUtils.createTestStory

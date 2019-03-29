@@ -3,10 +3,9 @@ package com.example.android.sparkstories.cues
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.test.filters.SmallTest
 import com.example.android.sparkstories.api.WriteItSayItHearItService
-import com.example.android.sparkstories.data.CueDao
+import com.example.android.sparkstories.data.local.CueDao
 import com.example.android.sparkstories.repos.CueRepository
 import com.example.android.sparkstories.repos.utils.WSHQueryHelper
-import com.example.android.sparkstories.test.TestUtils
 import com.example.android.sparkstories.util.InstantAppExecutors
 import com.example.android.sparkstories.model.SortOrder
 import com.example.android.sparkstories.test.TestUtils.createTestCue

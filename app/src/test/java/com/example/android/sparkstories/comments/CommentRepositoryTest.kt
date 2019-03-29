@@ -3,7 +3,7 @@ package com.example.android.sparkstories.comments
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.test.filters.SmallTest
-import com.example.android.sparkstories.data.CommentDao
+import com.example.android.sparkstories.data.local.CommentDao
 import com.example.android.sparkstories.model.SortOrder
 import com.example.android.sparkstories.repos.CommentRepository
 import com.example.android.sparkstories.repos.utils.WSHQueryHelper

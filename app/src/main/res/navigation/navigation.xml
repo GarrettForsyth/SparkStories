@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/cuesFragment">
+    app:startDestination="@id/createScreenNameFragment">
 
     <fragment
         android:id="@+id/cuesFragment"
@@ -103,6 +103,18 @@
         <action
             android:id="@+id/action_newCommentFragment_to_commentsFragment"
             app:destination="@id/commentsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.android.sparkstories.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/createScreenNameFragment"
+        android:name="com.example.android.sparkstories.ui.signup.NewScreenNameFragment"
+        android:label="CreateScreenNameFragment" >
+        <action
+            android:id="@+id/action_createScreenNameFragment_to_cuesFragment"
+            app:destination="@id/cuesFragment" />
     </fragment>
 
 </navigation>

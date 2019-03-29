@@ -1,4 +1,4 @@
-package com.example.android.sparkstories.data
+package com.example.android.sparkstories.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

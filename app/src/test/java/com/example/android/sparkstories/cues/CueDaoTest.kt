@@ -2,16 +2,12 @@ package com.example.android.sparkstories.cues
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.example.android.sparkstories.data.CueDao
-import com.example.android.sparkstories.data.WriteItSayItHearItDatabase
+import com.example.android.sparkstories.data.local.CueDao
+import com.example.android.sparkstories.data.local.WriteItSayItHearItDatabase
 import com.example.android.sparkstories.repos.utils.WSHQueryHelper
 import com.example.android.sparkstories.test.getValueBlocking
 import com.example.android.sparkstories.model.cue.Cue

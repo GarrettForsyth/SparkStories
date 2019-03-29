@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.android.sparkstories.api.WriteItSayItHearItService
-import com.example.android.sparkstories.data.*
+import com.example.android.sparkstories.data.local.*
 import com.example.android.sparkstories.repos.utils.WSHQueryHelper
 import com.example.android.sparkstories.test.data.DatabaseSeed
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR

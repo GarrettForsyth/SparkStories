@@ -1,16 +1,11 @@
 package com.example.android.sparkstories.repos
 
-import android.app.DownloadManager
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.android.sparkstories.AppExecutors
-import com.example.android.sparkstories.api.WriteItSayItHearItService
-import com.example.android.sparkstories.data.CommentDao
-import com.example.android.sparkstories.data.StoryDao
-import com.example.android.sparkstories.model.SortOrder
+import com.example.android.sparkstories.data.local.CommentDao
 import com.example.android.sparkstories.model.comment.Comment
-import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.repos.utils.WSHQueryHelper
 import com.example.android.sparkstories.ui.util.QueryParameters
 import javax.inject.Inject

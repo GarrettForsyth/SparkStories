@@ -5,6 +5,7 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.example.android.sparkstories.di.AppInjector
 import com.example.android.sparkstories.di.DaggerAndroidTestAppComponent
+import com.google.firebase.FirebaseApp
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import timber.log.Timber
@@ -29,7 +30,6 @@ class AndroidTestApp : MultiDexApplication(), HasActivityInjector {
                 .build()
                 .inject(this)
         AppInjector.init(this)
-
 
         Timber.d("AndroidTest injection used.")
         Timber.d("Application onCreate() mytrace")

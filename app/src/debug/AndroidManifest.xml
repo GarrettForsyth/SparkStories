@@ -11,6 +11,9 @@
             android:name="androidx.fragment.app.testing.FragmentScenario$EmptyFragmentActivity"
             tools:replace="android:theme"
             android:theme="@style/Theme.WriteItSayItHearIt"/>
+
+        <activity
+            android:name="com.firebase.ui.auth.KickoffActivity" />
     </application>
 
 </manifest>

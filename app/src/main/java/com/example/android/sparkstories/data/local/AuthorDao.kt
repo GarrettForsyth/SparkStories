@@ -1,4 +1,4 @@
-package com.example.android.sparkstories.data
+package com.example.android.sparkstories.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

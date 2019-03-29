@@ -33,6 +33,6 @@ fun disableEditText(activity: Activity, editText: EditText) {
 }
 
 fun hideKeyboard(activity: Activity, view: View) {
-    val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+    val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
     imm!!.hideSoftInputFromWindow(view.windowToken, 0)
 }

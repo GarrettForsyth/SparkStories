@@ -5,10 +5,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.android.sparkstories.AppExecutors
-import com.example.android.sparkstories.data.WriteItSayItHearItDatabase
+import com.example.android.sparkstories.data.local.WriteItSayItHearItDatabase
 import com.example.android.sparkstories.test.data.DatabaseSeed
 import dagger.Module
 import dagger.Provides
+import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
@@ -23,6 +24,7 @@ class DatabaseModule {
         appExecutors: AppExecutors,
         dbSeed: DatabaseSeed
     ): WriteItSayItHearItDatabase {
+        Timber.d("mytest using real database")
         database = Room
                 .databaseBuilder(
                         app,

@@ -5,17 +5,17 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.android.sparkstories.AppExecutors
 import com.example.android.sparkstories.api.WriteItSayItHearItService
-import com.example.android.sparkstories.data.StoryDao
+import com.example.android.sparkstories.data.local.StoryDao
 import com.example.android.sparkstories.repos.utils.WSHQueryHelper
 import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.ui.util.QueryParameters
 import javax.inject.Inject
 
 class StoryRepository @Inject constructor(
-        private val appExecutors: AppExecutors,
-        private val storyDao: StoryDao,
-        private val service: WriteItSayItHearItService,
-        private val wshQueryHelper: WSHQueryHelper
+    private val appExecutors: AppExecutors,
+    private val storyDao: StoryDao,
+    private val service: WriteItSayItHearItService,
+    private val wshQueryHelper: WSHQueryHelper
 ) {
 
     fun stories(queryParameters: QueryParameters): LiveData<PagedList<Story>> {
