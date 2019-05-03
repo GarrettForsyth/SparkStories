@@ -9,8 +9,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.android.sparkstories.model.comment.Comment
 import com.example.android.sparkstories.model.comment.CommentTextField
-import com.example.android.sparkstories.model.story.Story
-import com.example.android.sparkstories.repos.CommentRepository
+import com.example.android.sparkstories.repos.comment.CommentRepository
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.DEFAULT_AUTHOR
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
 import com.example.android.sparkstories.ui.util.events.Event

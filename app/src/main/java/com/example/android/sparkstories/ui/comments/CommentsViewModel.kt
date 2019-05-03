@@ -2,14 +2,11 @@ package com.example.android.sparkstories.ui.comments
 
 import androidx.lifecycle.*
 import androidx.paging.PagedList
-import com.example.android.sparkstories.model.SortOrder
 import com.example.android.sparkstories.model.comment.Comment
-import com.example.android.sparkstories.repos.CommentRepository
-import com.example.android.sparkstories.repos.utils.WSHQueryHelper.stories
+import com.example.android.sparkstories.repos.comment.CommentRepository
 import com.example.android.sparkstories.ui.util.ObservedMutableLiveData
 import com.example.android.sparkstories.ui.util.QueryParameters
 import com.example.android.sparkstories.ui.util.events.Event
-import org.junit.internal.requests.SortingRequest
 import javax.inject.Inject
 
 class CommentsViewModel @Inject constructor(

@@ -8,6 +8,7 @@ import com.example.android.sparkstories.ui.cues.CueViewModel
 import com.example.android.sparkstories.ui.cues.CuesViewModel
 import com.example.android.sparkstories.ui.cues.NewCueViewModel
 import com.example.android.sparkstories.ui.signup.NewScreenNameViewModel
+import com.example.android.sparkstories.ui.splash.SplashViewModel
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel
 import com.example.android.sparkstories.ui.stories.StoriesViewModel
 import com.example.android.sparkstories.ui.stories.StoryViewModel
@@ -63,6 +64,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(NewScreenNameViewModel::class)
     abstract fun bindNewScreenNameViewModel(createNewScreenName: NewScreenNameViewModel) : ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplashViewModel::class)
+    abstract fun bindSplashViewModel(splashViewModel: SplashViewModel) : ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: WriteItSayItHearItViewModelFactory) : ViewModelProvider.Factory

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/createScreenNameFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/cuesFragment"
@@ -33,7 +33,7 @@
         tools:layout="@layout/fragment_new_story" >
         <argument
             android:name="cue_id"
-            app:argType="integer" />
+            app:argType="string" />
         <action
             android:id="@+id/action_newStoryFragment_to_storiesFragment"
             app:destination="@id/storiesFragment" />
@@ -70,7 +70,7 @@
         android:label="CueFragment" >
         <argument
             android:name="cue_id"
-            app:argType="integer" />
+            app:argType="string" />
         <action
             android:id="@+id/action_storiesFragment_to_storyFragment"
             app:destination="@id/storyFragment" />
@@ -107,13 +107,32 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.android.sparkstories.ui.settings.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_createScreenNameFragment"
+            app:destination="@id/createScreenNameFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createScreenNameFragment"
         android:name="com.example.android.sparkstories.ui.signup.NewScreenNameFragment"
         android:label="CreateScreenNameFragment" >
         <action
             android:id="@+id/action_createScreenNameFragment_to_cuesFragment"
+            app:destination="@id/cuesFragment"
+            app:popUpTo="@id/createScreenNameFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.android.sparkstories.ui.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_createScreenNameFragment"
+            app:destination="@id/createScreenNameFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_cuesFragment"
             app:destination="@id/cuesFragment" />
     </fragment>
 

@@ -1,21 +1,12 @@
 package com.example.android.sparkstories.comments
 
-import android.text.Editable
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
-import com.example.android.sparkstories.R
-import com.example.android.sparkstories.model.comment.Comment
-import com.example.android.sparkstories.repos.CommentRepository
-import com.example.android.sparkstories.repos.CueRepository
-import com.example.android.sparkstories.repos.StoryRepository
-import com.example.android.sparkstories.test.TestUtils
+import com.example.android.sparkstories.repos.comment.CommentRepository
 import com.example.android.sparkstories.test.TestUtils.createTestComment
-import com.example.android.sparkstories.test.TestUtils.createTestCue
-import com.example.android.sparkstories.test.TestUtils.createTestStory
 import com.example.android.sparkstories.test.asLiveData
 import com.example.android.sparkstories.test.getValueBlocking
 import com.example.android.sparkstories.ui.comments.NewCommentViewModel
-import com.example.android.sparkstories.ui.stories.NewStoryViewModel
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.DEFAULT_AUTHOR
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
 import com.example.android.sparkstories.util.MockUtils.mockObserverFor
@@ -30,7 +21,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import kotlin.math.exp
 
 @SmallTest
 @RunWith(JUnit4::class)

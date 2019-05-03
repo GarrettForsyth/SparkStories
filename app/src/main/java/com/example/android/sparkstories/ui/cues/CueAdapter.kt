@@ -11,12 +11,13 @@ import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.CueListItemBinding
 import com.example.android.sparkstories.model.cue.Cue
 import com.example.android.sparkstories.ui.common.DataBoundListAdapter
+import com.example.android.sparkstories.ui.common.DataBoundPagedListAdapter
 import timber.log.Timber
 
 class CueAdapter(
     private val viewModel: CuesViewModel,
     appExecutors: AppExecutors
-) : DataBoundListAdapter<Cue, CueListItemBinding>(
+) : DataBoundPagedListAdapter<Cue, CueListItemBinding>(
     appExecutors = appExecutors,
     diffCallback = Cue.cueDiffCallback
 ) {

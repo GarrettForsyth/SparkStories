@@ -8,7 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.data.local.StoryDao
 import com.example.android.sparkstories.data.local.WriteItSayItHearItDatabase
-import com.example.android.sparkstories.repos.utils.WSHQueryHelper
+import com.example.android.sparkstories.repos.utils.SparkStoriesQueryHelper
 import com.example.android.sparkstories.test.getValueBlocking
 import com.example.android.sparkstories.model.SortOrder
 import com.example.android.sparkstories.model.story.Story
@@ -99,7 +99,7 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadStoryList() {
-        val query = WSHQueryHelper.stories(QueryParameters())
+        val query = SparkStoriesQueryHelper.stories(QueryParameters())
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         for (stories in stories) {
@@ -111,7 +111,7 @@ class StoryDaoTest {
     @Throws(IOException::class)
     fun writeAndReadStoryListWithFilter() {
         val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT)
-        val query = WSHQueryHelper.stories(queryParameters)
+        val query = SparkStoriesQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
         assert(readStories.size == 3)
     }
@@ -120,7 +120,7 @@ class StoryDaoTest {
     @Throws(IOException::class)
     fun writeAndReadStoryListWithSortOrderNew() {
         val queryParameters = QueryParameters(_sortOrder = SortOrder.NEW)
-        val query = WSHQueryHelper.stories(queryParameters)
+        val query = SparkStoriesQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = SORT_NEW_INDICES
@@ -131,7 +131,7 @@ class StoryDaoTest {
     @Throws(IOException::class)
     fun writeAndReadStoryListWithTop() {
         val queryParameters = QueryParameters(_sortOrder = SortOrder.TOP)
-        val query = WSHQueryHelper.stories(queryParameters)
+        val query = SparkStoriesQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = SORT_TOP_INDICES
@@ -142,7 +142,7 @@ class StoryDaoTest {
     @Throws(IOException::class)
     fun writeAndReadStoryListWithHot() {
         val queryParameters = QueryParameters(_sortOrder = SortOrder.HOT)
-        val query = WSHQueryHelper.stories(queryParameters)
+        val query = SparkStoriesQueryHelper.stories(queryParameters)
         println(query.sql)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
         val expectedStoryOrder = SORT_HOT_INDICES
@@ -153,7 +153,7 @@ class StoryDaoTest {
     @Throws(IOException::class)
     fun writeAndReadStoryListWithHotWithFilter() {
         val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT, _sortOrder = SortOrder.HOT)
-        val query = WSHQueryHelper.stories(queryParameters)
+        val query = SparkStoriesQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = STORY_FILTER_SORT_HOT_INDICES
@@ -164,7 +164,7 @@ class StoryDaoTest {
     @Throws(IOException::class)
     fun writeAndReadStoryListWithTopWithFilter() {
         val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT, _sortOrder = SortOrder.TOP)
-        val query = WSHQueryHelper.stories(queryParameters)
+        val query = SparkStoriesQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 
         val expectedStoryOrder = STORY_FILTER_SORT_TOP_INDICES
@@ -175,7 +175,7 @@ class StoryDaoTest {
     @Throws(IOException::class)
     fun writeAndReadStoryListWithNewWithFilter() {
         val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT, _sortOrder = SortOrder.NEW)
-        val query = WSHQueryHelper.stories(queryParameters)
+        val query = SparkStoriesQueryHelper.stories(queryParameters)
         println(query.sql)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
 

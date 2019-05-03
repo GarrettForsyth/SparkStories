@@ -1,6 +1,7 @@
 package com.example.android.sparkstories.ui.signup
 
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,9 +21,11 @@ import com.example.android.sparkstories.model.Status
 import com.example.android.sparkstories.model.cue.CueTextField
 import com.example.android.sparkstories.test.CustomMatchers.first
 import com.example.android.sparkstories.test.OpenForTesting
+import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
 import com.example.android.sparkstories.ui.util.events.EventObserver
 import com.example.android.sparkstories.ui.util.events.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_new_screen_name.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -35,6 +38,7 @@ class NewScreenNameFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
 
     lateinit var newScreenNameViewModel: NewScreenNameViewModel
 
@@ -56,9 +60,9 @@ class NewScreenNameFragment : Fragment(), Injectable {
             .get(NewScreenNameViewModel::class.java)
 
         binding.viewmodel = newScreenNameViewModel
+        binding.isLoading = false
 
         observeShouldNavigateToCues()
-        observeDoesUserExist()
         observeSubmitScreenNameResponse()
         observeScreenNameFieldError()
         observeScreenNameAvailability()
@@ -75,49 +79,24 @@ class NewScreenNameFragment : Fragment(), Injectable {
         })
     }
 
-    private fun observeDoesUserExist() {
-        newScreenNameViewModel.doesUserExist.observe(this, Observer { result ->
-            when (result?.status) {
-                Status.SUCCESS -> {
-                    Timber.d("mytest fragment update: successful resposne! ")
-                    if (result.data!!) {
-                        Timber.d("mytest fragment update: username exists! ")
-                        navController().navigate(
-                            NewScreenNameFragmentDirections.actionCreateScreenNameFragmentToCuesFragment()
-                        )
-                    } // else user does not exist and remain on page
-                }
-                Status.LOADING -> {
-                    Timber.d("mytest fragment update: loading response! ")
-                    // Todo add a progressbar
-                }
-                Status.ERROR -> {
-                    Timber.d("mytest fragment update: error response! ")
-                    // Todo add a progressbar
-                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
 
     private fun observeSubmitScreenNameResponse() {
         hideKeyboard(activity!!, binding.newScreenNameConstraintLayout)
         newScreenNameViewModel.submitScreenNameResponse.observe(this, Observer { result ->
             when (result?.status) {
                 Status.SUCCESS -> {
-                    Timber.d("mytest fragment update: successful screen name resposne! ")
                     navController().navigate(
                         NewScreenNameFragmentDirections.actionCreateScreenNameFragmentToCuesFragment()
                     )
+                    binding.isLoading = false
                 }
                 Status.LOADING -> {
-                    Timber.d("mytest fragment update: loading response! ")
-                    // Todo add a progressbar
+                    hideKeyboard(activity!!, binding.newScreenNameConstraintLayout)
+                    binding.isLoading = true
                 }
                 Status.ERROR -> {
-                    Timber.d("mytest fragment update: error submit screen name response! ")
-                    // Todo add a progressbar
                     Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                    binding.isLoading = false
                 }
             }
         })
@@ -126,7 +105,6 @@ class NewScreenNameFragment : Fragment(), Injectable {
     private fun observeScreenNameFieldError() {
         newScreenNameViewModel.screenNameFieldErrorMessage.observe(this, Observer { message ->
             message?.let {
-                print("This is a test: $message")
                 binding.textInputLayout.error = message
             }
         })
@@ -134,24 +112,16 @@ class NewScreenNameFragment : Fragment(), Injectable {
 
     fun observeScreenNameAvailability() {
         newScreenNameViewModel.isScreenNameAvailableResponse.observe(this, Observer { availabilityResponse ->
-            when (availabilityResponse?.status) {
-                Status.SUCCESS -> {
+            // Ignore Loading and Error results
+            if (availabilityResponse?.status == Status.SUCCESS) {
                     val isAvailable = availabilityResponse.data?.first!!
                     val screenName = availabilityResponse.data.second
-
 
                     if (newScreenNameViewModel.screenName.text == screenName && !isAvailable) {
                         binding.textInputLayout.error = getString(R.string.name_unavailable)
                     } else {
                         binding.textInputLayout.error = ""
                     }
-                }
-                Status.LOADING -> {
-                    // Todo add a progressbar
-                }
-                Status.ERROR -> {
-                    Toast.makeText(context, availabilityResponse.message, Toast.LENGTH_SHORT).show()
-                }
             }
         })
     }
@@ -165,6 +135,16 @@ class NewScreenNameFragment : Fragment(), Injectable {
                 Snackbar.LENGTH_SHORT
             ).show()
         })
+    }
+
+    override fun onResume() {
+        binding.root.rootView.bottom_navigation?.visibility = View.GONE
+        super.onResume()
+    }
+
+    override fun onPause() {
+        binding.root.rootView.bottom_navigation?.visibility = View.VISIBLE
+        super.onPause()
     }
 
     fun navController() = findNavController()

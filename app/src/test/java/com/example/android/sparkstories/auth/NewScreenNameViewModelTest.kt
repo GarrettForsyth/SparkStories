@@ -2,17 +2,12 @@ package com.example.android.sparkstories.auth
 
 import android.text.Editable
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.test.filters.SmallTest
-import com.example.android.sparkstories.R
 import com.example.android.sparkstories.model.Resource
-import com.example.android.sparkstories.repos.AuthorRepository
-import com.example.android.sparkstories.repos.CueRepository
+import com.example.android.sparkstories.repos.author.AuthorRepository
 import com.example.android.sparkstories.test.getValueBlocking
-import com.example.android.sparkstories.ui.cues.CuesViewModel
 import com.example.android.sparkstories.ui.signup.NewScreenNameViewModel
-import com.example.android.sparkstories.ui.util.QueryParameters
 import com.example.android.sparkstories.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
@@ -46,10 +41,6 @@ class NewScreenNameViewModelTest {
         mockObserverFor(newScreenNameViewModel.isScreenNameAvailableResponse)
     }
 
-    @Test
-    fun checksUserExistenceOnInitialization() {
-        verify(exactly = 1) { authorRepository.checkUserExists()}
-    }
 
     @Test
     fun onSubmitScreenName() {

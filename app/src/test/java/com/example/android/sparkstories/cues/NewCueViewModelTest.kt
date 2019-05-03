@@ -3,7 +3,7 @@ package com.example.android.sparkstories.cues
 import android.widget.EditText
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
-import com.example.android.sparkstories.repos.CueRepository
+import com.example.android.sparkstories.repos.cue.CueRepository
 import com.example.android.sparkstories.test.TestUtils
 import com.example.android.sparkstories.test.TestUtils.createTestCue
 import com.example.android.sparkstories.test.getValueBlocking
@@ -20,7 +20,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito.mock
 
 @SmallTest
 @RunWith(JUnit4::class)
@@ -43,6 +42,7 @@ class NewCueViewModelTest {
             newCueViewModel.shouldNavigateToCues,
             newCueViewModel.invalidCueSnackBar
         )
+        mockObserverFor(newCueViewModel.submitCueResponse)
     }
 
     @Test
@@ -82,12 +82,6 @@ class NewCueViewModelTest {
 
         verify { cueRepository.submitCue(expectedCue) }
 
-        assertFalse(
-            newCueViewModel
-                .shouldNavigateToCues
-                .getValueBlocking()
-                .hasBeenHandled
-        )
     }
 
     @Test

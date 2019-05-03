@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import com.example.android.sparkstories.MainActivity
 import com.example.android.sparkstories.R
+import com.example.android.sparkstories.di.SparkStoriesTestConfigurations
 import com.example.android.sparkstories.model.cue.CueTextField
 import com.example.android.sparkstories.test.CustomMatchers.hasItemAtPosition
 import com.example.android.sparkstories.test.data.DatabaseSeed
@@ -33,6 +34,8 @@ import org.junit.Rule
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class NewCueTest {
+
+    init { SparkStoriesTestConfigurations.injectAndroidTestAppComponent() }
 
     @Rule
     @JvmField
@@ -83,8 +86,6 @@ class NewCueTest {
         onView(withId(R.id.new_cue_edit_text))
             .perform(typeText(validCueText))
 
-        // And I press the back button to close the keyboard
-        Espresso.pressBack()
         onView(withId(R.id.submit_cue_btn)).perform(click())
 
         // I should see a list of cues with my story in the list

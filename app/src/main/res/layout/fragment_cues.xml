@@ -18,6 +18,10 @@
             name="listAdapter"
             type="com.example.android.sparkstories.ui.cues.CueAdapter" />
 
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.WriteItSayItHearIt.FilterTextInputLayout"
-            app:layout_constraintBottom_toTopOf="@id/cues_list"
+            app:layout_constraintBottom_toTopOf="@id/progress_bar_cues"
             app:layout_constraintEnd_toStartOf="@id/sort_order_spinner"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/sort_order_spinner"
@@ -56,12 +60,29 @@
             app:onItemSelected="@{(selection) -> viewmodel.queryParameters.setSortOrder(Converter.toSortOrder(selection)) }"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/cues_list"
+            app:layout_constraintBottom_toTopOf="@id/progress_bar_cues"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toRightOf="@id/filter_cues_layout"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@id/filter_cues_layout"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_bar_cues"
+            visibleGone="@{isLoading}"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:orientation="horizontal"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/secondaryDarkColor"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/filter_cues_layout"
+            app:layout_constraintBottom_toTopOf="@id/cues_list"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cues_list"
@@ -70,7 +91,7 @@
             android:adapter="@{listAdapter}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/filter_cues_layout"
+            app:layout_constraintTop_toBottomOf="@id/progress_bar_cues"
             tools:listItem="@layout/cue_list_item" />
 
         <TextView
@@ -98,6 +119,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_add_black_24dp" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

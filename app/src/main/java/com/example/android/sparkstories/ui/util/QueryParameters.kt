@@ -7,46 +7,56 @@ import com.example.android.sparkstories.model.SortOrder
 import timber.log.Timber
 
 data class QueryParameters(
-    private var _filterCueId: Int = -1,
+    private var _filterCueId: String = "",
     private var _filterStoryId: Int = -1,
     private var _filterParentCommentId: Int = -1,
     private var _filterString: String = "",
     private var _sortOrder: SortOrder = SortOrder.NEW
 ): BaseObservable() {
 
-    var filterCueId: Int
+    var filterCueId: String
         @Bindable get() = _filterCueId
         set(value) {
-            _filterCueId = value
-            notifyPropertyChanged(BR.viewmodel)
+            if (value != _filterCueId) {
+                _filterCueId = value
+                notifyPropertyChanged(BR.viewmodel)
+            }
         }
 
     var filterStoryId: Int
         @Bindable get() = _filterStoryId
         set(value) {
-            _filterStoryId = value
-            notifyPropertyChanged(BR.viewmodel)
+            if (value != _filterStoryId) {
+                _filterStoryId = value
+                notifyPropertyChanged(BR.viewmodel)
+            }
         }
 
     var filterParentCommentId: Int
         @Bindable get() = _filterParentCommentId
         set(value) {
-            _filterParentCommentId = value
-            notifyPropertyChanged(BR.viewmodel)
+            if (value != _filterParentCommentId) {
+                _filterParentCommentId = value
+                notifyPropertyChanged(BR.viewmodel)
+            }
         }
 
     var filterString: String
         @Bindable get() = _filterString
         set(value) {
-            _filterString = value
-            notifyPropertyChanged(BR.viewmodel)
+            if (value != _filterString) {
+                _filterString = value
+                notifyPropertyChanged(BR.viewmodel)
+            }
         }
 
     var sortOrder: SortOrder
         @Bindable get() = _sortOrder
         set(value) {
-            _sortOrder = value
-            notifyPropertyChanged(BR.viewmodel)
+            if(value != _sortOrder) {
+                _sortOrder = value
+                notifyPropertyChanged(BR.viewmodel)
+            }
         }
 
     override fun equals(other: Any?): Boolean {

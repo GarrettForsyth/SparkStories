@@ -3,9 +3,14 @@ package com.example.android.sparkstories.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.android.sparkstories.AppExecutors
+import com.example.android.sparkstories.api.SparkStoriesService
 import com.example.android.sparkstories.api.WriteItSayItHearItService
 import com.example.android.sparkstories.data.local.*
-import com.example.android.sparkstories.repos.utils.WSHQueryHelper
+import com.example.android.sparkstories.model.cue.Cue
+import com.example.android.sparkstories.repos.cue.CueBoundaryCallback
+import com.example.android.sparkstories.repos.cue.CueRepository
+import com.example.android.sparkstories.repos.utils.SparkStoriesQueryHelper
 import com.example.android.sparkstories.test.data.DatabaseSeed
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
 import dagger.Module
@@ -21,10 +26,6 @@ class AppModule {
         //TODO: Log in as the first starting author (temporary for tests)
         val fileName = " com.example.android.sparkstories"
         val pref = application.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-        pref.edit().apply {
-            putString(PREFERENCE_AUTHOR, dbSeed.SEED_AUTHORS.first().name)
-            apply()
-        }
         return pref
     }
 
@@ -60,9 +61,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideWSHQueryHelper(): WSHQueryHelper {
-        return WSHQueryHelper
+    fun provideSparkStoriesQueryHelper(): SparkStoriesQueryHelper {
+        return SparkStoriesQueryHelper
     }
-
 
 }

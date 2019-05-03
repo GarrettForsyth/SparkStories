@@ -5,8 +5,8 @@ import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.test.filters.SmallTest
 import com.example.android.sparkstories.data.local.CommentDao
 import com.example.android.sparkstories.model.SortOrder
-import com.example.android.sparkstories.repos.CommentRepository
-import com.example.android.sparkstories.repos.utils.WSHQueryHelper
+import com.example.android.sparkstories.repos.comment.CommentRepository
+import com.example.android.sparkstories.repos.utils.SparkStoriesQueryHelper
 import com.example.android.sparkstories.test.TestUtils.createTestComment
 import com.example.android.sparkstories.ui.util.QueryParameters
 import com.example.android.sparkstories.util.InstantAppExecutors
@@ -27,8 +27,9 @@ class CommentRepositoryTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val dao: CommentDao = mockk(relaxed = true)
-    private val wshQueryHelper: WSHQueryHelper = mockk(relaxed = true)
-    private val commentRepository = CommentRepository(InstantAppExecutors(), dao, wshQueryHelper)
+    private val wshQueryHelper: SparkStoriesQueryHelper = mockk(relaxed = true)
+    private val commentRepository =
+        CommentRepository(InstantAppExecutors(), dao, wshQueryHelper)
 
     @Test
     fun submitComment() {

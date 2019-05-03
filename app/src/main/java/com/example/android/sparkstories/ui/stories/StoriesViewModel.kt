@@ -2,9 +2,8 @@ package com.example.android.sparkstories.ui.stories
 
 import androidx.lifecycle.*
 import androidx.paging.PagedList
-import com.example.android.sparkstories.repos.StoryRepository
+import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.ui.util.events.Event
-import com.example.android.sparkstories.model.SortOrder
 import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.ui.util.ObservedMutableLiveData
 import com.example.android.sparkstories.ui.util.QueryParameters

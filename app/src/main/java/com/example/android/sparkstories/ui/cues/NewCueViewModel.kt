@@ -1,17 +1,21 @@
 package com.example.android.sparkstories.ui.cues
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.example.android.sparkstories.R
-import com.example.android.sparkstories.repos.CueRepository
+import com.example.android.sparkstories.model.Resource
+import com.example.android.sparkstories.repos.cue.CueRepository
 import com.example.android.sparkstories.model.cue.CueTextField
 import com.example.android.sparkstories.ui.util.events.Event
 import com.example.android.sparkstories.model.cue.Cue
+import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.DEFAULT_AUTHOR
+import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
+import com.facebook.internal.Mutable
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class NewCueViewModel @Inject constructor(
@@ -34,6 +38,13 @@ class NewCueViewModel @Inject constructor(
     val newCueEditTextFocusStatus: LiveData<Event<Boolean>>
         get() = _newCueEditTextFocusStatus
 
+    private val submitCue = MutableLiveData<Cue>()
+    private val _submitCueResponse = Transformations.switchMap(submitCue) {
+        println(it)
+        cueRepository.submitCue(it)
+    }
+    val submitCueResponse: LiveData<Resource<Boolean>> = _submitCueResponse
+
     init {
         _newCueEditTextFocusStatus.value = Event(false)
     }
@@ -48,15 +59,13 @@ class NewCueViewModel @Inject constructor(
         if (cueTextField.isValid()) {
             val author = sharedPreferences.getString(PREFERENCE_AUTHOR, DEFAULT_AUTHOR)!!
             val cue = Cue(cueTextField.text, author)
+            cue.id = UUID.randomUUID().toString()
             Timber.d("--> $cue")
-            submitCue(cue)
-            _shouldNavigateToCues.value = Event(true)
-        } else {
-            _invalidCueSnackBar.value = Event(true)
+            submitCue.postValue(cue)
+        }else {
+            _invalidCueSnackBar.postValue(Event(true))
         }
     }
-
-    private fun submitCue(cue: Cue) { cueRepository.submitCue(cue) }
 
     companion object {
         const val PREFERENCE_AUTHOR = "preference_author"

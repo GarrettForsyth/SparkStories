@@ -4,8 +4,8 @@ import android.text.Editable
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.example.android.sparkstories.R
-import com.example.android.sparkstories.repos.CueRepository
-import com.example.android.sparkstories.repos.StoryRepository
+import com.example.android.sparkstories.repos.cue.CueRepository
+import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.test.TestUtils
 import com.example.android.sparkstories.test.getValueBlocking
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel
@@ -24,6 +24,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.*
 
 @SmallTest
 @RunWith(JUnit4::class)
@@ -65,7 +66,7 @@ class NewStoryViewModelTest {
     @Test
     fun getCue() {
         // mock response from repository
-        val id = 0
+        val id = UUID.randomUUID().toString()
         val cue = createTestCue()
         every { cueRepository.cue(id) } returns cue.asLiveData()
 

@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.MainActivity
 import com.example.android.sparkstories.R
+import com.example.android.sparkstories.di.SparkStoriesTestConfigurations
 import com.example.android.sparkstories.model.comment.CommentTextField
 import com.example.android.sparkstories.test.CustomMatchers.first
 import com.example.android.sparkstories.test.data.DatabaseSeed
@@ -32,6 +33,8 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class NewCommentTest {
+
+    init { SparkStoriesTestConfigurations.injectAndroidTestAppComponent() }
 
     @Rule
     @JvmField

@@ -1,8 +1,12 @@
 package com.example.android.sparkstories.test
 
+import android.provider.MediaStore
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.android.sparkstories.model.Resource
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -32,8 +36,9 @@ fun <T> LiveData<T>.getValueBlocking(): T {
 /**
  * Returns the data wrapped in LiveData
  */
-fun <T> T.asLiveData(): LiveData<T>{
+fun <T> T.asLiveData(): LiveData<T> {
     val liveData = MutableLiveData<T>()
     liveData.value = this
     return liveData
 }
+

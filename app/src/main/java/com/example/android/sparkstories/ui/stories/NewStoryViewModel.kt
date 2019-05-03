@@ -5,21 +5,18 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.GestureDetector
 import android.view.MotionEvent
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.example.android.sparkstories.BR
-import com.example.android.sparkstories.repos.CueRepository
-import com.example.android.sparkstories.repos.StoryRepository
+import com.example.android.sparkstories.repos.cue.CueRepository
+import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.test.OpenForTesting
 import com.example.android.sparkstories.model.story.StoryTextField
 import com.example.android.sparkstories.ui.util.events.Event
 import com.example.android.sparkstories.model.cue.Cue
 import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.ui.util.TextWatcherAdapter
-import timber.log.Timber
 import javax.inject.Inject
 
 @OpenForTesting
@@ -57,7 +54,7 @@ class NewStoryViewModel @Inject constructor(
     val shouldNavigateToStories: LiveData<Event<Boolean>>
         get() = _navigateToStoriesFragment
 
-    private val cueId = MutableLiveData<Int>()
+    private val cueId = MutableLiveData<String>()
     private val _cue = Transformations.switchMap(cueId) { id -> cueRepository.cue(id) }
     val cue: LiveData<Cue>
         get() = _cue
@@ -79,7 +76,7 @@ class NewStoryViewModel @Inject constructor(
         _inPreviewMode.value = Event(false)
     }
 
-    fun getCue(id: Int) = cueId.postValue(id)
+    fun getCue(id: String) = cueId.postValue(id)
 
     fun storyTextChangeListener(): TextWatcher {
         return object : TextWatcherAdapter() {

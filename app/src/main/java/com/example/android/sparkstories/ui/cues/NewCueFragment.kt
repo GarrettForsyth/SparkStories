@@ -8,21 +8,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.test.espresso.action.Swiper
 
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.binding.BindingUtil
 import com.example.android.sparkstories.databinding.FragmentNewCueBinding
 import com.example.android.sparkstories.di.Injectable
+import com.example.android.sparkstories.model.Status
 import com.example.android.sparkstories.test.OpenForTesting
 import com.example.android.sparkstories.model.cue.CueTextField
+import com.example.android.sparkstories.ui.signup.NewScreenNameFragmentDirections
 import com.example.android.sparkstories.ui.util.events.EventObserver
+import com.example.android.sparkstories.ui.util.events.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,9 +62,13 @@ class NewCueFragment : Fragment(), Injectable {
         observeInvalidSnackBar()
         observeShouldNavigateToCues()
         observeNewCueEditTextFocus()
+        observeSubmitCueResponse()
+
+        binding.isLoading = false
 
         return binding.root
     }
+
 
     private fun observeNewCueEditTextFocus() {
         newCueViewModel.newCueEditTextFocusStatus.observe(this, EventObserver { hasFocus ->
@@ -86,6 +96,28 @@ class NewCueFragment : Fragment(), Injectable {
                 ),
                 Snackbar.LENGTH_SHORT
             ).show()
+        })
+    }
+
+    private fun observeSubmitCueResponse() {
+        hideKeyboard(activity!!, binding.newCueConstraintLayout)
+        newCueViewModel.submitCueResponse.observe(this, Observer { result ->
+            when (result?.status) {
+                Status.SUCCESS -> {
+                    navController().navigate(
+                        NewCueFragmentDirections.actionNewCueFragmentToCuesFragment()
+                    )
+                    binding.isLoading = false
+                }
+                Status.LOADING -> {
+                    hideKeyboard(activity!!, binding.newCueConstraintLayout)
+                    binding.isLoading = true
+                }
+                Status.ERROR -> {
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                    binding.isLoading = false
+                }
+            }
         })
     }
 

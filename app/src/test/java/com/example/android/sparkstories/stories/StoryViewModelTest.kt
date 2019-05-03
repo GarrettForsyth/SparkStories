@@ -2,8 +2,8 @@ package com.example.android.sparkstories.stories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
-import com.example.android.sparkstories.repos.CueRepository
-import com.example.android.sparkstories.repos.StoryRepository
+import com.example.android.sparkstories.repos.cue.CueRepository
+import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.test.TestUtils.createTestCue
 import com.example.android.sparkstories.test.TestUtils.createTestStory
 import com.example.android.sparkstories.test.asLiveData
@@ -19,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.*
 
 @SmallTest
 @RunWith(JUnit4::class)
@@ -58,7 +59,7 @@ class StoryViewModelTest {
 
     @Test()
     fun getStory(){
-        val cue = createTestCue().apply{ id = 12}
+        val cue = createTestCue().apply{ id = UUID.randomUUID().toString()}
         every { cueRepository.cue(cue.id) } returns cue.asLiveData()
 
         val story = createTestStory().apply { cueId = cue.id }

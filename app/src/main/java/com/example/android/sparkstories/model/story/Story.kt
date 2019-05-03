@@ -15,21 +15,7 @@ import com.example.android.sparkstories.model.cue.CueContract
 import java.util.*
 
 
-@Entity(
-    tableName = StoryContract.TABLE_NAME,
-    foreignKeys = [
-        ForeignKey(
-            entity = Author::class,
-            parentColumns = [AuthorContract.COLUMN_NAME],
-            childColumns = [StoryContract.COLUMN_AUTHOR]
-        ),
-        ForeignKey(
-            entity = Cue::class,
-            parentColumns = [CueContract.COLUMN_ID],
-            childColumns = [StoryContract.COLUMN_CUE_ID]
-        )
-    ]
-)
+@Entity(tableName = StoryContract.TABLE_NAME)
 data class Story(
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_TEXT)
@@ -41,7 +27,7 @@ data class Story(
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_CUE_ID)
-    var cueId: Int,
+    var cueId: String,
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_CREATION_DATE)
@@ -76,7 +62,7 @@ data class Story(
     }
 
 
-    constructor(storyText: String, author: String, cueId: Int) :
+    constructor(storyText: String, author: String, cueId: String) :
             this(
                 storyText,
                 author,

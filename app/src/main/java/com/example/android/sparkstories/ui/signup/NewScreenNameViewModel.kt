@@ -8,16 +8,17 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.model.author.ScreenNameTextField
-import com.example.android.sparkstories.repos.AuthorRepository
+import com.example.android.sparkstories.repos.author.AuthorRepository
 import com.example.android.sparkstories.ui.util.TextWatcherAdapter
 import com.example.android.sparkstories.ui.util.events.Event
+import timber.log.Timber
 import javax.inject.Inject
 
 class NewScreenNameViewModel @Inject constructor(
     private val authorRepository: AuthorRepository
 ): ViewModel() {
 
-    val doesUserExist = authorRepository.checkUserExists()
+//    val doesUserExist = authorRepository.checkUserExists()
 
     var screenName = ScreenNameTextField()
 
@@ -32,7 +33,10 @@ class NewScreenNameViewModel @Inject constructor(
     val isScreenNameAvailableResponse:  LiveData<Resource<Pair<Boolean, String>>> = _isScreenNameAvailableResponse
 
     private val submitScreenName = MutableLiveData<Boolean>()
-    private val _submitScreenNameResponse = Transformations.switchMap(submitScreenName) { authorRepository.submitScreenName(screenName.text)}
+    private val _submitScreenNameResponse = Transformations.switchMap(submitScreenName) {
+        Timber.d("mytest submitting test user screen name")
+        authorRepository.submitScreenName(screenName.text)
+    }
     val submitScreenNameResponse: LiveData<Resource<Unit>> = _submitScreenNameResponse
 
     private val _invalidScreenNameSnackBar = MutableLiveData<Event<Boolean>>()

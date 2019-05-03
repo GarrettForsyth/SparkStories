@@ -82,7 +82,7 @@ class DatabaseSeed @Inject constructor(application: Application) {
                 val text = jsonCue.getString("text")
                 val author = jsonCue.getString("author")
                 val rating = jsonCue.getInt("rating")
-                val cue = Cue(text, author, creationDate(i), rating, 0)
+                val cue = Cue(text, author, creationDate(i), rating, UUID.randomUUID().toString())
                 cues.add(cue)
             }
         }catch(e: Exception) {
@@ -103,7 +103,7 @@ class DatabaseSeed @Inject constructor(application: Application) {
 
                 val text = jsonStory.getString("text")
                 val author = jsonStory.getString("author")
-                val cueId = jsonStory.getInt("cue_id")
+                val cueId = jsonStory.getString("cue_id")
                 val rating = jsonStory.getInt("rating")
                 val story = Story(text, author, cueId, creationDate(i), rating, 0)
                 stories.add(story)

@@ -8,6 +8,8 @@
 
         <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
+
+        <item name="preferenceTheme">@style/Theme.WriteItSayItHearIt.PreferenceTheme</item>
     </style>
 
     <style name="Theme.WriteItSayItHearIt.MaterialButton">
@@ -63,6 +65,14 @@
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
+    <!--Preference screen theme-->
+    <style name="Theme.WriteItSayItHearIt.PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material" >
+        <!--Overriding textColor primary/secondary from main theme-->
+        <item name="android:textColorPrimary">@color/primaryColor</item>
+        <item name="android:textColorSecondary">@color/primaryColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
 </resources>

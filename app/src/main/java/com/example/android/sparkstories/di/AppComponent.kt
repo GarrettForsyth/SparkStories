@@ -16,7 +16,7 @@ import javax.inject.Singleton
         DatabaseModule::class,
         AppExecutorsModule::class,
         AuthenticationModule::class,
-        RemoteDatabaseModule::class
+        SparkStoriesServiceModule::class
     ]
 )
 interface AppComponent {

@@ -48,6 +48,58 @@ class NewScreenNameFragmentTest {
     }
 
     @Test
+    fun progressBarShows_WhenSubmittingScreenName() {
+        scenario.onFragment {
+            it.submitScreenNameResponse.value = Resource.loading(null)
+            assertTrue(it.progress_bar_new_screen_name.isShown)
+        }
+    }
+
+    @Test
+    fun progressBarHides_OnSuccessScreenNameResponse() {
+        scenario.onFragment {
+            it.submitScreenNameResponse.value = Resource.loading(null)
+            it.submitScreenNameResponse.value = Resource.success(null)
+            assertFalse(it.progress_bar_new_screen_name.isShown)
+        }
+    }
+
+    @Test
+    fun progressBarHides_OnErrorScreenNameResponse() {
+        scenario.onFragment {
+            it.submitScreenNameResponse.value = Resource.loading(null)
+            it.submitScreenNameResponse.value = Resource.error("", null)
+            assertFalse(it.progress_bar_new_screen_name.isShown)
+        }
+    }
+
+//    @Test
+//    fun progressBarShows_WhenCheckingUserAvailability() {
+//        scenario.onFragment {
+//            it.doesUserExist.value = Resource.loading(null)
+//            assertTrue(it.progress_bar_new_screen_name.isShown)
+//        }
+//    }
+
+    @Test
+    fun progressBarHides_OnSuccessUserNameAvailabilityResponse() {
+        scenario.onFragment {
+            it.doesUserExist.value = Resource.loading(null)
+            it.doesUserExist.value = Resource.success(null)
+            assertFalse(it.progress_bar_new_screen_name.isShown)
+        }
+    }
+
+    @Test
+    fun progressBarHides_OnErrorUserNameAvailabilityResponse() {
+        scenario.onFragment {
+            it.doesUserExist.value = Resource.loading(null)
+            it.doesUserExist.value = Resource.error("", null)
+            assertFalse(it.progress_bar_new_screen_name.isShown)
+        }
+    }
+
+    @Test
     fun onUnSubmitScreenName_DoNotNavigateToCuesFragment() {
         scenario.onFragment {
             it.submitScreenNameResponse.value = Resource.error("", null)
@@ -63,7 +115,7 @@ class NewScreenNameFragmentTest {
     @Test
     fun onErrorSubmitScreenName_NavigateToCuesFragment() {
         scenario.onFragment {
-            it.submitScreenNameResponse.value = Resource.error("",null)
+            it.submitScreenNameResponse.value = Resource.error("", null)
             verify(exactly = 0) {
                 it.navController.navigate(
                     NewScreenNameFragmentDirections
@@ -86,18 +138,18 @@ class NewScreenNameFragmentTest {
         }
     }
 
-    @Test
-    fun onUserExists_NavigateToCuesFragment() {
-        scenario.onFragment {
-            it.doesUserExist.value = Resource.success(true)
-            verify(exactly = 1) {
-                it.navController.navigate(
-                    NewScreenNameFragmentDirections
-                        .actionCreateScreenNameFragmentToCuesFragment()
-                )
-            }
-        }
-    }
+//    @Test
+//    fun onUserExists_NavigateToCuesFragment() {
+//        scenario.onFragment {
+//            it.doesUserExist.value = Resource.success(true)
+//            verify(exactly = 1) {
+//                it.navController.navigate(
+//                    NewScreenNameFragmentDirections
+//                        .actionCreateScreenNameFragmentToCuesFragment()
+//                )
+//            }
+//        }
+//    }
 
     @Test
     fun onUserDoesNotExist_DoNotNavigateToCuesFragment() {
@@ -188,7 +240,6 @@ class NewScreenNameFragmentTest {
                 this.viewModelFactory = ViewModelUtil.createFor(this.newScreenNameViewModel)
 
                 every { newScreenNameViewModel.shouldNavigateToCues } returns shouldNavigateToCues
-                every { newScreenNameViewModel.doesUserExist } returns doesUserExist
                 every { newScreenNameViewModel.submitScreenNameResponse } returns submitScreenNameResponse
                 every { newScreenNameViewModel.screenNameFieldErrorMessage } returns screenNameFieldErrorMessage
                 every { newScreenNameViewModel.isScreenNameAvailableResponse } returns isScreenNameAvailableResponse
@@ -208,7 +259,7 @@ class NewScreenNameFragmentTest {
         val doesUserExist = MutableLiveData<Resource<Boolean>>()
         val submitScreenNameResponse = MutableLiveData<Resource<Unit>>()
         val screenNameFieldErrorMessage = MutableLiveData<String>()
-        val isScreenNameAvailableResponse = MutableLiveData<Resource<Pair<Boolean,String>>>()
+        val isScreenNameAvailableResponse = MutableLiveData<Resource<Pair<Boolean, String>>>()
         val invalidScreenNameSnackBar = MutableLiveData<Event<Boolean>>()
     }
 

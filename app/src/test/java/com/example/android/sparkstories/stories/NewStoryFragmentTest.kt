@@ -61,7 +61,7 @@ class NewStoryFragmentTest {
     // initialize the fragment with a cue id passed as an argument
     init {
         val args = Bundle()
-        args.putInt(CUE_ID_EXTRA, CUE.id)
+        args.putString(CUE_ID_EXTRA, CUE.id)
         scenario = launchInContainer(
             NewStoryFragmentTest.TestNewStoryFragment::class.java,
             args,

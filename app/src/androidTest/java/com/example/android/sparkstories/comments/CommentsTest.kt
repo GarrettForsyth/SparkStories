@@ -16,6 +16,7 @@ import com.example.android.sparkstories.MainActivity
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.CommentListItemBinding
 import com.example.android.sparkstories.databinding.StoryListItemBinding
+import com.example.android.sparkstories.di.SparkStoriesTestConfigurations
 import com.example.android.sparkstories.test.CustomMatchers.first
 import com.example.android.sparkstories.test.CustomMatchers.hasItemAtPosition
 import com.example.android.sparkstories.test.TestUtils.CHILD_COMMENT_ORDER
@@ -48,6 +49,8 @@ import timber.log.Timber
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class CommentsTest {
+
+    init { SparkStoriesTestConfigurations.injectAndroidTestAppComponent() }
 
     @Rule
     @JvmField

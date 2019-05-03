@@ -1,15 +1,5 @@
 package com.example.android.sparkstories.helpers
 
-import androidx.databinding.library.baseAdapters.BR.sortOrder
-import androidx.test.filters.SmallTest
-import com.example.android.sparkstories.repos.utils.WSHQueryHelper
-import com.example.android.sparkstories.model.SortOrder
-import com.example.android.sparkstories.ui.util.QueryParameters
-import junit.framework.Assert.assertEquals
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-
 //@SmallTest
 //@RunWith(JUnit4::class)
 //class WSHQueryHelperTest {

@@ -20,9 +20,13 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
+import com.example.android.sparkstories.AndroidTestApp
 import com.example.android.sparkstories.MainActivity
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.CueListItemBinding
+import com.example.android.sparkstories.di.AppInjector
+import com.example.android.sparkstories.di.SparkStoriesTestConfigurations
 import com.example.android.sparkstories.test.CustomMatchers.hasItemAtPosition
 import com.example.android.sparkstories.test.TestUtils.CUE_FILTER_AUTHOR
 import com.example.android.sparkstories.test.TestUtils.CUE_FILTER_AUTHOR_NEW_INDICES
@@ -55,6 +59,8 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class CuesTest {
+
+    init { SparkStoriesTestConfigurations.injectAndroidTestAppComponent() }
 
     @Rule
     @JvmField

@@ -1,5 +1,7 @@
 package com.example.android.sparkstories.test
 
+import android.os.Handler
+import android.os.Looper
 import com.example.android.sparkstories.AppExecutors
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -36,7 +38,7 @@ class CountingAppExecutors(idleCallback: (() -> Unit)? = null) {
         appExecutors = AppExecutors(
             CountingExecutor(increment, decrement),
             CountingExecutor(increment, decrement),
-            CountingExecutor(increment, decrement)
+            MainThreadExecutor()
         )
     }
 
@@ -79,6 +81,13 @@ class CountingAppExecutors(idleCallback: (() -> Unit)? = null) {
                     decrement()
                 }
             }
+        }
+    }
+
+    private class MainThreadExecutor : Executor {
+        private val mainThreadHandler = Handler(Looper.getMainLooper())
+        override fun execute(command: Runnable) {
+            mainThreadHandler.post(command)
         }
     }
 }

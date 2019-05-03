@@ -4,7 +4,6 @@ import android.app.Activity
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.example.android.sparkstories.di.AppInjector
-import com.example.android.sparkstories.di.DaggerAndroidTestAppComponent
 import com.google.firebase.FirebaseApp
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -25,11 +24,9 @@ class AndroidTestApp : MultiDexApplication(), HasActivityInjector {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        DaggerAndroidTestAppComponent.builder()
-                .application(this)
-                .build()
-                .inject(this)
-        AppInjector.init(this)
+
+        // Dagger Components are injected in each test suite such that
+        // each test suite can use the module it needs.
 
         Timber.d("AndroidTest injection used.")
         Timber.d("Application onCreate() mytrace")

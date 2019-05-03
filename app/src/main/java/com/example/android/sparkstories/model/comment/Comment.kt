@@ -14,16 +14,7 @@ import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.model.story.StoryContract
 import java.util.*
 
-@Entity(
-    tableName = CommentContract.TABLE_NAME,
-    foreignKeys = [
-        ForeignKey(
-            entity = Author::class,
-            parentColumns = [AuthorContract.COLUMN_NAME],
-            childColumns = [CommentContract.COLUMN_AUTHOR]
-        )
-    ]
-)
+@Entity(tableName = CommentContract.TABLE_NAME)
 data class Comment(
     @NonNull
     @ColumnInfo(name = CommentContract.COLUMN_TEXT)

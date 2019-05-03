@@ -1,4 +1,4 @@
-package com.example.android.sparkstories.repos
+package com.example.android.sparkstories.repos.comment
 
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
@@ -6,14 +6,14 @@ import androidx.paging.PagedList
 import com.example.android.sparkstories.AppExecutors
 import com.example.android.sparkstories.data.local.CommentDao
 import com.example.android.sparkstories.model.comment.Comment
-import com.example.android.sparkstories.repos.utils.WSHQueryHelper
+import com.example.android.sparkstories.repos.utils.SparkStoriesQueryHelper
 import com.example.android.sparkstories.ui.util.QueryParameters
 import javax.inject.Inject
 
 class CommentRepository @Inject constructor(
     private val appExecutors: AppExecutors,
     private val commentDao: CommentDao,
-    private val wshQueryHelper: WSHQueryHelper
+    private val wshQueryHelper: SparkStoriesQueryHelper
 ) {
 
     fun submitComment(comment: Comment) {
@@ -25,13 +25,17 @@ class CommentRepository @Inject constructor(
     fun comments(queryParameters: QueryParameters): LiveData<PagedList<Comment>>{
         val factory =  commentDao.comments(
             wshQueryHelper.comments(queryParameters))
-        return LivePagedListBuilder<Int, Comment>(factory, getCommentPagedListConfig()).build()
+        return LivePagedListBuilder<Int, Comment>(factory,
+            getCommentPagedListConfig()
+        ).build()
     }
 
     fun childComments(id: Int): LiveData<PagedList<Comment>> {
         val queryParameters = QueryParameters(_filterParentCommentId = id)
         val factory =  commentDao.comments(wshQueryHelper.comments(queryParameters))
-        return LivePagedListBuilder<Int, Comment>(factory, getChildCommentPagedListConfig()).build()
+        return LivePagedListBuilder<Int, Comment>(factory,
+            getChildCommentPagedListConfig()
+        ).build()
     }
 
     fun update(comment: Comment) {

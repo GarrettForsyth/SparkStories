@@ -1,15 +1,12 @@
 package com.example.android.sparkstories.ui.stories
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.lifecycle.*
 import com.example.android.sparkstories.model.cue.Cue
 import com.example.android.sparkstories.model.story.Story
-import com.example.android.sparkstories.repos.CueRepository
-import com.example.android.sparkstories.repos.StoryRepository
-import com.example.android.sparkstories.ui.util.TextWatcherAdapter
+import com.example.android.sparkstories.repos.cue.CueRepository
+import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.ui.util.events.Event
 import timber.log.Timber
 import javax.inject.Inject

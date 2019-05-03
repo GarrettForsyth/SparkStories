@@ -10,7 +10,7 @@ import com.example.android.sparkstories.ui.util.QueryParameters
 import java.lang.StringBuilder
 import java.util.*
 
-object WSHQueryHelper {
+object SparkStoriesQueryHelper {
 
     fun cues(queryParameters: QueryParameters): SupportSQLiteQuery {
         val queryBuilder = SupportSQLiteQueryBuilder.builder(CueContract.TABLE_NAME)
@@ -39,8 +39,8 @@ object WSHQueryHelper {
         selectionArgs[0] = ("%${queryParameters.filterString}%")
         selectionArgs[1] = ("%${queryParameters.filterString}%")
 
-        if (queryParameters.filterCueId > 0) {
-            selection.append(" AND ${StoryContract.COLUMN_CUE_ID} = ${queryParameters.filterCueId}")
+        if (queryParameters.filterCueId.isNotBlank()) {
+            selection.append(" AND ${StoryContract.COLUMN_CUE_ID} = '${queryParameters.filterCueId}'")
         }
 
         appendHotSelection(queryParameters, selection)

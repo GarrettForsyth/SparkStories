@@ -14,7 +14,7 @@ import com.example.android.sparkstories.model.story.Story
             Author::class,
             Comment::class
         ],
-        version = 11,
+        version = 14,
         exportSchema = false
 )
 abstract class WriteItSayItHearItDatabase : RoomDatabase() {

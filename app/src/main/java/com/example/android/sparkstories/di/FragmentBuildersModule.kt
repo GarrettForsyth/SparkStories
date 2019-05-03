@@ -7,6 +7,7 @@ import com.example.android.sparkstories.ui.cues.CuesFragment
 import com.example.android.sparkstories.ui.cues.NewCueFragment
 import com.example.android.sparkstories.ui.narrations.NarrationsFragment
 import com.example.android.sparkstories.ui.signup.NewScreenNameFragment
+import com.example.android.sparkstories.ui.splash.SplashFragment
 import com.example.android.sparkstories.ui.stories.NewStoryFragment
 import com.example.android.sparkstories.ui.stories.StoriesFragment
 import com.example.android.sparkstories.ui.stories.StoryFragment
@@ -44,5 +45,8 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeNewScreenNameFragment() : NewScreenNameFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeSplashFragment() : SplashFragment
 
 }

@@ -18,8 +18,11 @@ import com.example.android.sparkstories.AppExecutors
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.FragmentCuesBinding
 import com.example.android.sparkstories.di.Injectable
+import com.example.android.sparkstories.model.Status
 import com.example.android.sparkstories.test.OpenForTesting
 import com.example.android.sparkstories.ui.util.events.EventObserver
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_cues.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -63,7 +66,7 @@ class CuesFragment : Fragment(), Injectable {
         binding.viewmodel = cuesViewModel
         binding.listAdapter = cueAdapter
         binding.hasResults = false
-
+        binding.isLoading = false
 
         binding.executePendingBindings()
 
@@ -89,8 +92,7 @@ class CuesFragment : Fragment(), Injectable {
             navController().navigate(
                 CuesFragmentDirections
                     .actionCuesFragmentToCueFragment(cueId)
-            )
-        })
+            ) })
     }
 
     private fun observeResultStatus() {
@@ -100,31 +102,38 @@ class CuesFragment : Fragment(), Injectable {
         })
     }
 
+    /**
+     * TODO: null is submitted before the list to achieve the behaviour
+     * of having the list start from the top.
+     *
+     * Without this line, the list will follow the topmost visible viewholder
+     * which leads to unintuitive effects (e.g. changing sort order from
+     * new --> top will follow the topmost vh somewhere in the middle of the list.)
+     *
+     * Telling the RecyclerView or LinearLayoutManager to scroll to the top
+     * after a data change doesn't do anything. I think this is because the
+     * list hasn't had a chance to fully update/become visible yet.
+     *
+     * A better solution might be to somehow watch until the view become visible
+     * and THEN scroll to the top of the list. This way, the benefits from DiffUtils
+     * are used (where as here, they aren't). This might be a premature optimization,
+     * but keep an eye on this.
+     */
     private fun observeCues() {
         cuesViewModel.cues.observe(this, Observer { cues ->
-            if (cues != null) {
-                /**
-                 * TODO: null is submitted before the list to achieve the behaviour
-                 * of having the list start from the top.
-                 *
-                 * Without this line, the list will follow the topmost visible viewholder
-                 * which leads to unintuitive effects (e.g. changing sort order from
-                 * new --> top will follow the topmost vh somewhere in the middle of the list.)
-                 *
-                 * Telling the RecyclerView or LinearLayoutManager to scroll to the top
-                 * after a data change doesn't do anything. I think this is because the
-                 * list hasn't had a chance to fully update/become visible yet.
-                 *
-                 * A better solution might be to somehow watch until the view become visible
-                 * and THEN scroll to the top of the list. This way, the benefits from DiffUtils
-                 * are used (where as here, they aren't). This might be a premature optimization,
-                 * but keep an eye on this.
-                 */
-                cueAdapter.submitList(null)
-                cueAdapter.submitList(cues)
-                cuesViewModel.setHasResults(!cues.isEmpty())
-            } else {
-                cuesViewModel.setHasResults(false)
+            when (cues?.status) {
+                Status.SUCCESS -> {
+                    cueAdapter.submitList(null )
+                    cueAdapter.submitList(cues.data)
+                    cuesViewModel.setHasResults(!(cues.data?.isEmpty() ?: false))
+                    binding.isLoading = false
+                }
+                Status.LOADING -> {
+                    binding.isLoading = true
+                }
+                Status.ERROR -> {
+                    binding.isLoading = false
+                }
             }
         })
     }

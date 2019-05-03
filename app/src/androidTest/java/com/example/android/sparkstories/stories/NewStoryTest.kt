@@ -13,6 +13,7 @@ import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.MainActivity
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.R.id.*
+import com.example.android.sparkstories.di.SparkStoriesTestConfigurations
 import com.example.android.sparkstories.model.story.StoryTextField
 import com.example.android.sparkstories.test.CustomMatchers.hasItemAtPosition
 import com.example.android.sparkstories.test.CustomMatchers.withFontSize
@@ -37,6 +38,8 @@ import timber.log.Timber
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class NewStoryTest {
+
+    init { SparkStoriesTestConfigurations.injectAndroidTestAppComponent() }
 
     @Rule
     @JvmField

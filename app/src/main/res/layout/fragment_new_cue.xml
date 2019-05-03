@@ -12,13 +12,16 @@
         <variable
             name="newCueEditTextHasFocus"
             type="Boolean" />
+
+        <variable
+            name="isLoading"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/new_cue_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/table_top_port"
+        android:layout_height="match_parent" android:background="@mipmap/table_top_port"
         android:focusable="true"
         android:focusableInTouchMode="true"
         tools:context=".ui.cues.NewCueFragment">
@@ -107,6 +110,22 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/new_cue_card"
             app:visibleGone="@{!newCueEditTextHasFocus}" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:indeterminateTint="@color/secondaryDarkColor"
+            android:id="@+id/progress_bar_new_cue"
+            visibleGone="@{isLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </layout>

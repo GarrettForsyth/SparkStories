@@ -2,15 +2,12 @@ package com.example.android.sparkstories.cues
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
-import com.example.android.sparkstories.repos.CueRepository
+import com.example.android.sparkstories.repos.cue.CueRepository
 import com.example.android.sparkstories.test.getValueBlocking
 import com.example.android.sparkstories.ui.cues.CuesViewModel
 import com.example.android.sparkstories.model.SortOrder
-import com.example.android.sparkstories.test.TestUtils.createTestCueList
-import com.example.android.sparkstories.test.asLiveData
 import com.example.android.sparkstories.ui.util.QueryParameters
 import com.example.android.sparkstories.util.MockUtils.mockObserverFor
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.*
@@ -19,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.*
 
 @SmallTest
 @RunWith(JUnit4::class)
@@ -43,11 +41,18 @@ class CuesViewModelTest {
     }
 
     @Test
+    fun intializationQueriesCuesOnce() {
+        verify(exactly = 1) { cueRepository.cues(any()) }
+    }
+
+
+    @Test
     fun getCues() {
         cuesViewModel.queryParameters.filterString = ""
         val expectedParameters = QueryParameters()
         verify { cueRepository.cues(expectedParameters) }
     }
+
 
     @Test
     fun filterQuery() {
@@ -122,8 +127,9 @@ class CuesViewModelTest {
 
     @Test
     fun onClickCue(){
-        cuesViewModel.onClickCue(0)
-        assertEquals(0, cuesViewModel.cueClicked.getValueBlocking().peekContent())
+        val id = UUID.randomUUID().toString()
+        cuesViewModel.onClickCue(id)
+        assertEquals(id, cuesViewModel.cueClicked.getValueBlocking().peekContent())
     }
 
     @Test

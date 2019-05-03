@@ -14,6 +14,7 @@ import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.MainActivity
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.StoryListItemBinding
+import com.example.android.sparkstories.di.SparkStoriesTestConfigurations
 import com.example.android.sparkstories.test.CustomMatchers.hasItemAtPosition
 import com.example.android.sparkstories.test.TestUtils.FILTER_STRING_NO_MATCHES
 import com.example.android.sparkstories.test.TestUtils.SORT_HOT_INDICES
@@ -44,6 +45,8 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class StoriesTest {
+
+    init { SparkStoriesTestConfigurations.injectAndroidTestAppComponent() }
 
     @Rule
     @JvmField

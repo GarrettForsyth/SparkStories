@@ -10,7 +10,7 @@ import com.example.android.sparkstories.data.local.CommentDao
 import com.example.android.sparkstories.data.local.WriteItSayItHearItDatabase
 import com.example.android.sparkstories.model.SortOrder
 import com.example.android.sparkstories.model.comment.Comment
-import com.example.android.sparkstories.repos.utils.WSHQueryHelper
+import com.example.android.sparkstories.repos.utils.SparkStoriesQueryHelper
 import com.example.android.sparkstories.test.TestUtils.COMMENT_SORT_HOT_INDICES
 import com.example.android.sparkstories.test.TestUtils.COMMENT_SORT_NEW_INDICES
 import com.example.android.sparkstories.test.TestUtils.COMMENT_SORT_TOP_INDICES
@@ -86,7 +86,7 @@ class CommentDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCommentListWithSortOrderNew() {
         val queryParameters = QueryParameters(_sortOrder = SortOrder.NEW, _filterStoryId = 1)
-        val query = WSHQueryHelper.comments(queryParameters)
+        val query = SparkStoriesQueryHelper.comments(queryParameters)
         val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_NEW_INDICES.size)
 
         val expectedStoryOrder = COMMENT_SORT_NEW_INDICES
@@ -97,7 +97,7 @@ class CommentDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCommentListWithSortOrderTop() {
         val queryParameters = QueryParameters(_sortOrder = SortOrder.TOP, _filterStoryId = 1)
-        val query = WSHQueryHelper.comments(queryParameters)
+        val query = SparkStoriesQueryHelper.comments(queryParameters)
         val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_TOP_INDICES.size)
 
         val expectedStoryOrder = COMMENT_SORT_TOP_INDICES
@@ -108,7 +108,7 @@ class CommentDaoTest {
     @Throws(IOException::class)
     fun writeAndReadCommentListWithSortOrderHot() {
         val queryParameters = QueryParameters(_sortOrder = SortOrder.HOT, _filterStoryId = 1)
-        val query = WSHQueryHelper.comments(queryParameters)
+        val query = SparkStoriesQueryHelper.comments(queryParameters)
         val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_HOT_INDICES.size)
 
         val expectedStoryOrder = COMMENT_SORT_HOT_INDICES

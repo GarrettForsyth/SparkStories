@@ -88,7 +88,7 @@ object TestUtils {
     fun createTestStory() = Story(
         text = "This is a test story. It was the best of stories, it was the worst of stories.",
         author = "Test Story Author",
-        cueId = 1,
+        cueId = UUID.randomUUID().toString(),
         creationDate = 0,
         rating = 0
     )
@@ -131,7 +131,7 @@ object TestUtils {
                 Story(
                     text = "Text for cue $i. This is the text.",
                     author = "Author for cue $i",
-                    cueId = i,
+                    cueId = UUID.randomUUID().toString(),
                     creationDate = 0,
                     rating = 0
                 )

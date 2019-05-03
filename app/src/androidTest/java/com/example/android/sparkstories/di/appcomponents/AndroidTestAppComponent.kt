@@ -1,7 +1,10 @@
-package com.example.android.sparkstories.di
+package com.example.android.sparkstories.di.appcomponents
 
 import android.app.Application
 import com.example.android.sparkstories.AndroidTestApp
+import com.example.android.sparkstories.di.*
+import com.example.android.sparkstories.di.authenticationmodules.AndroidTestAuthenticationModule
+import com.example.android.sparkstories.di.sparkservicestoriesmodules.AndroidTestSparkServiceModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -16,7 +19,7 @@ import javax.inject.Singleton
             AndroidTestDatabaseModule::class,
             AndroidTestAppExecutorsModule::class,
             AndroidTestAuthenticationModule::class,
-            AndroidTestRemoteDatabaseModule::class
+            AndroidTestSparkServiceModule::class
         ]
 )
 interface AndroidTestAppComponent {

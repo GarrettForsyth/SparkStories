@@ -5,7 +5,7 @@ import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 
 /**
- * A MutableLiveData that will update if its observed data changes.
+ * A MutableLiveData that will update if its observed data's Observed fields change.
  */
 class ObservedMutableLiveData<T: BaseObservable> : MutableLiveData<T>() {
 

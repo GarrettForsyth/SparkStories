@@ -10,39 +10,33 @@ import androidx.room.PrimaryKey
 import com.example.android.sparkstories.model.Datable
 import com.example.android.sparkstories.model.author.Author
 import com.example.android.sparkstories.model.author.AuthorContract
+import com.google.firebase.firestore.PropertyName
+import com.google.gson.annotations.SerializedName
 import timber.log.Timber
 import java.util.*
 
-@Entity(
-    tableName = CueContract.TABLE_NAME,
-    foreignKeys = [
-        ForeignKey(
-            entity = Author::class,
-            parentColumns = [AuthorContract.COLUMN_NAME],
-            childColumns = [CueContract.COLUMN_AUTHOR]
-        )
-    ]
-)
+@Entity(tableName = CueContract.TABLE_NAME)
 data class Cue(
     @NonNull
     @ColumnInfo(name = CueContract.COLUMN_TEXT)
-    var text: String,
+    @SerializedName("text")
+    @get:PropertyName("text") @set:PropertyName("text") var text: String,
 
     @NonNull
     @ColumnInfo(name = CueContract.COLUMN_AUTHOR)
-    var author: String,
+    @get:PropertyName("author") @set:PropertyName("author") var author: String,
 
     @NonNull
     @ColumnInfo(name = CueContract.COLUMN_CREATION_DATE)
-    var creationDate: Long,
+    @get:PropertyName("creation_date") @set:PropertyName("creation_date") var creationDate: Long,
 
     @NonNull
     @ColumnInfo(name = CueContract.COLUMN_RATING)
-    var rating: Int,
+    @get:PropertyName("rating") @set:PropertyName("rating") var rating: Int,
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = CueContract.COLUMN_ID)
-    var id: Int = 0
+    @get:PropertyName("id") @set:PropertyName("id") var id: String = UUID.randomUUID().toString()
 ): Datable {
 
     companion object { val cueDiffCallback = object :DiffUtil.ItemCallback<Cue>(){
@@ -69,8 +63,9 @@ data class Cue(
         author,
         Calendar.getInstance().timeInMillis,
         0,
-        0
+        UUID.randomUUID().toString()
     )
+    constructor(): this("","")
 
     //TODO add hash
     override fun equals(other: Any?): Boolean {
@@ -81,5 +76,3 @@ data class Cue(
     }
 
 }
-
-

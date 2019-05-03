@@ -29,6 +29,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import java.util.*
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -45,7 +46,7 @@ class CueFragmentTest {
     // initialize the fragment with a cue id passed as an argument
     init {
         val args = Bundle()
-        args.putInt(CUE_ID_EXTRA, CUE.id)
+        args.putString(CUE_ID_EXTRA, CUE.id)
         scenario = launchInContainer(
             TestCueFragment::class.java,
             args,
@@ -105,6 +106,7 @@ class CueFragmentTest {
 
                 every { cueViewModel.cue } returns this.cue
                 every { cueViewModel.newStoryButtonClick } returns newStoryButtonClick
+                every { storiesFragment.storiesViewModel.queryParameters.filterCueId } returns CUE.id
             }
         }
 

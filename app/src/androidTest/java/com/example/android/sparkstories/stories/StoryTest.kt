@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.MainActivity
 import com.example.android.sparkstories.R
+import com.example.android.sparkstories.di.SparkStoriesTestConfigurations
 import com.example.android.sparkstories.test.CustomMatchers.withFontSize
 import com.example.android.sparkstories.test.CustomViewActions.pinchIn
 import com.example.android.sparkstories.test.CustomViewActions.pinchOut
@@ -33,6 +34,8 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class StoryTest {
+
+    init { SparkStoriesTestConfigurations.injectAndroidTestAppComponent() }
 
     @Rule
     @JvmField

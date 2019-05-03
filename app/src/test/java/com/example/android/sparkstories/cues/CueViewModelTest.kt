@@ -2,13 +2,12 @@ package com.example.android.sparkstories.cues
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
-import com.example.android.sparkstories.repos.CueRepository
-import com.example.android.sparkstories.repos.StoryRepository
+import com.example.android.sparkstories.repos.cue.CueRepository
+import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.test.TestUtils.createTestCue
 import com.example.android.sparkstories.test.asLiveData
 import com.example.android.sparkstories.test.getValueBlocking
 import com.example.android.sparkstories.ui.cues.CueViewModel
-import com.example.android.sparkstories.ui.stories.StoryViewModel
 import com.example.android.sparkstories.util.MockUtils.mockObserverFor
 import io.mockk.every
 import io.mockk.mockk
@@ -20,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.*
 
 @SmallTest
 @RunWith(JUnit4::class)
@@ -43,7 +43,7 @@ class CueViewModelTest {
     @Test
     fun getCue() {
         // mock response from repository
-        val id = 0
+        val id = UUID.randomUUID().toString()
         val cue = createTestCue()
         every { cueRepository.cue(id) } returns cue.asLiveData()
 
