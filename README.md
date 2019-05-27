@@ -4,7 +4,7 @@ This is a toy app to explore the [JetPack Components](https://developer.android.
 
 This app is similiar to [r/WritingPrompts](https://www.reddit.com/r/WritingPrompts/) but geared for mobile devcies. Users create 'Cues' which are the starting points for 'Stories'. Stories are capped at a character limit to force the stories to be short and concise. The idea is to give aspiring writers a platform to easily practice a little bit every day. It was also planned to add a narration feature to give a similiar service for voice actors, though this is yet to be implemented.
 
-<img src="./app/src/main/res/drawable/ss-1.png" >
+<img src="./app/src/main/res/drawable/ss-1.png" width="30%" height="30%">
 <img src="./app/src/main/res/drawable/ss-2.png" width="30%" height="30%">
 
 ### Tools and Libraries Used
