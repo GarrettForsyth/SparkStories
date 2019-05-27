@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.android.sparkstories.api.ApiResponse
 import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.model.cue.Cue
+import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.ui.util.QueryParameters
 
 
@@ -19,6 +20,11 @@ interface SparkStoriesService {
 
     fun getCues(queryParameters: QueryParameters): LiveData<ApiResponse<List<Cue>>>
 
+    fun getCue(cueId: String): LiveData<ApiResponse<Cue>>
+
     fun submitCue(cue: Cue): LiveData<Resource<Boolean>>
+
+    fun getStories(queryParameters: QueryParameters): LiveData<ApiResponse<List<Story>>>
+
 
 }
