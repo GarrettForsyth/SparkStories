@@ -56,7 +56,7 @@ class CommentsFragmentTest {
 
     init {
         val args = Bundle()
-        args.putInt(STORY_ID_EXTRA, STORY.id)
+        args.putString(STORY_ID_EXTRA, STORY.id)
         scenario = launchInContainer(
             TestCommentsFragment::class.java,
             args,
@@ -67,6 +67,7 @@ class CommentsFragmentTest {
     @Test
     fun storyIdIsSet() {
         scenario.onFragment {
+            println("the story id is ${STORY.id}")
             assertEquals(it.commentsViewModel.queryParameters.filterStoryId, STORY.id)
         }
     }

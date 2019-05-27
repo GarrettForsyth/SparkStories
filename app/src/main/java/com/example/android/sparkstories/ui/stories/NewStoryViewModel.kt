@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.repos.cue.CueRepository
 import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.test.OpenForTesting
@@ -56,7 +57,7 @@ class NewStoryViewModel @Inject constructor(
 
     private val cueId = MutableLiveData<String>()
     private val _cue = Transformations.switchMap(cueId) { id -> cueRepository.cue(id) }
-    val cue: LiveData<Cue>
+    val cue: LiveData<Resource<Cue>>
         get() = _cue
 
     private val _topMenuStatus = MutableLiveData<Boolean>()
@@ -133,7 +134,7 @@ class NewStoryViewModel @Inject constructor(
 
     fun submitStory(story: Story) {
         storyRepository.submitStory(story)
-        val updatedCue = cue.value!!.copy().apply { rating++ }
+        val updatedCue = cue.value?.data!!.copy().apply { rating++ }
         cueRepository.updateCue(updatedCue)
     }
 

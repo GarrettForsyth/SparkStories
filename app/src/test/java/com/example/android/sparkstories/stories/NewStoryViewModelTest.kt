@@ -4,6 +4,7 @@ import android.text.Editable
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.example.android.sparkstories.R
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.repos.cue.CueRepository
 import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.test.TestUtils
@@ -67,7 +68,7 @@ class NewStoryViewModelTest {
     fun getCue() {
         // mock response from repository
         val id = UUID.randomUUID().toString()
-        val cue = createTestCue()
+        val cue = Resource.success(createTestCue())
         every { cueRepository.cue(id) } returns cue.asLiveData()
 
         // call getCue
@@ -183,7 +184,7 @@ class NewStoryViewModelTest {
         val expectedStory = createTestStory()
 
         // mock cue response from repository
-        val cue = createTestCue().apply { rating = 14 }
+        val cue = Resource.success(createTestCue().apply { rating =14})
         every { cueRepository.cue(expectedStory.cueId) } returns cue.asLiveData()
         newStoryViewModel.getCue(expectedStory.cueId)
 
@@ -195,7 +196,8 @@ class NewStoryViewModelTest {
         } returns expectedStory.author
 
         // expect to update with one more rating
-        val expectedCue = cue.copy().apply { rating++ }
+        val expectedCue = cue.data?.copy()!!.apply { rating++ }
+
 
         newStoryViewModel.onConfirmSubmission()
         verify { storyRepository.submitStory(expectedStory) }
@@ -214,12 +216,12 @@ class NewStoryViewModelTest {
         val expectedStory = TestUtils.createTestStory()
 
         // mock cue response from repository
-        val cue = createTestCue().apply { rating = 14}
+        val cue = Resource.success(createTestCue().apply { rating =14})
         every { cueRepository.cue(expectedStory.cueId) } returns cue.asLiveData()
         newStoryViewModel.getCue(expectedStory.cueId)
 
         // expect to update with one more rating (if valid)
-        val expectedCue = cue.copy().apply { rating++ }
+        val expectedCue = cue.data?.copy()!!.apply { rating++ }
 
         every { newStoryViewModel.storyTextField.isValid() } returns false
         every { newStoryViewModel.storyTextField.text } returns expectedStory.text

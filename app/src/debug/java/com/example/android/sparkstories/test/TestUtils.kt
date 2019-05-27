@@ -95,7 +95,7 @@ object TestUtils {
 
     fun createTestComment() = Comment(
         id = 0,
-        storyId = 1,
+        storyId = UUID.randomUUID().toString(),
         parentId = -1,
         depth = 0,
         text = "This is a test comment!",
@@ -110,7 +110,7 @@ object TestUtils {
             comments.add(
                 Comment(
                     id = 0,
-                    storyId = 1,
+                    storyId = UUID.randomUUID().toString(),
                     parentId = -1,
                     depth = 0,
                     text = "This is test comment $i!",

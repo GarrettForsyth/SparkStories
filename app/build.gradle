@@ -112,6 +112,7 @@ task fullCoverageReport(type: JacocoReport) {
     ])
 }
 
+
 sonarqube {
     properties {
         property "sonar.projectName", "Spark STories"

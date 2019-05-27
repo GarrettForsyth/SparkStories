@@ -2,6 +2,7 @@ package com.example.android.sparkstories.stories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.repos.cue.CueRepository
 import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.test.TestUtils.createTestCue
@@ -59,17 +60,19 @@ class StoryViewModelTest {
 
     @Test()
     fun getStory(){
-        val cue = createTestCue().apply{ id = UUID.randomUUID().toString()}
-        every { cueRepository.cue(cue.id) } returns cue.asLiveData()
+        val cue = Resource.success(
+            createTestCue().apply{ id = UUID.randomUUID().toString()})
 
-        val story = createTestStory().apply { cueId = cue.id }
+        every { cueRepository.cue(cue.data?.id!!) } returns cue.asLiveData()
+
+        val story = createTestStory().apply { cueId = cue.data?.id!! }
         every { storyRepository.story(story.id) } returns story.asLiveData()
 
         // Call get story
         storyViewModel.getStory(story.id)
 
         verify { storyRepository.story(story.id)}
-        verify { cueRepository.cue(cue.id) }
+        verify { cueRepository.cue(cue.data?.id!!) }
         assertEquals(storyViewModel.story.getValueBlocking(), story)
         assertEquals(storyViewModel.cue.getValueBlocking(), cue)
     }
@@ -88,7 +91,7 @@ class StoryViewModelTest {
 
     @Test
     fun likeStory() {
-        val story = createTestStory().apply { id = 10 }
+        val story = createTestStory().apply { id = UUID.randomUUID().toString() }
         every { storyRepository.story(story.id) } returns story.asLiveData()
         storyViewModel.getStory(story.id)
 

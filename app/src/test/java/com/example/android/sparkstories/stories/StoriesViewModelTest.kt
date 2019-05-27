@@ -219,8 +219,9 @@ class StoriesViewModelTest {
 
     @Test
     fun onClickStory() {
-        storiesViewModel.onClickStory(0)
-        assertEquals(0, storiesViewModel.storyClicked.getValueBlocking().peekContent())
+        val storyId = UUID.randomUUID().toString()
+        storiesViewModel.onClickStory(storyId)
+        assertEquals(storyId, storiesViewModel.storyClicked.getValueBlocking().peekContent())
     }
 
 }

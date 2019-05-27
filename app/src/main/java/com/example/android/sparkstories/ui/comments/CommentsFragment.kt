@@ -84,6 +84,7 @@ class CommentsFragment : Fragment(), Injectable {
 
     private fun setStoryId() {
         val args = CommentsFragmentArgs.fromBundle(arguments!!)
+        println("setting to ${args.storyId}")
         commentsViewModel.queryParameters.filterStoryId = args.storyId
     }
 

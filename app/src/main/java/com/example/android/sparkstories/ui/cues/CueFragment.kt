@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.FragmentCueBinding
 import com.example.android.sparkstories.di.Injectable
+import com.example.android.sparkstories.model.Status
 import com.example.android.sparkstories.test.OpenForTesting
 import com.example.android.sparkstories.ui.stories.StoriesFragment
 import com.example.android.sparkstories.ui.util.events.EventObserver
@@ -62,10 +63,10 @@ class CueFragment : Fragment(), Injectable {
         cueViewModel.getCue(args.cueId)
 
         cueViewModel.cue.observe(this, Observer { cue ->
-            cue?.let {
-                binding.cue = cue
+            if (cue.status == Status.SUCCESS) {
+                binding.cue = cue.data
                 binding.executePendingBindings()
-                storiesFragment.storiesViewModel.queryParameters.filterCueId = cue.id
+                storiesFragment.storiesViewModel.queryParameters.filterCueId = cue.data?.id!!
             }
         })
     }

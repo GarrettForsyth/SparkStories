@@ -18,6 +18,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.TestApp
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.test.TestUtils
 import com.example.android.sparkstories.ui.stories.NewStoryFragment
 import com.example.android.sparkstories.ui.stories.NewStoryFragmentDirections
@@ -265,7 +266,7 @@ class NewStoryFragmentTest {
         val inPreviewMode = MutableLiveData<Event<Boolean>>()
         val characterCount = MutableLiveData<Int>()
         val characterCountColour = MutableLiveData<Int>()
-        val cue = MutableLiveData<Cue>()
+        val cue = MutableLiveData<Resource<Cue>>()
         val cueDialog = MutableLiveData<Event<Boolean>>()
     }
 

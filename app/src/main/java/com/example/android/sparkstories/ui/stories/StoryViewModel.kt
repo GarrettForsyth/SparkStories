@@ -3,6 +3,7 @@ package com.example.android.sparkstories.ui.stories
 import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.lifecycle.*
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.model.cue.Cue
 import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.repos.cue.CueRepository
@@ -17,13 +18,13 @@ class StoryViewModel @Inject constructor(
 ): ViewModel() {
 
 
-    private val storyId = MutableLiveData<Int>()
+    private val storyId = MutableLiveData<String>()
     private val _story = Transformations.switchMap(storyId) { id -> storyRepository.story(id) }
     val story: LiveData<Story>
         get() =  _story
 
     private val _cue = Transformations.switchMap(_story ) { story -> cueRepository.cue(story.cueId) }
-    val cue: LiveData<Cue>
+    val cue: LiveData<Resource<Cue>>
         get() =  _cue
 
     private val _topMenuStatus = MutableLiveData<Boolean>()
@@ -44,7 +45,7 @@ class StoryViewModel @Inject constructor(
     }
 
 
-    fun getStory(id: Int) {
+    fun getStory(id: String) {
         storyId.value = id
     }
 

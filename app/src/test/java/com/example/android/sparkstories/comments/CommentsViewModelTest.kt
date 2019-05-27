@@ -17,6 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.*
 
 @SmallTest
 @RunWith(JUnit4::class)
@@ -40,8 +41,9 @@ class CommentsViewModelTest {
 
     @Test
     fun getComments() {
-        commentsViewModel.queryParameters.filterStoryId = 1
-        val expectedQueryParameters = QueryParameters(_filterStoryId = 1)
+        val storyId = UUID.randomUUID().toString()
+        commentsViewModel.queryParameters.filterStoryId = storyId
+        val expectedQueryParameters = QueryParameters(_filterStoryId = storyId)
         verify { commentRepository.comments(expectedQueryParameters) }
     }
 

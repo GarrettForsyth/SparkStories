@@ -26,7 +26,7 @@ data class Comment(
 
     @NonNull
     @ColumnInfo(name = CommentContract.COLUMN_STORY_ID)
-    var storyId: Int,
+    var storyId: String,
 
     @NonNull
     @ColumnInfo(name = CommentContract.COLUMN_PARENT_ID)
@@ -69,7 +69,7 @@ data class Comment(
         return DateFormat.format("dd/MM/yy", creationDate).toString()
     }
 
-    constructor(text: String, author: String, depth: Int = 0, storyId: Int = 1, parentId: Int = -1) : this(
+    constructor(text: String, author: String, depth: Int = 0, storyId: String = UUID.randomUUID().toString(), parentId: Int = -1) : this(
         text,
         author,
         storyId,

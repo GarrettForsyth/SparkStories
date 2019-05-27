@@ -21,6 +21,7 @@ import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.CueListItemBinding
 import com.example.android.sparkstories.databinding.FragmentStoryBinding
 import com.example.android.sparkstories.di.Injectable
+import com.example.android.sparkstories.model.Status
 import com.example.android.sparkstories.test.OpenForTesting
 import com.example.android.sparkstories.ui.util.events.EventObserver
 import timber.log.Timber
@@ -57,6 +58,7 @@ class StoryFragment : Fragment(), Injectable {
             .get(StoryViewModel::class.java)
 
         binding.viewmodel = storyViewModel
+        cueBinding.isCueLoading = false
         binding.executePendingBindings()
 
         observeStory()
@@ -99,11 +101,20 @@ class StoryFragment : Fragment(), Injectable {
 
     private fun observeCue() {
         storyViewModel.cue.observe(this, Observer { cue ->
-            cue?.let {
-                binding.cue = cue
-                cueBinding.cue = cue
-                binding.executePendingBindings()
-                cueBinding.executePendingBindings()
+            when (cue?.status) {
+                Status.SUCCESS -> {
+                    binding.cue = cue.data
+                    cueBinding.cue = cue.data
+                    binding.executePendingBindings()
+                    cueBinding.executePendingBindings()
+                    cueBinding.isCueLoading = false
+                }
+                Status.LOADING -> {
+                    cueBinding.isCueLoading = true
+                }
+                Status.ERROR -> {
+                    cueBinding.isCueLoading = false
+                }
             }
         })
     }

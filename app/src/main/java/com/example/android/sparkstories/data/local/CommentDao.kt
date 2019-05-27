@@ -11,10 +11,10 @@ import com.example.android.sparkstories.model.story.Story
 @Dao
 abstract class CommentDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(comment: Comment)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(comments: List<Comment>)
 
     @Update

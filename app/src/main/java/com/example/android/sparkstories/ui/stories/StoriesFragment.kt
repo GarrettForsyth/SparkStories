@@ -17,13 +17,14 @@ import com.example.android.sparkstories.AppExecutors
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.FragmentStoriesBinding
 import com.example.android.sparkstories.di.Injectable
+import com.example.android.sparkstories.model.Status
 import com.example.android.sparkstories.test.OpenForTesting
 import com.example.android.sparkstories.ui.util.events.EventObserver
 import timber.log.Timber
 import javax.inject.Inject
 
 @OpenForTesting
-class StoriesFragment @Inject constructor(): Fragment(), Injectable {
+class StoriesFragment @Inject constructor() : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -56,6 +57,8 @@ class StoriesFragment @Inject constructor(): Fragment(), Injectable {
         binding.viewmodel = storiesViewModel
         binding.listAdapter = storyAdapter
         binding.hasResults = false
+        binding.isLoading = false
+
         binding.executePendingBindings()
 
         observeStories()
@@ -83,13 +86,19 @@ class StoriesFragment @Inject constructor(): Fragment(), Injectable {
 
     private fun observeStories() {
         storiesViewModel.stories.observe(this, Observer { stories ->
-            if (stories != null) {
-                storyAdapter.submitList(null)
-                storyAdapter.submitList(stories)
-                storiesViewModel.setHasResults(stories.isNotEmpty())
-            }else {
-                storyAdapter.submitList(emptyList())
-                storiesViewModel.setHasResults(false)
+            when (stories?.status) {
+                Status.SUCCESS -> {
+                    storyAdapter.submitList(null)
+                    storyAdapter.submitList(stories.data)
+                    storiesViewModel.setHasResults(!(stories.data?.isEmpty() ?: false))
+                    binding.isLoading = false
+                }
+                Status.LOADING -> {
+                    binding.isLoading = true
+                }
+                Status.ERROR -> {
+                    binding.isLoading = false
+                }
             }
         })
     }

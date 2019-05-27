@@ -8,6 +8,7 @@ import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.model.SortOrder
 import com.example.android.sparkstories.model.author.Author
 import com.example.android.sparkstories.model.cue.Cue
+import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.ui.stories.NewStoryViewModel.Companion.PREFERENCE_AUTHOR
 import com.example.android.sparkstories.ui.util.QueryParameters
 import com.google.firebase.firestore.*
@@ -24,6 +25,7 @@ class SparkStoriesServiceImpl @Inject constructor(
     companion object {
         const val COLLECTION_USERS = "users"
         const val COLLECTION_CUES = "cues"
+        const val COLLECTION_STORIES = "stories"
 
         const val FIELD_SCREEN_NAME = "screen_name"
         const val FIELD_CREATION_DATE = "creation_date"
@@ -31,6 +33,8 @@ class SparkStoriesServiceImpl @Inject constructor(
         const val FIELD_UID = "uid"
 
         const val CUE_NETWORK_PAGE_LIMIT = 120L
+        const val STORY_NETWORK_PAGE_LIMIT = 60L
+        const val MILLIS_IN_DAY = 86400000
     }
 
     private var lastCueDocumentReceived: DocumentSnapshot? = null
@@ -64,7 +68,7 @@ class SparkStoriesServiceImpl @Inject constructor(
             .addOnSuccessListener { documentSnapshot ->
                 // should be null if name is not set
                 val user: Author? = documentSnapshot.toObject(Author::class.java)
-                response.value = Resource.success(user?.name?.isNotBlank() ?: false )
+                response.value = Resource.success(user?.name?.isNotBlank() ?: false)
                 Timber.d("screenName test: successful network response: ${documentSnapshot.data}")
                 Timber.d("screenName test: serialized data is $user")
                 Timber.d("screenName test: set result to ${user?.name?.isNotBlank() ?: false}")
@@ -123,7 +127,7 @@ class SparkStoriesServiceImpl @Inject constructor(
 
         Timber.d("query test \n query params = $queryParameters \n  last query = $lastQueryParameters \n  is equal ${queryParameters == lastQueryParameters}")
 
-        if (queryParameters != lastQueryParameters){
+        if (queryParameters != lastQueryParameters) {
             Timber.d("PaginationTest new query parameters: resetting last document received to null.")
             lastCueDocumentReceived = null
             Timber.d("PaginationTest query test setting last query parameters to $queryParameters")
@@ -148,8 +152,8 @@ class SparkStoriesServiceImpl @Inject constructor(
         }
 
         if (queryParameters.sortOrder == SortOrder.HOT) {
-            val now = Calendar.getInstance().timeInMillis
-            query.whereGreaterThan(FIELD_CREATION_DATE, now)
+            val yesterday = Calendar.getInstance().timeInMillis - MILLIS_IN_DAY
+            query.whereGreaterThan(FIELD_CREATION_DATE, yesterday)
         }
 
         query.get()
@@ -185,6 +189,32 @@ class SparkStoriesServiceImpl @Inject constructor(
         return results
     }
 
+    override fun getCue(cueId: String): LiveData<ApiResponse<Cue>> {
+        val response = MutableLiveData<ApiResponse<Cue>>()
+        firestore
+            .collection(COLLECTION_CUES)
+            .document(cueId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val cue = documentSnapshot.toObject(Cue::class.java)!!
+                    try {
+                        response.postValue(ApiSuccessResponse(cue))
+                    } catch (e: Exception) {
+                        Timber.d("PaginationTest exception while parsing: ${e.message}")
+                    }
+                } else {
+                    Timber.d("PaginationTest empty response.")
+                    response.postValue(ApiEmptyResponse<Cue>())
+                }
+            }
+            .addOnFailureListener() {
+                Timber.e("PaginationTest Error response: ${it.message}")
+                response.value = ApiErrorResponse("An unknown network error has occurred.")
+            }
+        return response
+    }
+
     override fun submitCue(cue: Cue): LiveData<Resource<Boolean>> {
         val response = MutableLiveData<Resource<Boolean>>()
         response.value = Resource.loading(null)
@@ -203,6 +233,75 @@ class SparkStoriesServiceImpl @Inject constructor(
             .addOnSuccessListener { response.postValue(Resource.success(true)) }
             .addOnFailureListener { response.postValue(Resource.error("Unable to submit Cue.", null)) }
         return response
+    }
+
+    override fun getStories(queryParameters: QueryParameters): LiveData<ApiResponse<List<Story>>> {
+        Timber.d("PaginationTest get stories creating service call get stories starting at $lastCueDocumentReceived")
+        Timber.d("PaginationTest get storiesusing query paramters: $queryParameters")
+        val response = MutableLiveData<ApiResponse<List<Story>>>()
+
+        Timber.d("query test \n query params = $queryParameters \n  last query = $lastQueryParameters \n  is equal ${queryParameters == lastQueryParameters}")
+
+        if (queryParameters != lastQueryParameters) {
+            Timber.d("PaginationTest new query parameters: resetting last document received to null.")
+            lastCueDocumentReceived = null
+            Timber.d("PaginationTest query test setting last query parameters to $queryParameters")
+            lastQueryParameters = queryParameters.copy()
+        }
+
+        val sortOrder = if (queryParameters.sortOrder == SortOrder.TOP) {
+            FIELD_RATING
+        } else {
+            FIELD_CREATION_DATE
+        }
+
+        val query = if (lastCueDocumentReceived == null) {
+            firestore.collection(COLLECTION_STORIES)
+                .orderBy(sortOrder, Query.Direction.DESCENDING)
+                .limit(CUE_NETWORK_PAGE_LIMIT)
+        } else {
+            firestore.collection(COLLECTION_CUES)
+                .orderBy(sortOrder)
+                .startAfter(lastCueDocumentReceived!!)
+                .limit(STORY_NETWORK_PAGE_LIMIT)
+        }
+
+        if (queryParameters.sortOrder == SortOrder.HOT) {
+            val yesterday = Calendar.getInstance().timeInMillis - MILLIS_IN_DAY
+            query.whereGreaterThan(FIELD_CREATION_DATE, yesterday)
+        }
+
+        query.get()
+            .addOnSuccessListener { querySnapshot ->
+                Timber.d("PaginationTest get stories document results: ${querySnapshot.documents}")
+                val results = getStoriesFromResponse(querySnapshot)
+                if (results.isNotEmpty()) {
+                    Timber.d("PaginationTest get stories successful response.")
+                    response.postValue(ApiSuccessResponse(results))
+                    lastCueDocumentReceived = querySnapshot.documents.last()
+                } else {
+                    Timber.d("PaginationTest get stories empty response.")
+                    response.postValue(ApiEmptyResponse<List<Story>>())
+                }
+            }
+            .addOnFailureListener() {
+                Timber.e("PaginationTest get storiesError response: ${it.message}")
+                response.value = ApiErrorResponse("An unknown network error has occurred.")
+            }
+
+        return response
+    }
+
+    private fun getStoriesFromResponse(querySnapshot: QuerySnapshot): List<Story> {
+        val results = mutableListOf<Story>()
+        for (document in querySnapshot) {
+            try {
+                results.add(document.toObject(Story::class.java))
+            } catch (e: Exception) {
+                Timber.d("PaginationTest get stories exception while parsing: ${e.message}")
+            }
+        }
+        return results
     }
 }
 

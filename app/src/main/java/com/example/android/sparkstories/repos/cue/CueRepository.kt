@@ -84,7 +84,27 @@ class CueRepository @Inject constructor(
         }
     }
 
-    fun cue(id: String) = cueDao.cue(id)
+    fun cue(id: String): LiveData<Resource<Cue>> {
+        return object : NetworkBoundResource<Cue, Cue>(appExecutors) {
+
+            override fun loadFromDb(): LiveData<Cue> = cueDao.cue(id)
+
+            // Only fetch if not in database alraedy
+            override fun shouldFetch(data: Cue?) : Boolean {
+                if (data == null) {
+                    Timber.d("CueTest no cue in local database with id $id.")
+                }else {
+                    Timber.d("CueTest local cue with $id fetched: $data")
+                }
+                return data == null
+            }
+
+            override fun createCall() = sparkStoriesService.getCue(id)
+
+            override fun saveCallResult(item: Cue) = cueDao.insert(item)
+
+        }.asLiveData()
+    }
 
     companion object {
         private const val PAGE_SIZE = 30

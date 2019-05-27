@@ -31,6 +31,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import java.util.*
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -76,7 +77,8 @@ class StoryDaoTest {
         val story = createTestStory().apply {
             author = authors.first().name
         }
-        val id = stories.size + 1
+        val id = UUID.randomUUID().toString()
+        story.id = id
         storyDao.insert(story)
 
         val readStory = storyDao.story(id).getValueBlocking()
@@ -86,7 +88,7 @@ class StoryDaoTest {
     @Test
     @Throws(IOException::class)
     fun readAndUpdateStory() {
-        val id = 1
+        val id = stories.first().id
         val readStory = storyDao.story(id).getValueBlocking()
         readStory.rating = 100
 
@@ -113,7 +115,7 @@ class StoryDaoTest {
         val queryParameters = QueryParameters(_filterString = STORY_FILTER_TEXT)
         val query = SparkStoriesQueryHelper.stories(queryParameters)
         val readStories = dataSourceFactoryToPagedList(storyDao.stories(query), stories.size)
-        assert(readStories.size == 3)
+        assertEquals(3, readStories.size)
     }
 
     @Test
@@ -184,8 +186,6 @@ class StoryDaoTest {
     }
 
     private fun assertCorrectOrder(expectedOrder: List<Int>, actualOrder: List<Story>) {
-        println(expectedOrder)
-        println(actualOrder.map { story -> story.id -1 })
         for (i in 0 until expectedOrder.size) {
             assert(stories[expectedOrder[i]].equals(actualOrder[i]))
         }

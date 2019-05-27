@@ -85,7 +85,8 @@ class CommentDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadCommentListWithSortOrderNew() {
-        val queryParameters = QueryParameters(_sortOrder = SortOrder.NEW, _filterStoryId = 1)
+        val storyId = stories.first().id
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.NEW, _filterStoryId = storyId)
         val query = SparkStoriesQueryHelper.comments(queryParameters)
         val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_NEW_INDICES.size)
 
@@ -96,7 +97,8 @@ class CommentDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadCommentListWithSortOrderTop() {
-        val queryParameters = QueryParameters(_sortOrder = SortOrder.TOP, _filterStoryId = 1)
+        val storyId = stories.first().id
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.TOP, _filterStoryId = storyId)
         val query = SparkStoriesQueryHelper.comments(queryParameters)
         val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_TOP_INDICES.size)
 
@@ -107,7 +109,8 @@ class CommentDaoTest {
     @Test
     @Throws(IOException::class)
     fun writeAndReadCommentListWithSortOrderHot() {
-        val queryParameters = QueryParameters(_sortOrder = SortOrder.HOT, _filterStoryId = 1)
+        val storyId = stories.first().id
+        val queryParameters = QueryParameters(_sortOrder = SortOrder.HOT, _filterStoryId = storyId)
         val query = SparkStoriesQueryHelper.comments(queryParameters)
         val readComments = dataSourceFactoryToPagedList(commentDao.comments(query), COMMENT_SORT_HOT_INDICES.size)
 

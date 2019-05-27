@@ -25,8 +25,8 @@ class NewCommentViewModel @Inject constructor(
 
     var commentTextField = CommentTextField()
 
-    private val _storyId = MutableLiveData<Int>()
-    val storyId: LiveData<Int>
+    private val _storyId = MutableLiveData<String>()
+    val storyId: LiveData<String>
         get() = _storyId
 
 
@@ -74,7 +74,7 @@ class NewCommentViewModel @Inject constructor(
         }
     }
 
-    fun setStoryId(storyId: Int) { _storyId.value = storyId }
+    fun setStoryId(storyId: String) { _storyId.value = storyId }
 
     fun getParentComment(parentCommentId: Int) {
         this.parentCommentId.value = parentCommentId

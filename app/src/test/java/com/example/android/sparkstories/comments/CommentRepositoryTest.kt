@@ -17,6 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.*
 
 @SmallTest
 @RunWith(JUnit4::class)
@@ -47,7 +48,7 @@ class CommentRepositoryTest {
 
     @Test
     fun loadCommentsLocally() {
-        val queryParameters = QueryParameters(_filterStoryId = 1)
+        val queryParameters = QueryParameters(_filterStoryId = UUID.randomUUID().toString())
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.comments(queryParameters) } returns mockedQuery
         commentRepository.comments(queryParameters)
@@ -56,7 +57,7 @@ class CommentRepositoryTest {
 
     @Test
     fun loadLocallyOrderByNew() {
-        val queryParameters = QueryParameters(_filterStoryId = 1)
+        val queryParameters = QueryParameters(_filterStoryId = UUID.randomUUID().toString())
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.comments(queryParameters) } returns mockedQuery
 
@@ -67,7 +68,7 @@ class CommentRepositoryTest {
 
     @Test
     fun loadLocallyOrderByTop() {
-        val queryParameters = QueryParameters(_filterStoryId = 1, _sortOrder = SortOrder.TOP)
+        val queryParameters = QueryParameters(_filterStoryId = UUID.randomUUID().toString(), _sortOrder = SortOrder.TOP)
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.comments(queryParameters) } returns mockedQuery
 
@@ -77,7 +78,7 @@ class CommentRepositoryTest {
 
     @Test
     fun loadLocallyOrderByHot() {
-        val queryParameters = QueryParameters(_filterStoryId = 1, _sortOrder = SortOrder.HOT)
+        val queryParameters = QueryParameters(_filterStoryId = UUID.randomUUID().toString(), _sortOrder = SortOrder.HOT)
         val mockedQuery: SupportSQLiteQuery = mockk()
         every { wshQueryHelper.comments(queryParameters) } returns mockedQuery
 

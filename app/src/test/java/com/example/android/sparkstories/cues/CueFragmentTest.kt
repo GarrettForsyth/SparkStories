@@ -14,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.TestApp
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.model.cue.Cue
 import com.example.android.sparkstories.stories.StoriesFragmentTest
 import com.example.android.sparkstories.test.TestUtils.createTestCue
@@ -64,7 +65,7 @@ class CueFragmentTest {
     @Test
     fun newStoryButtonClicked() {
         scenario.onFragment {
-            it.cue.postValue(CUE)
+            it.cue.postValue(Resource.success(CUE))
             it.newStoryButtonClick.value = Event(true)
             verify {
                 it.navController.navigate(
@@ -77,7 +78,7 @@ class CueFragmentTest {
     @Test
     fun displayCue() {
         scenario.onFragment {
-            it.cue.postValue(CUE)
+            it.cue.postValue(Resource.success(CUE))
             onView(withId(R.id.cue_text))
                 .check(matches(withText(CUE.text)))
         }
@@ -86,7 +87,7 @@ class CueFragmentTest {
     @Test
     fun filterCue() {
         scenario.onFragment {
-            it.cue.postValue(CUE)
+            it.cue.postValue(Resource.success(CUE))
             assertEquals(it.storiesFragment.storiesViewModel.queryParameters.filterCueId, CUE.id)
         }
     }
@@ -117,7 +118,7 @@ class TestCueFragment : CueFragment() {
     val navController: NavController = mockk(relaxed = true)
     override fun navController() = navController
 
-    val cue = MutableLiveData<Cue>()
+    val cue = MutableLiveData<Resource<Cue>>()
     val newStoryButtonClick = MutableLiveData<Event<Boolean>>()
 }
 

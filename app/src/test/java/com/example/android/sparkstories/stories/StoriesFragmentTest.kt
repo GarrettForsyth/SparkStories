@@ -19,6 +19,7 @@ import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.TestApp
 import com.example.android.sparkstories.databinding.StoryListItemBinding
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.ui.stories.StoriesFragment
 import com.example.android.sparkstories.ui.stories.StoriesFragmentDirections
 import com.example.android.sparkstories.ui.util.events.Event
@@ -36,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_stories.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import java.util.*
 
 
 @LargeTest
@@ -63,7 +65,7 @@ class StoriesFragmentTest {
     fun storiesAreInsideStoryList() {
         scenario.onFragment {
             val stories = createTestStoryList(5)
-            it.liveResponseStories.postValue(mockPagedList(stories))
+            it.liveResponseStories.postValue(Resource.success(mockPagedList(stories)))
             val indices = (0 until stories.size).toList()
             verifyInsideRecyclerView(indices, stories)
             verify(exactly = 1) { it.storiesViewModel.setHasResults(true) }
@@ -80,16 +82,8 @@ class StoriesFragmentTest {
     @Test
     fun setsZeroResultsOnEmptyList() {
         scenario.onFragment {
-            it.liveResponseStories.value = mockPagedList(emptyList())
+            it.liveResponseStories.value = Resource.success(mockPagedList(emptyList()))
             verify { it.storiesViewModel.setHasResults(false) }
-        }
-    }
-
-    @Test
-    fun setsZeroResultsOnNull() {
-        scenario.onFragment {
-            it.liveResponseStories.value = null
-            verify(exactly = 1) { it.storiesViewModel.setHasResults(false) }
         }
     }
 
@@ -113,20 +107,21 @@ class StoriesFragmentTest {
     fun clickStoryEventSent() {
         scenario.onFragment {
             val stories = createTestStoryList(5)
-            it.liveResponseStories.value = mockPagedList(stories)
+            it.liveResponseStories.value = Resource.success(mockPagedList(stories))
             it.stories_list.children.first().callOnClick()
-            verify(exactly = 1) { it.storiesViewModel.onClickStory(0) }
+            verify(exactly = 1) { it.storiesViewModel.onClickStory(any()) }
         }
     }
 
     @Test
     fun navigateToStoryFragmentWhenClickStoryEventReceived() {
         scenario.onFragment {
-            it.storyClicked.value = Event(0)
+            val storyId = UUID.randomUUID().toString()
+            it.storyClicked.value = Event(storyId)
             verify {
                 it.navController.navigate(
                     StoriesFragmentDirections.actionStoriesFragmentToStoryFragment(
-                        0))
+                        storyId))
             }
         }
     }
@@ -214,9 +209,9 @@ class StoriesFragmentTest {
      */
     class TestStoriesFragment : StoriesFragment() {
         val navController: NavController = mockk(relaxed = true)
-        val liveResponseStories = MutableLiveData<PagedList<Story>>()
+        val liveResponseStories = MutableLiveData<Resource<PagedList<Story>>>()
         val hasResults = MutableLiveData<Event<Boolean>>()
-        val storyClicked = MutableLiveData<Event<Int>>()
+        val storyClicked = MutableLiveData<Event<String>>()
         override fun navController() = navController
     }
 

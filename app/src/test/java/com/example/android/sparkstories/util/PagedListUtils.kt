@@ -1,6 +1,7 @@
 package com.example.android.sparkstories.util
 
 import androidx.paging.PagedList
+import com.example.android.sparkstories.model.Resource
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -18,3 +19,4 @@ fun <T> mockPagedList(list: List<T>): PagedList<T> {
     every { pagedList.isNotEmpty() } returns (!list.isNotEmpty())
     return pagedList
 }
+

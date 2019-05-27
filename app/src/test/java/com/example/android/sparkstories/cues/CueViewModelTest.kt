@@ -2,6 +2,7 @@ package com.example.android.sparkstories.cues
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.repos.cue.CueRepository
 import com.example.android.sparkstories.repos.story.StoryRepository
 import com.example.android.sparkstories.test.TestUtils.createTestCue
@@ -44,7 +45,7 @@ class CueViewModelTest {
     fun getCue() {
         // mock response from repository
         val id = UUID.randomUUID().toString()
-        val cue = createTestCue()
+        val cue = Resource.success(createTestCue())
         every { cueRepository.cue(id) } returns cue.asLiveData()
 
         // call getCue

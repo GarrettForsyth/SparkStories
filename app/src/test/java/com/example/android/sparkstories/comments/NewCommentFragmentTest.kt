@@ -69,7 +69,7 @@ class NewCommentFragmentTest {
     // initialize the fragment with a cue id passed as an argument
     init {
         val args = Bundle()
-        args.putInt(STORY_ID_EXTRA, STORY.id)
+        args.putString(STORY_ID_EXTRA, STORY.id)
         args.putInt(PARENT_ID_EXTRA, PARENT_COMMENT.id)
         scenario = launchInContainer(
             TestNewCommentFragment::class.java,

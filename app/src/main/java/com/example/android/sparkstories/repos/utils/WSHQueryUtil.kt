@@ -61,8 +61,9 @@ object SparkStoriesQueryHelper {
         selectionArgs[0] = ("%${queryParameters.filterString}%")
         selectionArgs[1] = ("%${queryParameters.filterString}%")
 
-        if (queryParameters.filterStoryId > 0) {
-            selection.append(" AND ${CommentContract.COLUMN_STORY_ID} = ${queryParameters.filterStoryId}")
+        if (queryParameters.filterStoryId.isNotBlank()) {
+            selection.append(" AND ${CommentContract.COLUMN_STORY_ID} = '${queryParameters.filterStoryId}'")
+            println(" AND ${CommentContract.COLUMN_STORY_ID} = '${queryParameters.filterStoryId}'")
         }
 
         if (queryParameters.filterParentCommentId > 0) {

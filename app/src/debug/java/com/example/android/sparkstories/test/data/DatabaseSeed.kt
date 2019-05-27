@@ -82,7 +82,8 @@ class DatabaseSeed @Inject constructor(application: Application) {
                 val text = jsonCue.getString("text")
                 val author = jsonCue.getString("author")
                 val rating = jsonCue.getInt("rating")
-                val cue = Cue(text, author, creationDate(i), rating, UUID.randomUUID().toString())
+                val id = jsonCue.getString("id")
+                val cue = Cue(text, author, creationDate(i), rating, id)
                 cues.add(cue)
             }
         }catch(e: Exception) {
@@ -105,13 +106,16 @@ class DatabaseSeed @Inject constructor(application: Application) {
                 val author = jsonStory.getString("author")
                 val cueId = jsonStory.getString("cue_id")
                 val rating = jsonStory.getInt("rating")
-                val story = Story(text, author, cueId, creationDate(i), rating, 0)
+                val id = jsonStory.getString("id")
+                val story = Story(text, author, cueId, creationDate(i), rating, id)
                 stories.add(story)
             }
         }catch(e: Exception) {
             Timber.e("Error initializing JSON Object from stories.")
             e.printStackTrace()
         }
+        Timber.d("Seed test seeding ${stories.size}")
+        stories.forEach { Timber.d("Seed test $it")}
         return stories
     }
 
@@ -124,7 +128,7 @@ class DatabaseSeed @Inject constructor(application: Application) {
             for(i in 0 until jsonComments.length()) {
                 val jsonComment = jsonComments.getJSONObject(i)
                 val id = jsonComment.getInt("id")
-                val storyId = jsonComment.getInt("story_id")
+                val storyId = jsonComment.getString("story_id")
                 val parentId = jsonComment.getInt("parent_id")
                 val depth = jsonComment.getInt("depth")
                 val text = jsonComment.getString("text")

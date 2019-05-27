@@ -12,6 +12,8 @@ import com.example.android.sparkstories.model.author.Author
 import com.example.android.sparkstories.model.author.AuthorContract
 import com.example.android.sparkstories.model.cue.Cue
 import com.example.android.sparkstories.model.cue.CueContract
+import com.google.firebase.firestore.PropertyName
+import com.google.gson.annotations.SerializedName
 import java.util.*
 
 
@@ -19,32 +21,36 @@ import java.util.*
 data class Story(
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_TEXT)
-    var text: String,
+    @SerializedName("text")
+    @get:PropertyName("text") @set:PropertyName("text") var text: String,
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_AUTHOR)
-    var author: String,
+    @get:PropertyName("author") @set:PropertyName("author") var author: String,
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_CUE_ID)
-    var cueId: String,
+    @get:PropertyName("cue_id") @set:PropertyName("cue_id") var cueId: String = "",
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_CREATION_DATE)
-    var creationDate: Long,
+    @get:PropertyName("creation_date") @set:PropertyName("creation_date") var creationDate: Long,
 
     @NonNull
     @ColumnInfo(name = StoryContract.COLUMN_RATING)
-    var rating: Int,
+    @get:PropertyName("rating") @set:PropertyName("rating") var rating: Int,
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = StoryContract.COLUMN_ID)
-    var id: Int = 0
-): Datable {
+    @get:PropertyName("id") @set:PropertyName("id") var id: String = UUID.randomUUID().toString()
 
-    companion object { val storyDiffCallback = object : DiffUtil.ItemCallback<Story>(){
-        override fun areItemsTheSame(oldItem: Story, newItem: Story) = (oldItem.id == newItem.id)
-        override fun areContentsTheSame(oldItem: Story, newItem: Story) = (oldItem == newItem)
+
+) : Datable {
+
+    companion object {
+        val storyDiffCallback = object : DiffUtil.ItemCallback<Story>() {
+            override fun areItemsTheSame(oldItem: Story, newItem: Story) = (oldItem.id == newItem.id)
+            override fun areContentsTheSame(oldItem: Story, newItem: Story) = (oldItem == newItem)
         }
     }
 
@@ -61,6 +67,8 @@ data class Story(
         return DateFormat.format("dd/MM/yy", creationDate).toString()
     }
 
+    // no arg constructor needed by firestore to deserialize
+    constructor(): this("", "", "")
 
     constructor(storyText: String, author: String, cueId: String) :
             this(
@@ -68,7 +76,8 @@ data class Story(
                 author,
                 cueId,
                 Calendar.getInstance().timeInMillis,
-                0
+                0,
+                UUID.randomUUID().toString()
             )
 
     override fun equals(other: Any?): Boolean {

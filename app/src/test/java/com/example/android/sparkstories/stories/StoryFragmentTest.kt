@@ -15,6 +15,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.TestApp
+import com.example.android.sparkstories.model.Resource
 import com.example.android.sparkstories.model.cue.Cue
 import com.example.android.sparkstories.model.story.Story
 import com.example.android.sparkstories.test.TestUtils.createTestCue
@@ -49,7 +50,7 @@ class StoryFragmentTest {
     // initialize the fragment with a story id passed as an argument
     init {
         val args = Bundle()
-        args.putInt(STORY_ID_EXTRA, STORY.id)
+        args.putString(STORY_ID_EXTRA, STORY.id)
         scenario = launchInContainer(
             TestStoryFragment::class.java,
             args,
@@ -141,7 +142,7 @@ class StoryFragmentTest {
         override fun navController() = navController
 
         val story = MutableLiveData<Story>()
-        val cue = MutableLiveData<Cue>()
+        val cue = MutableLiveData<Resource<Cue>>()
         val topMenuShown = MutableLiveData<Boolean>()
         val viewCommentsEvent = MutableLiveData<Event<Boolean>>()
         val cueDialog = MutableLiveData<Event<Boolean>>()

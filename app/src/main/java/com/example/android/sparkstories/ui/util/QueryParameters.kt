@@ -8,7 +8,7 @@ import timber.log.Timber
 
 data class QueryParameters(
     private var _filterCueId: String = "",
-    private var _filterStoryId: Int = -1,
+    private var _filterStoryId: String = "",
     private var _filterParentCommentId: Int = -1,
     private var _filterString: String = "",
     private var _sortOrder: SortOrder = SortOrder.NEW
@@ -23,7 +23,7 @@ data class QueryParameters(
             }
         }
 
-    var filterStoryId: Int
+    var filterStoryId: String
         @Bindable get() = _filterStoryId
         set(value) {
             if (value != _filterStoryId) {

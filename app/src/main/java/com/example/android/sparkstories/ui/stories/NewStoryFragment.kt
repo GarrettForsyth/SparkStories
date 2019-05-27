@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import com.example.android.sparkstories.R
 import com.example.android.sparkstories.databinding.CueListItemBinding
+import com.example.android.sparkstories.model.Status
 import com.example.android.sparkstories.ui.util.events.disableEditText
 import com.example.android.sparkstories.ui.util.events.enableEditText
 
@@ -62,6 +63,7 @@ class NewStoryFragment : Fragment(), Injectable {
             .get(NewStoryViewModel::class.java)
 
         binding.viewmodel = newStoryViewModel
+        cueBinding.isCueLoading = false
         binding.executePendingBindings()
 
         observeCue()
@@ -177,11 +179,20 @@ class NewStoryFragment : Fragment(), Injectable {
         newStoryViewModel.getCue(args.cueId)
 
         newStoryViewModel.cue.observe(this, Observer { cue ->
-            cue?.let {
-                binding.cue = cue
-                cueBinding.cue = cue
-                binding.executePendingBindings()
-                cueBinding.executePendingBindings()
+            when (cue?.status) {
+                Status.SUCCESS -> {
+                    binding.cue = cue.data
+                    cueBinding.cue = cue.data
+                    cueBinding.isCueLoading = false
+                    binding.executePendingBindings()
+                    cueBinding.executePendingBindings()
+                }
+                Status.LOADING -> {
+                    cueBinding.isCueLoading = true
+                }
+                Status.ERROR -> {
+                    cueBinding.isCueLoading = false
+                }
             }
         })
     }
